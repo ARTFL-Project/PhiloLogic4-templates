@@ -1,7 +1,7 @@
 <script type="text/javascript">
 function autocomplete_metadata(metadata, field) {
     $("#" + field).autocomplete({
-        source: "http://pantagruel.ci.uchicago.edu/philo4/sha_cleanup/scripts/metadata_list.py?field=" + field,
+        source: "http://pantagruel.ci.uchicago.edu/philo4/${dbname}/scripts/metadata_list.py?field=" + field,
         minLength: 2,
         dataType: "json"
     });
@@ -9,7 +9,7 @@ function autocomplete_metadata(metadata, field) {
 var fields = ${repr(db.locals['metadata_fields'])}
 $(document).ready(function(){
     $("#q").autocomplete({
-        source: "http://pantagruel.ci.uchicago.edu/philo4/sha_cleanup/scripts/term_list.py",
+        source: "http://pantagruel.ci.uchicago.edu/philo4/${dbname}/scripts/term_list.py",
         minLength: 2,
         "dataType": "json"
     });
