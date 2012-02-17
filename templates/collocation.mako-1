@@ -1,0 +1,19 @@
+<%include file="header.mako"/>
+<%namespace file="bibliographic_info.mako" import="bibliography"/>
+<div class='philologic_concordance'>
+ <p class='description'>Concordance Report</p>
+ <ol>
+  <% colloc_results = [] %>
+  % for k,v in results:
+   <li class='philologic_occurence'>
+   <hr>
+   <% href = "./" + "/".join(str(x) for x in i.philo_id[:5]) %>
+    ##<a href="${href}" class='philologic_cite'>${i.author}, <i>${i.title}</i> : ${i.who}</a>
+    <div class='philologic_context'>${q['q']} --> ${report_function(i, path, q)}</div>
+    ##<div class='philologic_context'>${i.bytes}</div>
+   </li>
+   <% biblio.add(i) %>
+  % endfor
+ </ol>
+</div>
+<%include file="footer.mako"/>
