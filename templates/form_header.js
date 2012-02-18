@@ -18,6 +18,27 @@ $(document).ready(function(){
         var field = fields[i];
         autocomplete_metadata(metadata, field)
     }
+//    The following is to display the right options when using the back button
+    if ($("#report option[value='concordance']").attr('selected')) {
+        $("#frequency").hide()
+        $("#collocation").hide()
+        $("#results_per_page").show()
+    }
+    if ($("#report option[value='kwic']").attr('selected')) {
+        $("#frequency").hide()
+        $("#collocation").hide()
+        $("#results_per_page").show()
+    }
+    if ($("#report option[value='collocation']").attr('selected')) {
+        $("#frequency").hide()
+        $("#results_per_page").hide()
+        $("#collocation").show()
+    }
+    if ($("#report option[value='frequency']").attr('selected')) {
+        $("#collocation").hide()
+        $("#results_per_page").hide()
+        $("#frequency").show()
+    }
 });
 function showHide(value) {
     if (value == 'frequency') {

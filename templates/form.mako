@@ -12,7 +12,7 @@
     <tr><td>${facet}:</td><td><input type='text' name='${facet}' id="${facet}"></input></td></tr>
 % endfor
 
- <tr><td>Report Generator:</td><td><select name='report' onchange="showHide(this.value);">
+ <tr><td>Report Generator:</td><td><select name='report' id="report" onchange="showHide(this.value);">
  <option value='concordance' selected="selected">Concordance</option>
  <option value='kwic'>KWIC</option>
  <option value='collocation'>Collocation</option>
