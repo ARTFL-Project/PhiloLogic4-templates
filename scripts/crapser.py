@@ -4,24 +4,20 @@ import os
 import cgi
 import subprocess
 import sys
+import re
 
-def read_file():
+    
+def crapser(term):
+    """ Expand queries"""
+    ## Find path to all_frequencies
     path = os.environ['SCRIPT_FILENAME']
     path = path.replace('dispatcher.py', '')
     path += 'data/WORK/all_frequencies'
-    return path
-
-def expand_term(term):
-    file = read_file()
-    command = ['egrep', '-oie', "%s\w*" % term, '%s' % file]
-    print >> sys.stderr, command
+    
+    ## Add wildcard and search for pattern
+    term = term.replace('*', '\w*')
+    command = ['egrep', '-oie', "%s" % term, '%s' % path]
     process = subprocess.Popen(command, stdout=subprocess.PIPE)
     match, stderr = process.communicate()
     matching_list = set(match.split('\n'))
-    return matching_list    
-    
-def crapser(term):
-    form = cgi.FieldStorage()
-    word = form.getvalue('term')
-    words = expand_term(term)
-    print >> sys.stderr,  words
+    print >> sys.stderr,  matching_list
