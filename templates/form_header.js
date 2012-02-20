@@ -1,15 +1,37 @@
 <script type="text/javascript">
+function monkeyPatchAutocomplete() {
+    //taken from http://stackoverflow.com/questions/2435964/jqueryui-how-can-i-custom-format-the-autocomplete-plug-in-results    
+    
+    // don't really need this, but in case I did, I could store it and chain
+    var oldFn = $.ui.autocomplete.prototype._renderItem;
+
+    $.ui.autocomplete.prototype._renderItem = function( ul, item) {
+        var re = new RegExp(this.term, "gi") ;
+        var t = item.label.replace(re,"<span style='font-weight:bold;color:Red;'>" + 
+                "$&" + 
+                "</span>");
+        return $( "<li></li>" )
+            .data( "item.autocomplete", item )
+            .append( "<a>" + t + "</a>" )
+            .appendTo( ul );
+    };
+}
+
 function autocomplete_metadata(metadata, field) {
     $("#" + field).autocomplete({
-        source: "http://pantagruel.ci.uchicago.edu/philo4/${dbname}/scripts/metadata_list.py?field=" + field,
+        source: "/philo4/${dbname}/scripts/metadata_list.py?field=" + field,
         minLength: 2,
         dataType: "json"
     });
 }
+
 var fields = ${repr(db.locals['metadata_fields'])}
 $(document).ready(function(){
+    
+    monkeyPatchAutocomplete();    
+    
     $("#q").autocomplete({
-        source: "http://pantagruel.ci.uchicago.edu/philo4/${dbname}/scripts/term_list.py",
+        source: "/philo4/${dbname}/scripts/term_list.py",
         minLength: 2,
         "dataType": "json"
     });
@@ -40,6 +62,7 @@ $(document).ready(function(){
         $("#frequency").show()
     }
 });
+
 function showHide(value) {
     if (value == 'frequency') {
         $("#collocation").hide()
