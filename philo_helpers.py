@@ -61,7 +61,7 @@ def hit_to_link(db,hit):
     return "./" + "/".join(str(b) for b in best)
 
 def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=None,results_per_page=None,**metadata):
-    q_params = [("q",query)]
+    q_params = [("q",query.encode('utf-8', 'ignore'))] ## urlencode does not like unicode...
     if method:
         q_params.append(("method",method))
     if methodarg:

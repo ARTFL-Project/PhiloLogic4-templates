@@ -21,3 +21,16 @@ def crapser(term):
     match, stderr = process.communicate()
     matching_list = set(match.split('\n'))
     print >> sys.stderr,  matching_list
+    
+def sql_crapser(term, field, db):
+    """Expand metadata queries"""
+    conn = db.toms.dbh
+    c = conn.cursor()
+    
+    ## Add wildcard and search for pattern
+    term = term.replace('*', '_%')
+    query = 'select %s from toms where %s like "%s"' % (field, field, term)
+    print >> sys.stderr, query
+    c.execute(query)
+    matching_list = [i[0] for i in c.fetchall()]
+    print >> sys.stderr,  matching_list
