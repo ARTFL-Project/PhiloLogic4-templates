@@ -6,7 +6,9 @@ function monkeyPatchAutocomplete() {
     var oldFn = $.ui.autocomplete.prototype._renderItem;
 
     $.ui.autocomplete.prototype._renderItem = function( ul, item) {
-        var re = new RegExp(this.term, "gi") ;
+        // This regex took some fiddling but should match beginning of string and
+        // any match preceded by a string: this is useful for sql matches.
+        var re = new RegExp('((^' + this.term + ')|( ' + this.term + '))', "gi") ; 
         var t = item.label.replace(re,"<span style='font-weight:bold;color:Red;'>" + 
                 "$&" + 
                 "</span>");
