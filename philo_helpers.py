@@ -39,6 +39,7 @@ def parse_cgi(environ):
     print >> sys.stderr, "metadata_fields = " + repr(db.locals["metadata_fields"])
     print >> sys.stderr, "cgi = " + repr(cgi)
     metadata_fields = db.locals["metadata_fields"]
+    num_empty = 0
     for field in metadata_fields:
         if field in cgi and cgi[field]:
             ## these ifs are to fix the no results you get when you do a metadata query
@@ -46,6 +47,14 @@ def parse_cgi(environ):
                 query["metadata"][field] = cgi[field][0]
             elif cgi[field][0] != '':
                 query["metadata"][field] = cgi[field][0]
+        if field not in cgi or not cgi[field][0]: ## in case of an empty query
+            num_empty += 1
+    
+    if num_empty == len(metadata_fields):
+        query["no_q"] = True
+    else:
+        query["no_q"] = False
+        
     return (db,query)
 
 def hit_to_link(db,hit):

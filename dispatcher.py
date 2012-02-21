@@ -48,7 +48,10 @@ def philo_dispatcher(environ,start_response):
             else:
                 template_name = "./templates/" + q["report"] + '.mako'
             template = Template(filename=template_name, lookup=mytemplates)
-            hits = db.toms.query(**q["metadata"])
+            if q["no_q"]:
+                hits = db.toms.get_documents()
+            else:
+                hits = db.toms.query(**q["metadata"])
             results = metadata_results_wrapper(hits, db) 
             yield template.render(results=results,db=db,dbname=dbname,q=q,report_function=function,path=path,make_query_link=make_query_link, form=False).encode("UTF-8")
         else:
