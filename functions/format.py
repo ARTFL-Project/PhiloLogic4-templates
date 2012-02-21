@@ -47,7 +47,7 @@ def chunkifier(conc_text, bytes, kwic=False, highlight=False):
     conc_end = conc_text[end_byte:]
     
     ## Make sure we have no words cut out
-    conc_start = re.sub("^[^\s]* ", "", conc_start)
+    conc_start = re.sub("^[^ ]+ ", "", conc_start)
     
     return conc_start, conc_middle, conc_end
 
@@ -56,8 +56,6 @@ def highlighter(text, word_byte, kwic=False):
     """This function highlights a passage based on the hit's byte offset"""
     # the split returns an empty list if the word_byte goes beyond the text excerpt
     # which causes an index error on the following line
-    import sys
-    print >> sys.stderr, '\n\n\n###\n', text[word_byte:]
     unicode_str = re.compile("([\w']+)", re.UNICODE)
     text_chunks = unicode_str.split(text[word_byte:].decode('utf-8', 'ignore'))
     end_byte = word_byte + len(text_chunks[1].encode('utf-8', 'ignore'))
