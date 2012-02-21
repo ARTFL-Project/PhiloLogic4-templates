@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import re
+import htmlentitydefs
 from BeautifulSoup import BeautifulSoup
 from philologic.DirtyFormatter import Formatter
 from custom_object_format import custom_format
@@ -28,6 +29,7 @@ def chunkifier(conc_text, bytes, kwic=False, highlight=False):
     * from the first hit to the end of the last hit
     * form the end of the last hit to the end of the passage
     Returns a tuple containing all three parts of the passage"""
+    conc_text = re.sub("[ \n\r]*.+$", "", conc_text) ## no words cut out, or worse, no broken mutiple-byte chars
     conc_start = conc_text[:bytes[0]]
     conc_middle = ''
     end_byte = int
@@ -45,8 +47,7 @@ def chunkifier(conc_text, bytes, kwic=False, highlight=False):
     conc_end = conc_text[end_byte:]
     
     ## Make sure we have no words cut out
-    conc_start = re.sub("^[^\s]* ", "", conc_start)
-    conc_end = re.sub(" [^\s]*$", "", conc_end)
+    conc_start = re.sub("^[^ ]+ ", "", conc_start)
     
     return conc_start, conc_middle, conc_end
 
@@ -55,12 +56,13 @@ def highlighter(text, word_byte, kwic=False):
     """This function highlights a passage based on the hit's byte offset"""
     # the split returns an empty list if the word_byte goes beyond the text excerpt
     # which causes an index error on the following line
-    text_chunks = re.split("([\w']+)", text[word_byte:])
-    end_byte = word_byte + len(text_chunks[1])
+    unicode_str = re.compile("([\w']+)", re.UNICODE)
+    text_chunks = unicode_str.split(text[word_byte:].decode('utf-8', 'ignore'))
+    end_byte = word_byte + len(text_chunks[1].encode('utf-8', 'ignore'))
     if kwic:
-        text = '<b>' + text_chunks[1] + '</b>' # 0 element is always an empty string
+        text = '<b>' + text_chunks[1].encode('utf-8', 'ignore') + '</b>' # 0 element is always an empty string
     else:
-        text = '<span class="highlight">' + text_chunks[1] + '</span>' # 0 element is always an empty string
+        text = '<span class="highlight">' + text_chunks[1].encode('utf-8', 'ignore') + '</span>' # 0 element is always an empty string
     return text, end_byte
 
 
@@ -110,13 +112,13 @@ def align_text(text, hit, chars=40):
     start_hit = text.index('<b>')
     end_hit = text.index('</b>') + 4
     tag_length = 7 * len(hit.bytes)
-    start_text = text[:start_hit]
+    start_text = convert_entities(text[:start_hit])
     if len(start_text) < chars:
         white_space = ' ' * (chars - len(start_text))
         start_text = white_space + start_text
     start_text = '<span style="white-space:pre-wrap;">' + start_text[-chars:] + '</span>'
-    end_text = text[end_hit:]
-    match = text[start_hit:end_hit]
+    end_text = convert_entities(text[end_hit:])
+    match = convert_entities(text[start_hit:end_hit])
     return start_text + match + end_text[:chars+tag_length]
    
     
@@ -141,7 +143,27 @@ def fix_html(text):
     """Fixes broken HTML tags"""
     return unicode(BeautifulSoup(text))
  
-   
+def convert_entities(text):
+    def fixup(m):
+        text = m.group(0)
+        if text[:2] == "&#":
+            # character reference
+            try:
+                if text[:3] == "&#x":
+                    return unichr(int(text[3:-1], 16))
+                else:
+                    return unichr(int(text[2:-1]))
+            except ValueError:
+                pass
+        else:
+            # named entity
+            try:
+                text = unichr(htmlentitydefs.name2codepoint[text[1:-1]])
+            except KeyError:
+                pass
+        return text # leave as is
+    return re.sub("&#?\w+;", fixup, text)
+
 def formatter(text):
     """This function calls an external script containing a dictionnary with formatting
     options for proper display in the web browser"""
