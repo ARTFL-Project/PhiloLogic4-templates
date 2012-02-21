@@ -29,6 +29,7 @@ def chunkifier(conc_text, bytes, kwic=False, highlight=False):
     * from the first hit to the end of the last hit
     * form the end of the last hit to the end of the passage
     Returns a tuple containing all three parts of the passage"""
+    conc_text = re.sub("[ \n\r]*.+$", "", conc_text) ## no words cut out, or worse, no broken mutiple-byte chars
     conc_start = conc_text[:bytes[0]]
     conc_middle = ''
     end_byte = int
@@ -47,7 +48,6 @@ def chunkifier(conc_text, bytes, kwic=False, highlight=False):
     
     ## Make sure we have no words cut out
     conc_start = re.sub("^[^\s]* ", "", conc_start)
-    conc_end = re.sub(" [^\s]*$", "", conc_end)
     
     return conc_start, conc_middle, conc_end
 
@@ -56,6 +56,8 @@ def highlighter(text, word_byte, kwic=False):
     """This function highlights a passage based on the hit's byte offset"""
     # the split returns an empty list if the word_byte goes beyond the text excerpt
     # which causes an index error on the following line
+    import sys
+    print >> sys.stderr, '\n\n\n###\n', text[word_byte:]
     unicode_str = re.compile("([\w']+)", re.UNICODE)
     text_chunks = unicode_str.split(text[word_byte:].decode('utf-8', 'ignore'))
     end_byte = word_byte + len(text_chunks[1].encode('utf-8', 'ignore'))
