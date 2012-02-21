@@ -11,7 +11,7 @@ from HitWrapper import *
 from mako.template import Template
 from mako.lookup import TemplateLookup
 import functions
-from scripts.crapser import crapser
+from scripts.crapser import *
 
 def philo_dispatcher(environ,start_response):
     status = '200 OK'
@@ -26,7 +26,6 @@ def philo_dispatcher(environ,start_response):
     db,q = parse_cgi(environ)
     mytemplates = TemplateLookup('./')
     path = os.getcwd()
-    #crapser(q['q'])
     try:
         path_components = [c for c in environ["PATH_INFO"].split("/") if c]
     except KeyError:
@@ -48,12 +47,13 @@ def philo_dispatcher(environ,start_response):
                 template_name = "./templates/" + "bibliography" + '.mako'
             else:
                 template_name = "./templates/" + q["report"] + '.mako'
-            print >> sys.stderr, template_name
             template = Template(filename=template_name, lookup=mytemplates)
             hits = db.toms.query(**q["metadata"])
             results = metadata_results_wrapper(hits, db) 
             yield template.render(results=results,db=db,dbname=dbname,q=q,report_function=function,path=path,make_query_link=make_query_link, form=False).encode("UTF-8")
         else:
+            if re.search('([A-Z]+|\*)', q['q']):
+                q['q'] = crapser(q['q'])
             template_name = "./templates/" + (q["report"] or "concordance") + '.mako'
             template = Template(filename=template_name, lookup=mytemplates)
             hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
