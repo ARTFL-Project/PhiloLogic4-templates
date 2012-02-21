@@ -30,7 +30,6 @@ def expand_query(term, path):
     matching_list = set(match.split('\n'))
     matching_list = [i for i in matching_list if i]
     matching_list = '|'.join(matching_list)
-    print >> sys.stderr, matching_list
     return matching_list
 
 def crapser(term):
@@ -43,9 +42,8 @@ def crapser(term):
     ## Iterate through query
     matching_list = ''
     for t in term.split():
-        print >> sys.stderr, t
         matching_list += expand_query(t, path) + ' '
-        
+ 
     return matching_list.rstrip()
     
 def sql_crapser(term, field, db):
