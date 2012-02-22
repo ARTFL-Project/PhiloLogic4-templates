@@ -11,7 +11,7 @@ def parse_cgi(environ):
     cgi = urlparse.parse_qs(environ["QUERY_STRING"],keep_blank_values=True)
     myname = environ["SCRIPT_FILENAME"]
     dbfile = os.path.dirname(myname) + "/data"
-    print >> sys.stderr, dbfile, myname
+    print >> sys.stderr, dbfile, 'HOHOHOHOHOHO'
     db = PhiloDB(dbfile)
     query = {}
     query["q"] = cgi.get("q",[None])[0]
@@ -34,10 +34,7 @@ def parse_cgi(environ):
     query["end"] = int(cgi.get('end',[0])[0]) 
     query["width"] = int(cgi.get("width",[0])[0]) or db.locals["conc_width"] # TODO: REMOVE
     query["field"] = cgi.get("field",[None])[0]
-    print >> sys.stderr, query["field"]
     query["metadata"] = {}
-    print >> sys.stderr, "metadata_fields = " + repr(db.locals["metadata_fields"])
-    print >> sys.stderr, "cgi = " + repr(cgi)
     metadata_fields = db.locals["metadata_fields"]
     num_empty = 0
     for field in metadata_fields:

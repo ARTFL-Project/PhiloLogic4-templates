@@ -37,6 +37,7 @@ def crapser(term):
     ## Find path to all_frequencies
     path = os.environ['SCRIPT_FILENAME']
     path = path.replace('dispatcher.py', '')
+    path = path.replace('scripts/get_hit_num.py', '') ## support for get_hit_num
     path += 'data/WORK/all_frequencies'
     
     ## Iterate through query

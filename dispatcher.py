@@ -61,7 +61,11 @@ def philo_dispatcher(environ,start_response):
             template = Template(filename=template_name, lookup=mytemplates)
             hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
             results = results_wrapper(hits,db)
-            yield template.render(results=results,db=db,dbname=dbname,q=q,report_function=function, format=functions.format, path=path, hitnum=len(hits), make_query_link=make_query_link, make_object_link=make_object_link,page_interval=page_interval,page_links=page_links, byte_query=byte_query, results_per_page=q['results_per_page'], form=False).encode("UTF-8")
+            yield template.render(results=results,db=db,dbname=dbname,q=q,report_function=function,
+                                  format=functions.format, path=path, hitnum=len(hits), make_query_link=make_query_link,
+                                  make_object_link=make_object_link,page_interval=page_interval,page_links=page_links,
+                                  byte_query=byte_query, results_per_page=q['results_per_page'], form=False,
+                                  q_string = environ['QUERY_STRING']).encode("UTF-8")
         
         
         
