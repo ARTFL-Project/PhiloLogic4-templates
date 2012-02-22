@@ -10,7 +10,7 @@ from scripts.crapser import *
 
 def parse_cgi(environ, q=False):
     myname = environ["SCRIPT_FILENAME"]
-    myname = myname.replace('scripts/get_hit_num.py', '')
+    myname = myname.replace('scripts/get_hit_num.py', '') ## when get_hit_num calls this function
     dbfile = os.path.dirname(myname) + "/data"
     db = PhiloDB(dbfile)
     if q:
