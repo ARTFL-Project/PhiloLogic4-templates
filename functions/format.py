@@ -29,12 +29,12 @@ def chunkifier(conc_text, bytes, kwic=False, highlight=False):
     * from the first hit to the end of the last hit
     * form the end of the last hit to the end of the passage
     Returns a tuple containing all three parts of the passage"""
-    conc_text = re.sub("[ \n\r]*.+$", "", conc_text) ## no words cut out, or worse, no broken mutiple-byte chars
+    conc_text = re.sub("[ \n\r]+\w*$", "", conc_text) ## no words cut out, or worse, no broken mutiple-byte chars
     conc_start = conc_text[:bytes[0]]
     conc_middle = ''
     end_byte = int
     for pos, word_byte in enumerate(bytes):
-        if highlight:
+        if highlight: 
             text, end_byte = highlighter(conc_text, word_byte, kwic=kwic)
         else:
             text_chunks = re.split("([\w']+)", conc_text[word_byte:])
