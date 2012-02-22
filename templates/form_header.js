@@ -64,21 +64,6 @@ $(document).ready(function(){
         $("#frequency").show()
     }
     
-    if ($("#hit_num")) {
-        $("#hit_num").hide()
-        var q_string = $("#hit_num").text()
-        $.ajax({
-            type: "GET",
-            url: '/philo4/${dbname}/scripts/get_hit_num.py',
-            data: {q:q_string},
-            dataType: "text",
-            success: function(num) {
-                $("#hit_num").html(num).show(600);
-            }
-        });
-    }
-    
-    
 });
 
 function showHide(value) {
