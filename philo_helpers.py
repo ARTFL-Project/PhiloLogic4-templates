@@ -8,11 +8,16 @@ import os
 from philologic.PhiloDB import PhiloDB
 from scripts.crapser import *
 
-def parse_cgi(environ):
-    cgi = urlparse.parse_qs(environ["QUERY_STRING"],keep_blank_values=True)
+def parse_cgi(environ, q=False):
     myname = environ["SCRIPT_FILENAME"]
+    myname = myname.replace('scripts/get_hit_num.py', '')
     dbfile = os.path.dirname(myname) + "/data"
     db = PhiloDB(dbfile)
+    if q:
+        cgi = urlparse.parse_qs(q,keep_blank_values=True)
+    else:
+        cgi = urlparse.parse_qs(environ["QUERY_STRING"],keep_blank_values=True)
+   
     query = {}
     query["q"] = cgi.get("q",[None])[0]
     query["method"] = cgi.get("method",[None])[0] 
