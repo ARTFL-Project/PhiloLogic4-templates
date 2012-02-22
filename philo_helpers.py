@@ -6,12 +6,12 @@ import re
 import sys
 import os
 from philologic.PhiloDB import PhiloDB
+from scripts.crapser import *
 
 def parse_cgi(environ):
     cgi = urlparse.parse_qs(environ["QUERY_STRING"],keep_blank_values=True)
     myname = environ["SCRIPT_FILENAME"]
     dbfile = os.path.dirname(myname) + "/data"
-    print >> sys.stderr, dbfile, 'HOHOHOHOHOHO'
     db = PhiloDB(dbfile)
     query = {}
     query["q"] = cgi.get("q",[None])[0]
@@ -51,6 +51,10 @@ def parse_cgi(environ):
         query["no_q"] = True
     else:
         query["no_q"] = False
+    
+    if query['q']:  
+        if re.search('([A-Z]+|\*)', query['q']):
+            query['q'] = crapser(query['q'])
         
     return (db,query)
 
