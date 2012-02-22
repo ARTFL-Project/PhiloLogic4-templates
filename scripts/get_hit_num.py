@@ -6,7 +6,6 @@ import cgi
 import re
 import urlparse ## to be removed when parse_cgi is moved elsewhere
 from philologic.PhiloDB import PhiloDB
-from HitWrapper import results_wrapper ## To be changed once it's part of the Philo lib
 from crapser import crapser
 
 ## This function (without mods) already exists in philo_helpers.py: we need a helpers script
@@ -56,16 +55,12 @@ def parse_cgi(q, dbfile):
 if  __name__ == '__main__':
     form = cgi.FieldStorage()
     query = form.getvalue('q')
-    print >> sys.stderr, 'HIHIHIHIHI', query
     path = os.environ['SCRIPT_FILENAME']
     path = path.replace('scripts/get_hit_num.py', '')
     path += 'data/'
     query, db = parse_cgi(query, path)
     hits = db.query(query["q"],query["method"],query["arg"],**query["metadata"])
-    results = results_wrapper(hits,db)
-    length = len(results)
-    print >> sys.stderr, length
     print "Content-Type: text/html\n"
-    print length
+    print len(hits)
     
 
