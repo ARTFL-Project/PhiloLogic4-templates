@@ -18,7 +18,7 @@
  <option value='collocation'>Collocation</option>
  <option value='frequency'>Frequency Table</option></select></td></tr>
  
- <tr id="collocation" style="display:none;"><td>Within </td><td><select name='word_num'>
+ <tr id="collocation"><td>Within </td><td><select name='word_num'>
  <option value='1'>1
  <option value='2'>2
  <option value='3'>3
@@ -31,7 +31,7 @@
  <option value='10'>10
  </select> words</td></tr>
  
- <tr id="frequency" style="display:none;"><td>Frequency by:</td><td><select name='field'>
+ <tr id="frequency"><td>Frequency by:</td><td><select name='field'>
 % for facet in db.locals["metadata_fields"]:
     <option value='${facet}'>${facet}
 %endfor
