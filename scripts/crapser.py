@@ -5,6 +5,7 @@ import cgi
 import subprocess
 import sys
 import re
+from script_helpers import *
 
 
 accents = {'A': "(a|\xc3\xa0|\xc3\xa1|\xc3\xa2|\xc3\xa3|\xc3\xa4|\xc3\x82)",
@@ -24,10 +25,7 @@ def expand_query(term, path):
     
     ## Add wildcard and search for pattern
     term = term.replace('*', '.*')
-    command = ['egrep', '-oie', "%s" % term, '%s' % path]
-    process = subprocess.Popen(command, stdout=subprocess.PIPE)
-    match, stderr = process.communicate()
-    matching_list = set(match.split('\n'))
+    matching_list = word_pattern_search(term, path)
     matching_list = [i for i in matching_list if i]
     matching_list = '|'.join(matching_list)
     return matching_list
@@ -35,10 +33,7 @@ def expand_query(term, path):
 def crapser(term):
     """ Expand queries"""
     ## Find path to all_frequencies
-    path = os.environ['SCRIPT_FILENAME']
-    path = path.replace('dispatcher.py', '')
-    path = path.replace('scripts/get_hit_num.py', '') ## support for get_hit_num
-    path += 'data/WORK/all_frequencies'
+    path = word_frequencies_file(os.environ)
     
     ## Iterate through query
     matching_list = ''

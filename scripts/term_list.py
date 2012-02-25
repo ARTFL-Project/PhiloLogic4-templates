@@ -4,28 +4,18 @@ import os
 import cgi
 import sys
 import json
+from script_helpers import *
 
-def read_file():
-    path = os.environ['SCRIPT_FILENAME']
-    path = path.replace('scripts/term_list.py', '')
-    path += 'data/WORK/all_frequencies'
-    return open(path)
     
 def autocomplete_term(word_start):
-    words = []
-    filehandle = read_file()
+    path = word_frequencies_file(os.environ)
     
     ## Workaround for when jquery send a list of words: happens when using the back button
     if isinstance(word_start, list):
         word_start = word_start[-1]
-    
-    for line in filehandle:
-        freq, word = line.split()
-        if word.startswith(word_start):
-            words.append(word)
-        if len(words) == 10:
-            break
-    filehandle.close()
+        
+    word_start +='*'
+    words = word_pattern_search(word_start, path)[:10]
     return json.dumps(words)
 
 if __name__ == "__main__":
