@@ -8,7 +8,7 @@ from script_helpers import *
 
     
 def autocomplete_term(word_start):
-    path = word_frequencies_file(os.environ)
+    path = frequencies_file(os.environ, 'word')
     
     ## Workaround for when jquery send a list of words: happens when using the back button
     if isinstance(word_start, list):
