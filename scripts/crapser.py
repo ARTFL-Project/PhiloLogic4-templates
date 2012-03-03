@@ -33,7 +33,7 @@ def expand_query(term, path):
 def crapser(term):
     """ Expand queries"""
     ## Find path to all_frequencies
-    path = word_frequencies_file(os.environ)
+    path = frequencies_file(os.environ, 'word')
     
     ## Iterate through query
     matching_list = ''
