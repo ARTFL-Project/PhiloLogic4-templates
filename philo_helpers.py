@@ -30,6 +30,9 @@ def parse_cgi(environ):
     ## This defines within how many words for collocation tables
     query["word_num"] = int(cgi.get("word_num",[0])[0])
     
+    # This defines the collocate for collocation to concordance searches
+    query["collocate"] = cgi.get("collocate",[None])[0]
+    
 #    query["dbname"] = dbname
     query["dbpath"] = dbfile
     query["start"] = int(cgi.get('start',[0])[0]) # special range handling done in each service now.
