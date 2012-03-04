@@ -8,7 +8,7 @@
   kwic_results = report_function(results, path, q, byte_query, start-1, end)
   biblio = []
   %>
-  Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${hitnum} for query "${q['q'].decode("utf-8")}"
+  Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${hitnum} for query "${q['q'].decode("utf-8", "ignore")}"
  </div>
   % for i, hit in kwic_results:
    <div class="kwic_concordance">${i}</div>

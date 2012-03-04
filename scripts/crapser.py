@@ -26,8 +26,7 @@ def expand_query(term, path):
     ## Add wildcard and search for pattern
     term = term.replace('*', '.*')
     matching_list = word_pattern_search(term, path)
-    matching_list = [i for i in matching_list if i]
-    matching_list = '|'.join(matching_list)
+    matching_list = [i.strip() for i in matching_list if i]
     return matching_list
 
 def crapser(term):
@@ -36,11 +35,11 @@ def crapser(term):
     path = frequencies_file(os.environ, 'word')
     
     ## Iterate through query
-    matching_list = ''
+    matching_list = []
     for t in term.split():
-        matching_list += expand_query(t, path) + ' '
- 
-    return matching_list.rstrip()
+        matching_list.extend(expand_query(t, path))
+    matching_list = list(set(matching_list))
+    return '|'.join(matching_list)
     
 def sql_crapser(term, field, db):
     """Expand metadata queries"""
