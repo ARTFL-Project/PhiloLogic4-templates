@@ -1,7 +1,7 @@
 <%include file="header.mako"/>
 <div class='philologic_frequency_report'>
  <p class='status'>Frequency Table</p>
-<% field, counts = report_function(results, q) %>
+<% field, counts = report_function(results, q, db) %>
 <table border="1" class="philologic_table">
   <tr><th>${field}</th><th>count</th></tr>
 % for k,v in counts:

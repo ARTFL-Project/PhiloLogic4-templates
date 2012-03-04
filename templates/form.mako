@@ -35,8 +35,8 @@
 % for facet in db.locals["metadata_fields"]:
     <option value='${facet}'>${facet}
 %endfor
-<input type="radio" name="rate" value="normal" checked/>Normal
-<input type="radio" name="rate" value="rated"/>per 10,000
+<input type="radio" name="rate" value="raw" checked/>Normal
+<input type="radio" name="rate" value="relative"/>per 10,000
 </td></tr>
 <tr id="results_per_page"><td>Results per page:</td><td><select name='results_per_page'>
  <option value='20' selected="selected">20</option>
