@@ -84,6 +84,10 @@ def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=
         q_params.append(("method",method))
     if methodarg:
         q_params.append(("arg",methodarg))
+    try:
+        metadata = dict([(k, v.encode('utf-8', 'ignore')) for k, v in metadata.items()])
+    except UnicodeDecodeError:
+        pass
     q_params.extend(metadata.items()[:])
     if report:
         q_params.append(("report",report))
