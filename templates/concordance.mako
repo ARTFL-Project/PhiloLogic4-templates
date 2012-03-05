@@ -9,7 +9,7 @@
   start, end, n = page_interval(results_per_page, len(results), q["start"], q["end"])
   biblio = set()
   %>
-  Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${hitnum} for query "${q['q'].decode("utf-8")}"
+  Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${hitnum} for query "${q['q'].decode("utf-8", "ignore")}"
   </div>
   % for i in results[start - 1:end]:
    <div class='philologic_occurence'>

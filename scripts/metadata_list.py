@@ -5,26 +5,18 @@ import cgi
 import sys
 import json
 from philologic.PhiloDB import PhiloDB
+from script_helpers import *
     
 def autocomplete_metadata(metadata, field, db):
-    conn = db.toms.dbh
-    c = conn.cursor()
+    path = frequencies_file(os.environ, field)
     
     ## Workaround for when jquery sends a list of words: this happens when using the back button
     if isinstance(metadata, list):
         metadata = metadata[-1]
         field = field[-1]    
 
-    start = metadata + '_%'
-    middle = '_% ' + metadata + '_%'
-    query = "select %s from toms where %s like '%s' or %s like '%s' group by %s order by count(%s) desc" % (field, field, start, field, middle, field, field)   
-    c .execute(query)
-    result_list = []
-    for result in c.fetchall():
-        result_list.append(result[0])
-        if len(result_list) == 10:
-            break
-    return json.dumps(result_list)
+    words = metadata_pattern_search(metadata, path)[:10]
+    return json.dumps(words)
 
 if __name__ == "__main__":
     path = os.environ['SCRIPT_FILENAME']

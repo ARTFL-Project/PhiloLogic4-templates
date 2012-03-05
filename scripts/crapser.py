@@ -5,6 +5,7 @@ import cgi
 import subprocess
 import sys
 import re
+from script_helpers import *
 
 
 accents = {'A': "(a|\xc3\xa0|\xc3\xa1|\xc3\xa2|\xc3\xa3|\xc3\xa4|\xc3\x82)",
@@ -24,27 +25,21 @@ def expand_query(term, path):
     
     ## Add wildcard and search for pattern
     term = term.replace('*', '.*')
-    command = ['egrep', '-oie', "%s" % term, '%s' % path]
-    process = subprocess.Popen(command, stdout=subprocess.PIPE)
-    match, stderr = process.communicate()
-    matching_list = set(match.split('\n'))
-    matching_list = [i for i in matching_list if i]
-    matching_list = '|'.join(matching_list)
+    matching_list = word_pattern_search(term, path)
+    matching_list = [i.strip() for i in matching_list if i]
     return matching_list
 
 def crapser(term):
     """ Expand queries"""
     ## Find path to all_frequencies
-    path = os.environ['SCRIPT_FILENAME']
-    path = path.replace('dispatcher.py', '')
-    path += 'data/WORK/all_frequencies'
+    path = frequencies_file(os.environ, 'word')
     
     ## Iterate through query
-    matching_list = ''
+    matching_list = []
     for t in term.split():
-        matching_list += expand_query(t, path) + ' '
- 
-    return matching_list.rstrip()
+        matching_list.extend(expand_query(t, path))
+    matching_list = list(set(matching_list))
+    return '|'.join(matching_list)
     
 def sql_crapser(term, field, db):
     """Expand metadata queries"""

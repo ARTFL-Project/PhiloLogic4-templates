@@ -11,7 +11,11 @@ from HitWrapper import *
 from mako.template import Template
 from mako.lookup import TemplateLookup
 import functions
-from scripts.crapser import *
+
+## For debugging templates only ###
+from mako import exceptions
+###################################
+
 
 def philo_dispatcher(environ,start_response):
     status = '200 OK'
@@ -55,13 +59,18 @@ def philo_dispatcher(environ,start_response):
             results = metadata_results_wrapper(hits, db) 
             yield template.render(results=results,db=db,dbname=dbname,q=q,report_function=function,path=path,make_query_link=make_query_link, form=False).encode("UTF-8")
         else:
-            if re.search('([A-Z]+|\*)', q['q']):
-                q['q'] = crapser(q['q'])
             template_name = "./templates/" + (q["report"] or "concordance") + '.mako'
             template = Template(filename=template_name, lookup=mytemplates)
             hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
             results = results_wrapper(hits,db)
-            yield template.render(results=results,db=db,dbname=dbname,q=q,report_function=function, format=functions.format, path=path, hitnum=len(hits), make_query_link=make_query_link, make_object_link=make_object_link,page_interval=page_interval,page_links=page_links, byte_query=byte_query, results_per_page=q['results_per_page'], form=False).encode("UTF-8")
+            try:
+                yield template.render(results=results,db=db,dbname=dbname,q=q,report_function=function,
+                                      format=functions.format, path=path, hitnum=len(hits), make_query_link=make_query_link,
+                                      make_object_link=make_object_link,page_interval=page_interval,page_links=page_links,
+                                      byte_query=byte_query, results_per_page=q['results_per_page'], form=False,
+                                      q_string = environ['QUERY_STRING']).encode("UTF-8", "ignore")
+            except:
+                yield exceptions.html_error_template().render()
         
         
         

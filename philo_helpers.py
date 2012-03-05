@@ -6,13 +6,15 @@ import re
 import sys
 import os
 from philologic.PhiloDB import PhiloDB
+from scripts.crapser import *
 
 def parse_cgi(environ):
-    cgi = urlparse.parse_qs(environ["QUERY_STRING"],keep_blank_values=True)
     myname = environ["SCRIPT_FILENAME"]
+    myname = myname.replace('scripts/get_hit_num.py', '') ## when get_hit_num calls this function
     dbfile = os.path.dirname(myname) + "/data"
-    print >> sys.stderr, dbfile, myname
     db = PhiloDB(dbfile)
+    cgi = urlparse.parse_qs(environ["QUERY_STRING"],keep_blank_values=True)
+   
     query = {}
     query["q"] = cgi.get("q",[None])[0]
     query["method"] = cgi.get("method",[None])[0] 
@@ -28,16 +30,19 @@ def parse_cgi(environ):
     ## This defines within how many words for collocation tables
     query["word_num"] = int(cgi.get("word_num",[0])[0])
     
+    # This defines the collocate for collocation to concordance searches
+    query["collocate"] = cgi.get("collocate",[None])[0]
+    
+    ## This is for frequency searches: raw count or per n number of words
+    query["rate"] = cgi.get("rate", [None])[0]
+    
 #    query["dbname"] = dbname
     query["dbpath"] = dbfile
     query["start"] = int(cgi.get('start',[0])[0]) # special range handling done in each service now.
     query["end"] = int(cgi.get('end',[0])[0]) 
     query["width"] = int(cgi.get("width",[0])[0]) or db.locals["conc_width"] # TODO: REMOVE
     query["field"] = cgi.get("field",[None])[0]
-    print >> sys.stderr, query["field"]
     query["metadata"] = {}
-    print >> sys.stderr, "metadata_fields = " + repr(db.locals["metadata_fields"])
-    print >> sys.stderr, "cgi = " + repr(cgi)
     metadata_fields = db.locals["metadata_fields"]
     num_empty = 0
     for field in metadata_fields:
@@ -54,6 +59,10 @@ def parse_cgi(environ):
         query["no_q"] = True
     else:
         query["no_q"] = False
+    
+    if query['q']:  
+        if re.search('([A-Z]+|\*)', query['q']):
+            query['q'] = crapser(query['q'])
         
     return (db,query)
 
@@ -78,6 +87,10 @@ def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=
         q_params.append(("method",method))
     if methodarg:
         q_params.append(("arg",methodarg))
+    try:
+        metadata = dict([(k, v.encode('utf-8', 'ignore')) for k, v in metadata.items()])
+    except UnicodeDecodeError:
+        pass
     q_params.extend(metadata.items()[:])
     if report:
         q_params.append(("report",report))

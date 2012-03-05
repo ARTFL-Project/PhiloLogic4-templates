@@ -63,6 +63,7 @@ $(document).ready(function(){
         $("#results_per_page").hide()
         $("#frequency").show()
     }
+    
 });
 
 function showHide(value) {
@@ -82,4 +83,5 @@ function showHide(value) {
         $("#results_per_page").show()
     }
 }
+
 </script>

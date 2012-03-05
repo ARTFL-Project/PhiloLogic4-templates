@@ -8,9 +8,7 @@
 <link type="text/css" href="/philo4/${dbname}/css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js" type="text/javascript"></script>
 <script type="text/javascript" src="/philo4/${dbname}/js/jquery-ui-1.8.17.custom.min.js"></script>
-% if form:
-    <%include file="form_header.js"/>
-% endif
+<%include file="form_header.js"/>
 </head>
 <body >
   
