@@ -19,24 +19,24 @@
  <option value='frequency'>Frequency Table</option></select></td></tr>
  
  <tr id="collocation"><td>Within </td><td><select name='word_num'>
- <option value='1'>1
- <option value='2'>2
- <option value='3'>3
- <option value='4'>4
- <option value='5' selected="selected">5
- <option value='6'>6
- <option value='7'>7
- <option value='8'>8
- <option value='9'>9
- <option value='10'>10
+ <option value='1'>1</option>
+ <option value='2'>2</option>
+ <option value='3'>3</option>
+ <option value='4'>4</option>
+ <option value='5' selected="selected">5</option>
+ <option value='6'>6</option>
+ <option value='7'>7</option>
+ <option value='8'>8</option>
+ <option value='9'>9</option>
+ <option value='10'>10</option>
  </select> words</td></tr>
  
  <tr id="frequency"><td>Frequency by:</td><td><select name='field'>
 % for facet in db.locals["metadata_fields"]:
-    <option value='${facet}'>${facet}
+    <option value='${facet}'>${facet}</option>
 %endfor
-<input type="radio" name="rate" value="normal" checked/>Normal
-<input type="radio" name="rate" value="rated"/>per 10,000
+<input type="radio" name="rate" value="raw" checked/>Normal</input>
+<input type="radio" name="rate" value="relative"/>per 10,000</input>
 </td></tr>
 <tr id="results_per_page"><td>Results per page:</td><td><select name='results_per_page'>
  <option value='20' selected="selected">20</option>

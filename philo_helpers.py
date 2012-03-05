@@ -33,6 +33,9 @@ def parse_cgi(environ):
     # This defines the collocate for collocation to concordance searches
     query["collocate"] = cgi.get("collocate",[None])[0]
     
+    ## This is for frequency searches: raw count or per n number of words
+    query["rate"] = cgi.get("rate", [None])[0]
+    
 #    query["dbname"] = dbname
     query["dbpath"] = dbfile
     query["start"] = int(cgi.get('start',[0])[0]) # special range handling done in each service now.
@@ -84,6 +87,10 @@ def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=
         q_params.append(("method",method))
     if methodarg:
         q_params.append(("arg",methodarg))
+    try:
+        metadata = dict([(k, v.encode('utf-8', 'ignore')) for k, v in metadata.items()])
+    except UnicodeDecodeError:
+        pass
     q_params.extend(metadata.items()[:])
     if report:
         q_params.append(("report",report))
