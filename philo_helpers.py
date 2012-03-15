@@ -36,6 +36,9 @@ def parse_cgi(environ):
     ## This is for frequency searches: raw count or per n number of words
     query["rate"] = cgi.get("rate", [None])[0]
     
+    ## This is for ranked relevancy
+    query['obj_type'] = 'doc'
+    
 #    query["dbname"] = dbname
     query["dbpath"] = dbfile
     query["start"] = int(cgi.get('start',[0])[0]) # special range handling done in each service now.
@@ -108,7 +111,7 @@ def make_object_link(philo_id, hit_bytes):
     
 def byte_query(hit_bytes):
     """This is used for navigating concordance results and highlighting hits"""
-    return '/?' + '&'.join(['byte=%d' % byte for byte in hit_bytes])
+    return '/?' + '&'.join(['byte=%d' % int(byte) for byte in hit_bytes])
 
 def page_interval(num, results_len, start, end):
     if start <= 0:

@@ -8,6 +8,7 @@ from wsgiref.util import shift_path_info
 from philologic.PhiloDB import PhiloDB
 from philo_helpers import *
 from HitWrapper import *
+from IRHitWrapper import *
 from mako.template import Template
 from mako.lookup import TemplateLookup
 import functions
@@ -61,8 +62,12 @@ def philo_dispatcher(environ,start_response):
         else:
             template_name = "./templates/" + (q["report"] or "concordance") + '.mako'
             template = Template(filename=template_name, lookup=mytemplates)
-            hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
-            results = results_wrapper(hits,db)
+            if q['report'] == 'relevance':
+                hits = functions.retrieve_hits(q, path)
+                results = ir_results_wrapper(hits,db,path)
+            else:
+                hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
+                results = results_wrapper(hits,db)
             try:
                 yield template.render(results=results,db=db,dbname=dbname,q=q,report_function=function,
                                       format=functions.format, path=path, hitnum=len(hits), make_query_link=make_query_link,
