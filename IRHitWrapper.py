@@ -12,7 +12,6 @@ class ir_hit_wrapper(object):
     
     def __init__(self, hit, bytes, db, score, path, obj_type=False, encoding='utf-8'):
         self.toms_db = db
-        print >> sys.stderr, path + '/data/' + obj_type + '_word_counts.db'
         self.db = sqlite3.connect(path + '/data/' + obj_type + '_word_counts.db')
         self.path = path
         self.hit = hit
@@ -36,7 +35,12 @@ class ir_results_wrapper(object):
         self.db = db
         self.sqlhits = sqlhits
         self.path = path
-        
+    
+    def __getitem__(self,n):
+        if isinstance(n,slice):
+            hits = self.sqlhits[n]
+            return [ir_hit_wrapper(philo_id.split(), bytes, self.db, tf_idf, self.path, obj_type=obj_type) for philo_id, obj_type, bytes, tf_idf in hits]
+    
     def __iter__(self):
         for philo_id, obj_type, bytes, tf_idf in self.sqlhits:
             hit_id = philo_id.split()

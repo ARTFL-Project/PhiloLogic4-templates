@@ -22,6 +22,19 @@ def retrieve_hits(q, path):
     toms_c.execute('select count(*) from toms where philo_type="%s"' % obj_type)
     total_docs = int(toms_c.fetchone()[0])
     
+    ## Filter out if necessary
+    philo_ids = []
+    for field in q['metadata']:
+        if field != 'n' and q['metadata'][field] != '':
+            query = 'select philo_id from toms where %s=?' % field
+            toms_c.execute(query, (q['metadata'][field],))
+            results = [i[0].split()[0] for i in toms_c.fetchall()] ## just keep doc id
+            print >> sys.stderr, results
+            philo_ids.extend(results)
+    if philo_ids:
+        philo_ids = set(philo_ids)
+        print >> sys.stderr, philo_ids
+    
     ## Compute IDF
     c.execute('select count(*) from toms where philo_name=?', (q['q'],))
     docs_with_word = int(c.fetchone()[0]) or 1  ## avoid division by 0
@@ -34,13 +47,16 @@ def retrieve_hits(q, path):
     c.execute(query, (q['q'],))
     new_results = []
     for philo_id, token_counts, byte_start in c.fetchall():
-        obj_id = ' '.join(philo_id[0].split()[:depth]) 
-        obj_id = obj_id + ' ' + ' '.join('0' for i in range(7 - depth))
-        toms_c.execute('select word_count from toms where philo_id=?', (obj_id,))
-        total_word_count = int(toms_c.fetchone()[0])
-        term_frequency = token_counts/total_word_count
-        tf_idf = term_frequency * idf
-        new_results.append((philo_id, obj_type, byte_start.split(), tf_idf))
+        doc_id = philo_id.split()[0]
+        #print >> sys.stderr, doc_id
+        if not philo_ids or doc_id in philo_ids:
+            obj_id = ' '.join(philo_id[0].split()[:depth]) 
+            obj_id = obj_id + ' ' + ' '.join('0' for i in range(7 - depth))
+            toms_c.execute('select word_count from toms where philo_id=?', (obj_id,))
+            total_word_count = int(toms_c.fetchone()[0])
+            term_frequency = token_counts/total_word_count
+            tf_idf = term_frequency * idf
+            new_results.append((philo_id, obj_type, byte_start.split(), tf_idf))
     return sorted(new_results, key=lambda x: x[3], reverse=True)
  
 def relevance(hit, path, q):

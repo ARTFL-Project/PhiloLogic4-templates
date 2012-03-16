@@ -63,7 +63,11 @@ $(document).ready(function(){
         $("#results_per_page").hide()
         $("#frequency").show()
     }
-    
+    if ($("#report option[value='relevance']").attr('selected')) {
+        $("#frequency").hide()
+        $("#collocation").hide()
+        $("#results_per_page").show()
+    }
 });
 
 function showHide(value) {
@@ -77,7 +81,7 @@ function showHide(value) {
         $("#results_per_page").hide()
         $("#collocation").show()
     }
-    if (value == 'concordance' || value == 'kwic') {
+    if (value == 'concordance' || value == 'kwic' || value == 'relevance') {
         $("#frequency").hide()
         $("#collocation").hide()
         $("#results_per_page").show()
