@@ -14,6 +14,7 @@
 
  <tr><td>Report Generator:</td><td><select name='report' id="report" onchange="showHide(this.value);">
  <option value='concordance' selected="selected">Concordance</option>
+ <option value='relevance'>Ranked relevance</option>
  <option value='kwic'>KWIC</option>
  <option value='collocation'>Collocation</option>
  <option value='frequency'>Frequency Table</option></select></td></tr>
