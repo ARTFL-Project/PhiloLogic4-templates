@@ -22,8 +22,13 @@
    q["metadata"]['author'] = author
    q["metadata"]['title'] = title
    url = make_query_link(q["q"],q["method"],q["arg"],**q["metadata"])
+   hit_num = len(i.bytes)
+   if hit_num >= 4:
+       sample_num = 4
+   else:
+       sample_num = hit_num 
    %>
-   <a href='${url}'>${title}, ${author}</a> score: ${i.score}
+   ${n}. <a href='${url}'>${title}, ${author}</a>: ${sample_num} occurences displayed of ${hit_num} occurences in document
    % if kwic:
     <div class="kwic_concordance">
    % endif

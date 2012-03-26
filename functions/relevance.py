@@ -30,11 +30,9 @@ def retrieve_hits(q, path):
             query = 'select philo_id from toms where %s=?' % field
             toms_c.execute(query, (q['metadata'][field],))
             results = [i[0].split()[0] for i in toms_c.fetchall()] ## just keep doc id
-            print >> sys.stderr, results
             philo_ids.extend(results)
     if philo_ids:
         philo_ids = set(philo_ids)
-        print >> sys.stderr, philo_ids
     
     ## Compute IDF
     c.execute('select count(*) from toms where philo_name=?', (q['q'],))
@@ -46,31 +44,29 @@ def retrieve_hits(q, path):
     
     ## Construct query
     if len(q['q'].split()) > 1:
-        query = 'select philo_id, %s_token_count, byte_start from toms where ' % obj_type
-        words =  []
-        for word in q['q'].split():
-            words.append('philo_name="%"' % word)
-        words = ' and '.join(words)
-        c.execute(query + words)
+        query = 'select philo_id, %s_token_count, bytes, word_count from toms where ' % obj_type
+        words =  q['q'].split()
+        query += ' and '.join(['philo_name=?' for i in words])
+        c.execute(query, words)
     else:
-        query = 'select philo_id, %s_token_count, byte_start from toms where philo_name=?' % obj_type
+        query = 'select philo_id, %s_token_count, bytes, word_count from toms where philo_name=?' % obj_type
         c.execute(query, (q['q'],))
+    
+    ## TODO: implement multiple word query search
     new_results = []
-    for philo_id, token_counts, byte_start in c.fetchall():
+    for philo_id, token_counts, bytes, word_count in c.fetchall():
         doc_id = philo_id.split()[0]
-        #print >> sys.stderr, doc_id
         if not philo_ids or doc_id in philo_ids:
             obj_id = ' '.join(philo_id[0].split()[:depth]) 
             obj_id = obj_id + ' ' + ' '.join('0' for i in range(7 - depth))
-            toms_c.execute('select word_count from toms where philo_id=?', (obj_id,))
-            total_word_count = int(toms_c.fetchone()[0])
+            total_word_count = int(word_count)
             term_frequency = token_counts/total_word_count
             tf_idf = term_frequency * idf
-            new_results.append((philo_id, obj_type, byte_start.split(), tf_idf))
+            new_results.append((philo_id, obj_type, bytes.split(), tf_idf))
     return sorted(new_results, key=lambda x: x[3], reverse=True)
  
 def relevance(hit, path, q, kwic=True):
-    length = 100
+    length = 400
     text_snippet = []
     for byte in hit.bytes[:4]:
         byte = [int(byte)]
