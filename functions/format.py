@@ -108,11 +108,11 @@ def clean_text(text, notag=True, kwic=False, collocation=False):
     return text
   
   
-def align_text(text, hit, chars=40):
+def align_text(text, byte_num, chars=40):
     """This function is meant for formating text for KWIC results"""
     start_hit = text.index('<b>')
     end_hit = text.index('</b>') + 4
-    tag_length = 7 * len(hit.bytes)
+    tag_length = 7 * byte_num
     start_text = convert_entities(text[:start_hit])
     if len(start_text) < chars:
         white_space = ' ' * (chars - len(start_text))

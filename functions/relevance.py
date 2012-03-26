@@ -3,7 +3,7 @@
 from __future__ import division
 import sqlite3
 from math import log
-from format import adjust_bytes, chunkifier, clean_text
+from format import adjust_bytes, chunkifier, clean_text, align_text
 from get_text import get_text
 import sys
 
@@ -14,6 +14,7 @@ def retrieve_hits(q, path):
     
     ## Open cursors for sqlite tables
     conn = sqlite3.connect(path + '/data/' + obj_type + '_word_counts.db')
+    conn.text_factory = str
     c = conn.cursor()
     toms_conn = sqlite3.connect(path + '/data/toms.db')
     toms_c = toms_conn.cursor()
@@ -43,8 +44,17 @@ def retrieve_hits(q, path):
         doc_freq = (total_docs + 1) / docs_with_word ## The logarithm won't be equal to 0
     idf = log(doc_freq)
     
-    query = 'select philo_id, %s_token_count, byte_start from toms where philo_name=?' % obj_type
-    c.execute(query, (q['q'],))
+    ## Construct query
+    if len(q['q'].split()) > 1:
+        query = 'select philo_id, %s_token_count, byte_start from toms where ' % obj_type
+        words =  []
+        for word in q['q'].split():
+            words.append('philo_name="%"' % word)
+        words = ' and '.join(words)
+        c.execute(query + words)
+    else:
+        query = 'select philo_id, %s_token_count, byte_start from toms where philo_name=?' % obj_type
+        c.execute(query, (q['q'],))
     new_results = []
     for philo_id, token_counts, byte_start in c.fetchall():
         doc_id = philo_id.split()[0]
@@ -59,18 +69,27 @@ def retrieve_hits(q, path):
             new_results.append((philo_id, obj_type, byte_start.split(), tf_idf))
     return sorted(new_results, key=lambda x: x[3], reverse=True)
  
-def relevance(hit, path, q):
+def relevance(hit, path, q, kwic=True):
     length = 100
     text_snippet = []
     for byte in hit.bytes[:4]:
         byte = [int(byte)]
         bytes, byte_start = adjust_bytes(byte, length)
         conc_text = get_text(hit, byte_start, length, path)
-        conc_start, conc_middle, conc_end = chunkifier(conc_text, bytes, highlight=True)
-        conc_start = clean_text(conc_start)
-        conc_end = clean_text(conc_end)
-        conc_text = conc_start + conc_middle + conc_end
+        conc_start, conc_middle, conc_end = chunkifier(conc_text, bytes, highlight=True, kwic=kwic)
+        conc_start = clean_text(conc_start, kwic=kwic)
+        conc_end = clean_text(conc_end, kwic=kwic)
+        if kwic:
+            conc_middle = clean_text(conc_middle, notag=False, kwic=kwic)
+            conc_text = conc_start + conc_middle + conc_end
+            conc_text = align_text(conc_text, 1)
+        else:
+            conc_text = conc_start + conc_middle + conc_end
         text_snippet.append(conc_text)
-    return '...'.join(text_snippet).decode('utf-8', 'ignore')
+    if kwic:
+        text = '<br>\n'.join(text_snippet).decode('utf-8', 'ignore')
+    else:
+        text = '... '.join(text_snippet).decode('utf-8', 'ignore')
+    return text
     
      
