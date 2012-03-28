@@ -11,6 +11,7 @@ def frequencies_file(environ, field_type):
     return path
 
 def word_pattern_search(term, path):
+    term = term.replace('*', '.*')
     command = ['egrep', '-ie', "^%s" % term, '%s' % path]
     process = subprocess.Popen(command, stdout=subprocess.PIPE)
     match, stderr = process.communicate()
