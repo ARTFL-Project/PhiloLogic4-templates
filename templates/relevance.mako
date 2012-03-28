@@ -19,9 +19,11 @@
    biblio.add(i)
    author = i.author
    title = i.title
-   q["metadata"]['author'] = author
-   q["metadata"]['title'] = title
-   url = make_query_link(q["q"],q["method"],q["arg"],**q["metadata"])
+   from copy import deepcopy
+   link_metadata = deepcopy(q["metadata"])
+   link_metadata['author'] = author
+   link_metadata['title'] = title
+   url = make_query_link(q["q"],q["method"],q["arg"],**link_metadata)
    hit_num = len(i.bytes)
    if hit_num >= 4:
        sample_num = 4

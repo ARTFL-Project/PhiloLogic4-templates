@@ -3,6 +3,7 @@
 from __future__ import division
 import sqlite3
 from math import log
+from random import sample
 from format import adjust_bytes, chunkifier, clean_text, align_text
 from get_text import get_text
 import sys
@@ -19,20 +20,20 @@ def retrieve_hits(q, path):
     toms_conn = sqlite3.connect(path + '/data/toms.db')
     toms_c = toms_conn.cursor()
     
-    ## Get total number of objects
-    toms_c.execute('select count(*) from toms where philo_type="%s"' % obj_type)
-    total_docs = int(toms_c.fetchone()[0])
-    
     ## Filter out if necessary
     philo_ids = []
     for field in q['metadata']:
         if field != 'n' and q['metadata'][field] != '':
-            query = 'select philo_id from toms where %s=?' % field
-            toms_c.execute(query, (q['metadata'][field],))
+            query = 'select philo_id from toms where %s=? and philo_type=?' % field
+            toms_c.execute(query, (q['metadata'][field], obj_type))
             results = [i[0].split()[0] for i in toms_c.fetchall()] ## just keep doc id
             philo_ids.extend(results)
     if philo_ids:
         philo_ids = set(philo_ids)
+        total_docs = len(philo_ids)
+    else:
+        toms_c.execute('select count(*) from toms where philo_type="%s"' % obj_type)
+        total_docs = int(toms_c.fetchone()[0])
     
     query_words = q['q'].replace('|', ' ') ## Handle ORs from crapser
     q['q'] = q['q'].replace(' ', '|') ## Add ORs for search links
@@ -86,10 +87,14 @@ def retrieve_hits(q, path):
             new_results[philo_id]['bytes'].extend(bytes.split()) 
     return sorted(new_results.iteritems(), key=lambda x: x[1]['tf_idf'], reverse=True)
  
-def relevance(hit, path, q, kwic=True):
+def relevance(hit, path, q, kwic=True, samples=4):
     length = 400
     text_snippet = []
-    for byte in hit.bytes[:4]:
+    if len(hit.bytes) >= samples:
+        byte_sample = sample(hit.bytes, samples)
+    else:
+        byte_sample = hit.bytes
+    for byte in byte_sample: 
         byte = [int(byte)]
         bytes, byte_start = adjust_bytes(byte, length)
         conc_text = get_text(hit, byte_start, length, path)
