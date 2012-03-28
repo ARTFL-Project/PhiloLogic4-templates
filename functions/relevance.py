@@ -34,36 +34,57 @@ def retrieve_hits(q, path):
     if philo_ids:
         philo_ids = set(philo_ids)
     
+    query_words = q['q'].replace('|', ' ') ## Handle ORs from crapser
+    q['q'] = q['q'].replace(' ', '|') ## Add ORs for search links
+    
     ## Compute IDF
-    c.execute('select count(*) from toms where philo_name=?', (q['q'],))
-    docs_with_word = int(c.fetchone()[0]) or 1  ## avoid division by 0
-    doc_freq = total_docs / docs_with_word
-    if doc_freq == 1:
-        doc_freq = (total_docs + 1) / docs_with_word ## The logarithm won't be equal to 0
-    idf = log(doc_freq)
+    idfs = {}
+    if len(query_words.split()) > 1:
+        for word in query_words.split():
+            c.execute('select count(*) from toms where philo_name=?', (word,))
+            docs_with_word = int(c.fetchone()[0]) or 1  ## avoid division by 0
+            doc_freq = total_docs / docs_with_word
+            if doc_freq == 1:
+                doc_freq = (total_docs + 1) / docs_with_word ## The logarithm won't be equal to 0
+            idf = log(doc_freq)
+            idfs[word] = idf
+    else:
+        c.execute('select count(*) from toms where philo_name=?', (query_words,))
+        docs_with_word = int(c.fetchone()[0]) or 1  ## avoid division by 0
+        doc_freq = total_docs / docs_with_word
+        if doc_freq == 1:
+            doc_freq = (total_docs + 1) / docs_with_word ## The logarithm won't be equal to 0
+        idf = log(doc_freq)
+        idfs[query_words] = idf
     
     ## Construct query
-    if len(q['q'].split()) > 1:
-        query = 'select philo_id, %s_token_count, bytes, word_count from toms where ' % obj_type
-        words =  q['q'].split()
-        query += ' and '.join(['philo_name=?' for i in words])
+    if len(query_words.split()) > 1:
+        query = 'select philo_id, philo_name, %s_token_count, bytes, word_count from toms where ' % obj_type
+        words =  query_words.split()
+        query += ' or '.join(['philo_name=?' for i in words])
         c.execute(query, words)
     else:
-        query = 'select philo_id, %s_token_count, bytes, word_count from toms where philo_name=?' % obj_type
-        c.execute(query, (q['q'],))
+        query = 'select philo_id, philo_name, %s_token_count, bytes, word_count from toms where philo_name=?' % obj_type
+        c.execute(query, (query_words,))
     
     ## TODO: implement multiple word query search
-    new_results = []
-    for philo_id, token_counts, bytes, word_count in c.fetchall():
+    new_results = {}
+    for philo_id, philo_name, token_counts, bytes, word_count in c.fetchall():
         doc_id = philo_id.split()[0]
         if not philo_ids or doc_id in philo_ids:
             obj_id = ' '.join(philo_id[0].split()[:depth]) 
             obj_id = obj_id + ' ' + ' '.join('0' for i in range(7 - depth))
             total_word_count = int(word_count)
             term_frequency = token_counts/total_word_count
-            tf_idf = term_frequency * idf
-            new_results.append((philo_id, obj_type, bytes.split(), tf_idf))
-    return sorted(new_results, key=lambda x: x[3], reverse=True)
+            tf_idf = term_frequency * idfs[philo_name]
+            if philo_id not in new_results:
+                new_results[philo_id] = {}
+                new_results[philo_id]['obj_type'] = obj_type
+                new_results[philo_id]['bytes'] = []
+                new_results[philo_id]['tf_idf'] = 0
+            new_results[philo_id]['tf_idf'] += tf_idf
+            new_results[philo_id]['bytes'].extend(bytes.split()) 
+    return sorted(new_results.iteritems(), key=lambda x: x[1]['tf_idf'], reverse=True)
  
 def relevance(hit, path, q, kwic=True):
     length = 400
