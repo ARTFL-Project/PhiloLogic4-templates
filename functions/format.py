@@ -60,10 +60,7 @@ def highlighter(text, word_byte, kwic=False):
     unicode_str = re.compile("([\w']+)", re.UNICODE)
     text_chunks = unicode_str.split(text[word_byte:].decode('utf-8', 'ignore'))
     end_byte = word_byte + len(text_chunks[1].encode('utf-8', 'ignore'))
-    if kwic:
-        text = '<b>' + text_chunks[1].encode('utf-8', 'ignore') + '</b>' # 0 element is always an empty string
-    else:
-        text = '<span class="highlight">' + text_chunks[1].encode('utf-8', 'ignore') + '</span>' # 0 element is always an empty string
+    text = '<span class="highlight">' + text_chunks[1].encode('utf-8', 'ignore') + '</span>' # 0 element is always an empty string
     return text, end_byte
 
 
@@ -78,9 +75,9 @@ def clean_text(text, notag=True, kwic=False, collocation=False):
         text = text.replace('\r', '')
         text = text.replace('\t', ' ')
         ## Assuming that the highlight tag is <b>
-        temp_text = re.sub('<(/?b)>', '[\\1]', text)
+        temp_text = re.sub('<(/?span.*)>', '[\\1]', text)
         temp_text = re.sub('<.*?>', '', temp_text)
-        text = re.sub('\[(/?b)\]', '<\\1>', temp_text)
+        text = re.sub('\[(/?span.*)\]', '<\\1>', temp_text)
         text = re.sub(' {2,}', ' ', text)
     if collocation:
         text = re.sub("-", " ", text)
@@ -108,13 +105,15 @@ def clean_text(text, notag=True, kwic=False, collocation=False):
     return text
   
   
-def align_text(text, hit, chars=40):
+def align_text(text, byte_num, chars=40):
     """This function is meant for formating text for KWIC results"""
-    start_hit = text.index('<b>')
-    end_hit = text.index('</b>') + 4
-    tag_length = 7 * len(hit.bytes)
+    start_hit = text.index('<span class="highlight">')
+    end_hit = text.index('</span>') + 7
+    tag_length = 7 * byte_num
     start_text = convert_entities(text[:start_hit])
     if len(start_text) < chars:
+        import sys
+        print >> sys.stderr, "hi"
         white_space = ' ' * (chars - len(start_text))
         start_text = white_space + start_text
     start_text = '<span style="white-space:pre-wrap;">' + start_text[-chars:] + '</span>'

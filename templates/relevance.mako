@@ -8,6 +8,7 @@
   <%
   start, end, n = page_interval(results_per_page, len(results), q["start"], q["end"])
   biblio = set()
+  kwic = True
   %>
   Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${hitnum} for query "${q['q'].decode("utf-8", "ignore")}"
   </div>
@@ -21,9 +22,20 @@
    q["metadata"]['author'] = author
    q["metadata"]['title'] = title
    url = make_query_link(q["q"],q["method"],q["arg"],**q["metadata"])
+   hit_num = len(i.bytes)
+   if hit_num >= 4:
+       sample_num = 4
+   else:
+       sample_num = hit_num 
    %>
-   <a href='${url}'>${title}, ${author}</a> score: ${i.score}
-    <div class='philologic_context'>${report_function(i, path, q)}</div>
+   ${n}. <a href='${url}'>${title}, ${author}</a>: ${sample_num} of ${hit_num} occurences displayed
+   % if kwic:
+    <div class="kwic_concordance">
+   % endif
+    <div class='philologic_context'>${report_function(i, path, q, kwic=kwic)}</div>
+   % if kwic:
+   </div>
+   % endif
    </div>
   % endfor
  </div>
