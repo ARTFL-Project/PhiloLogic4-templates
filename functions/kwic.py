@@ -26,7 +26,7 @@ def kwic(results, path, q, byte_query, start, end, length=400):
         conc_start = clean_text(conc_start, kwic=True)
         conc_end = clean_text(conc_end, kwic=True)
         conc_middle = clean_text(conc_middle, notag=False, kwic=True)
-        conc_text = (conc_start + conc_middle + conc_end).decode('utf-8')
+        conc_text = (conc_start + conc_middle + conc_end).decode('utf-8', 'ignore')
         conc_text = align_text(conc_text, len(hit.bytes))
         kwic_results.append((biblio, href, conc_text, hit))
     

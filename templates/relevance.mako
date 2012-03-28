@@ -28,7 +28,7 @@
    else:
        sample_num = hit_num 
    %>
-   ${n}. <a href='${url}'>${title}, ${author}</a>: ${sample_num} occurences displayed of ${hit_num} occurences in document
+   ${n}. <a href='${url}'>${title}, ${author}</a>: ${sample_num} of ${hit_num} occurences displayed
    % if kwic:
     <div class="kwic_concordance">
    % endif

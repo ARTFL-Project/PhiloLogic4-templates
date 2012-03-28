@@ -77,15 +77,15 @@ def relevance(hit, path, q, kwic=True):
         conc_end = clean_text(conc_end, kwic=kwic)
         if kwic:
             conc_middle = clean_text(conc_middle, notag=False, kwic=kwic)
-            conc_text = conc_start + conc_middle + conc_end
+            conc_text = (conc_start + conc_middle + conc_end).decode('utf-8', 'ignore')
             conc_text = align_text(conc_text, 1)
         else:
-            conc_text = conc_start + conc_middle + conc_end
+            conc_text = (conc_start + conc_middle + conc_end).decode('utf-8', 'ignore')
         text_snippet.append(conc_text)
     if kwic:
-        text = '<br>\n'.join(text_snippet).decode('utf-8', 'ignore')
+        text = '<br>\n'.join(text_snippet)
     else:
-        text = '... '.join(text_snippet).decode('utf-8', 'ignore')
+        text = '... '.join(text_snippet)
     return text
     
      
