@@ -7,6 +7,7 @@ from random import sample
 from format import adjust_bytes, chunkifier, clean_text, align_text
 from get_text import get_text
 import sys
+import re
 
 def retrieve_hits(q, path):
     object_types = ['doc', 'div1', 'div2', 'div3', 'para', 'sent', 'word']
@@ -15,6 +16,7 @@ def retrieve_hits(q, path):
     
     ## Open cursors for sqlite tables
     conn = sqlite3.connect(path + '/data/' + obj_type + '_word_counts.db')
+    conn.row_factory = sqlite3.Row
     conn.text_factory = str
     c = conn.cursor()
     toms_conn = sqlite3.connect(path + '/data/toms.db')
@@ -40,37 +42,33 @@ def retrieve_hits(q, path):
     
     ## Compute IDF
     idfs = {}
-    if len(query_words.split()) > 1:
-        for word in query_words.split():
-            c.execute('select count(*) from toms where philo_name=?', (word,))
-            docs_with_word = int(c.fetchone()[0]) or 1  ## avoid division by 0
-            doc_freq = total_docs / docs_with_word
-            if doc_freq == 1:
-                doc_freq = (total_docs + 1) / docs_with_word ## The logarithm won't be equal to 0
-            idf = log(doc_freq)
-            idfs[word] = idf
-    else:
-        c.execute('select count(*) from toms where philo_name=?', (query_words,))
+    for word in query_words.split():
+        c.execute('select count(*) from toms where philo_name=?', (word,))
         docs_with_word = int(c.fetchone()[0]) or 1  ## avoid division by 0
         doc_freq = total_docs / docs_with_word
         if doc_freq == 1:
             doc_freq = (total_docs + 1) / docs_with_word ## The logarithm won't be equal to 0
         idf = log(doc_freq)
-        idfs[query_words] = idf
+        idfs[word] = idf
     
     ## Construct query
     if len(query_words.split()) > 1:
-        query = 'select philo_id, philo_name, %s_token_count, bytes, word_count from toms where ' % obj_type
+        query = 'select * from toms where '
         words =  query_words.split()
         query += ' or '.join(['philo_name=?' for i in words])
         c.execute(query, words)
     else:
-        query = 'select philo_id, philo_name, %s_token_count, bytes, word_count from toms where philo_name=?' % obj_type
+        query = 'select * from toms where philo_name=?'
         c.execute(query, (query_words,))
     
-    ## TODO: implement multiple word query search
     new_results = {}
-    for philo_id, philo_name, token_counts, bytes, word_count in c.fetchall():
+    for i in c.fetchall():
+        philo_id = i['philo_id']
+        philo_name = i['philo_name']
+        token_counts = i['doc_token_count']
+        bytes = i['bytes']
+        word_count = i['word_count']
+        boost = metadata_boost(philo_name, q['metadata'], i)
         doc_id = philo_id.split()[0]
         if not philo_ids or doc_id in philo_ids:
             obj_id = ' '.join(philo_id[0].split()[:depth]) 
@@ -83,9 +81,19 @@ def retrieve_hits(q, path):
                 new_results[philo_id]['obj_type'] = obj_type
                 new_results[philo_id]['bytes'] = []
                 new_results[philo_id]['tf_idf'] = 0
-            new_results[philo_id]['tf_idf'] += tf_idf
+            new_results[philo_id]['tf_idf'] += tf_idf * boost
             new_results[philo_id]['bytes'].extend(bytes.split()) 
     return sorted(new_results.iteritems(), key=lambda x: x[1]['tf_idf'], reverse=True)
+    
+def metadata_boost(word, metadata, i):
+    boost = 0
+    for field in metadata:
+        try:
+            if re.search(word, i[field], re.I):
+                boost += 4
+        except (IndexError, TypeError):
+            pass
+    return boost or 1
  
 def relevance(hit, path, q, kwic=True, samples=4):
     length = 400

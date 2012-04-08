@@ -7,7 +7,7 @@
   <p class='description'>Ranked relevance Report</p>
   <%
   start, end, n = page_interval(results_per_page, len(results), q["start"], q["end"])
-  biblio = set()
+  biblio = []
   kwic = True
   %>
   Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${hitnum} for query "${q['q'].decode("utf-8", "ignore")}"
@@ -16,7 +16,7 @@
    <div class='philologic_occurence'>
    <%
    n += 1
-   biblio.add(i)
+   biblio.append(i)
    author = i.author
    title = i.title
    from copy import deepcopy
