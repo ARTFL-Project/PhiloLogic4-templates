@@ -14,6 +14,7 @@ class ir_hit_wrapper(object):
         conn = sqlite3.connect(path + '/data/' + obj_type + '_word_counts.db')
         self.db = conn.cursor()
         self.hit = hit
+        self.philo_id = hit.split()
         self.bytes = bytes
         self.type = obj_type
         self.encoding = encoding
@@ -55,11 +56,11 @@ class ir_results_wrapper(object):
     def __getitem__(self,n):
         if isinstance(n,slice):
             hits = self.sqlhits[n]
-            return [ir_hit_wrapper(philo_id, bytes, tf_idf, self.path, obj_type=obj_type) for philo_id, obj_type, bytes, tf_idf in hits]
+            return [ir_hit_wrapper(philo_id, hit['bytes'], hit['tf_idf'], self.path, obj_type=hit['obj_type']) for philo_id, hit in hits]
     
     def __iter__(self):
-        for philo_id, obj_type, bytes, tf_idf in self.sqlhits:
-            yield ir_hit_wrapper(philo_id, bytes, tf_idf, self.path, obj_type=obj_type)
+        for philo_id, hit in self.sqlhits:
+            yield ir_hit_wrapper(philo_id, hit['bytes'], hit['tf_idf'], self.path, obj_type=hit['obj_type'])
         
     def __len__(self):
         return len(self.sqlhits)
