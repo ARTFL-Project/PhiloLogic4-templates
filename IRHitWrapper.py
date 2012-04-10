@@ -11,7 +11,7 @@ obj_dict = {'doc': 1, 'div1': 2, 'div2': 3, 'div3': 4,
 class ir_hit_wrapper(object):
     
     def __init__(self, hit, bytes, score, path, obj_type=False, encoding='utf-8'):
-        conn = sqlite3.connect(path + '/data/' + obj_type + '_word_counts.db')
+        conn = sqlite3.connect(path + '/data/' + 'toms.db')
         self.db = conn.cursor()
         self.hit = hit
         self.philo_id = hit.split()
@@ -29,7 +29,7 @@ class ir_hit_wrapper(object):
     def __metadata_lookup(self, field):
         metadata = None
         try:
-            query = 'select %s from toms where philo_id=? limit 1' % field
+            query = 'select %s from %s_word_counts where philo_id=? limit 1' % (field, self.type)
             self.db.execute(query, (self.hit, ))
             metadata = self.db.fetchone()[0]
         except (TypeError,IndexError):

@@ -15,7 +15,7 @@ def retrieve_hits(q, path):
     depth = object_types.index(obj_type) + 1 ## this is for philo_id slices
     
     ## Open cursors for sqlite tables
-    conn = sqlite3.connect(path + '/data/' + obj_type + '_word_counts.db')
+    conn = sqlite3.connect(path + '/data/' + 'toms.db')
     conn.row_factory = sqlite3.Row
     conn.text_factory = str
     c = conn.cursor()
@@ -43,7 +43,7 @@ def retrieve_hits(q, path):
     ## Compute IDF
     idfs = {}
     for word in query_words.split():
-        c.execute('select count(*) from toms where philo_name=?', (word,))
+        c.execute('select count(*) from %s_word_counts where philo_name=?' % obj_type, (word,))
         docs_with_word = int(c.fetchone()[0]) or 1  ## avoid division by 0
         doc_freq = total_docs / docs_with_word
         if doc_freq == 1:
@@ -53,12 +53,12 @@ def retrieve_hits(q, path):
     
     ## Construct query
     if len(query_words.split()) > 1:
-        query = 'select * from toms where '
+        query = 'select * from %s_word_counts where ' % obj_type
         words =  query_words.split()
         query += ' or '.join(['philo_name=?' for i in words])
         c.execute(query, words)
     else:
-        query = 'select * from toms where philo_name=?'
+        query = 'select * from %s_word_counts where philo_name=?' % obj_type
         c.execute(query, (query_words,))
     
     new_results = {}
