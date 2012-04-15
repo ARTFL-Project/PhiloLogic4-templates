@@ -3,10 +3,20 @@
 import sqlite3
 import re
 import sys
+from mako.template import Template
+from mako.lookup import TemplateLookup
 from HitWrapper import *
 from format import *
 
 philo_types = set(['div1', 'div2', 'div3'])
+
+def navigation(h, path, path_components, db, dbname, q, environ):
+    mytemplates = TemplateLookup(path)
+    template = Template(filename="templates/object.mako", lookup=mytemplates)
+    obj = hit_wrapper(path_components,None,db)
+    doc = db[path_components[0]]
+    return template.render(obj=obj,dbname=dbname,doc=doc,path_components=path_components,
+                           navigate_doc=navigate_doc,navigate_object=navigate_object,db=db,q=q, form=False).encode("UTF-8", "ignore")
 
 def navigate_doc(philo_id, db):
     conn = db.toms.dbh ## make this more accessible 

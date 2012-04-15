@@ -66,8 +66,15 @@ def parse_cgi(environ):
     if query['q']:  
         if re.search('([A-Z]+|\*)', query['q']):
             query['q'] = crapser(query['q'])
-        
-    return (db,query)
+    
+    path_components = [c for c in environ["PATH_INFO"].split("/") if c]
+    try:
+        if path_components[0] == 'form':
+            query['report'] = 'form'
+    except IndexError:
+        path_components = False
+    
+    return (db, path_components, query)
 
 def hit_to_link(db,hit):
     i = 0

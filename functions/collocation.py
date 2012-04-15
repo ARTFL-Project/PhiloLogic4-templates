@@ -1,9 +1,31 @@
 #!/usr/bin/env python
 import sys
 import re
-from format import adjust_bytes, clean_text, chunkifier 
+from mako.template import Template
+from mako.lookup import TemplateLookup
+from format import adjust_bytes, clean_text, chunkifier
+from bibliography import bibliography
 
-def collocation(results, path, q):
+## For debugging templates only ###
+from mako import exceptions
+###################################
+
+
+def collocation(h, HitWrapper, IRHitWrapper, path, db, dbname, q, environ):
+    mytemplates = TemplateLookup(path)
+    if q['q'] == '':
+        return bibliography(HitWrapper, q, db, dbname, mytemplates) ## the default should be an error message
+    else:
+        hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
+        results = HitWrapper.results_wrapper(hits,db)
+        template = Template(filename="templates/collocation.mako", lookup=mytemplates)
+    try:
+        return template.render(results=results,db=db,dbname=dbname,q=q,fetch_collocation=fetch_collocation,h=h,format=format,
+                                path=path, results_per_page=q['results_per_page']).encode("UTF-8", "ignore")
+    except:
+        return exceptions.html_error_template().render()
+
+def fetch_collocation(results, path, q):
 
   ## set up filtering of most frequent 100 terms ##
 
