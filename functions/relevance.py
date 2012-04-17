@@ -4,32 +4,22 @@ from __future__ import division
 import sqlite3
 from math import log
 from random import sample
-from mako.template import Template
-from mako.lookup import TemplateLookup
 from format import adjust_bytes, chunkifier, clean_text, align_text
 from get_text import get_text
 from bibliography import bibliography
 import sys
 import re
-
-## For debugging templates only ###
-from mako import exceptions
-###################################
+from MakoWrapper import render_template
 
 
 def relevance(h, HitWrapper, IRHitWrapper, path, db, dbname, q, environ):
-    mytemplates = TemplateLookup(path)
     if q['q'] == '':
-        return bibliography(HitWrapper, q, db, dbname, mytemplates)
+        return bibliography(HitWrapper, q, db, dbname)
     else:
         hits = retrieve_hits(q, path)
         results = IRHitWrapper.ir_results_wrapper(hits,db,path)
-        template = Template(filename="templates/relevance.mako", lookup=mytemplates)
-    try:
-        return template.render(results=results,db=db,dbname=dbname,q=q,fetch_relevance=fetch_relevance,h=h,format=format,
-                                path=path, results_per_page=q['results_per_page']).encode("UTF-8", "ignore")
-    except:
-        return exceptions.html_error_template().render()
+    return render_template(results=results,db=db,dbname=dbname,q=q,fetch_relevance=fetch_relevance,h=h,format=format,
+                                path=path, results_per_page=q['results_per_page'], template_name='relevance.mako')
 
 def retrieve_hits(q, path):
     object_types = ['doc', 'div1', 'div2', 'div3', 'para', 'sent', 'word']

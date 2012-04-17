@@ -1,17 +1,13 @@
+#!/usr/bin env python
+
 from __future__ import division
-from mako.template import Template
-from mako.lookup import TemplateLookup
+from MakoWrapper import render_template
 from philo_helpers import make_query_link
 
 def frequency(h, HitWrapper, IRHitWrapper, path, db, dbname, q, environ):
-    mytemplates = TemplateLookup(path)
-    template = Template(filename="templates/frequency.mako", lookup=mytemplates)
     hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
     results = HitWrapper.results_wrapper(hits,db)
-    try:
-        return template.render(results=results,db=db,dbname=dbname,q=q,generate_frequency=generate_frequency,h=h).encode("UTF-8", "ignore")
-    except:
-        return exceptions.html_error_template().render()
+    return render_template(results=results,db=db,dbname=dbname,q=q,generate_frequency=generate_frequency,h=h, template_name='frequency.mako')
 
 def generate_frequency(results, q, db):
     field = q["field"]
