@@ -1,7 +1,15 @@
+#!/usr/bin env python
+
 from __future__ import division
+from MakoWrapper import render_template
 from philo_helpers import make_query_link
 
-def frequency(results, q, db):
+def frequency(h, HitWrapper, IRHitWrapper, path, db, dbname, q, environ):
+    hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
+    results = HitWrapper.results_wrapper(hits,db)
+    return render_template(results=results,db=db,dbname=dbname,q=q,generate_frequency=generate_frequency,h=h, template_name='frequency.mako')
+
+def generate_frequency(results, q, db):
     field = q["field"]
     if field == None:
         field = 'title'

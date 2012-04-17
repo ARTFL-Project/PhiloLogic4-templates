@@ -1,9 +1,21 @@
 #!/usr/bin/env python
 import sys
 import re
-from format import adjust_bytes, clean_text, chunkifier 
+from MakoWrapper import render_template
+from format import adjust_bytes, clean_text, chunkifier
+from bibliography import bibliography
 
-def collocation(results, path, q):
+
+def collocation(h, HitWrapper, IRHitWrapper, path, db, dbname, q, environ):
+    if q['q'] == '':
+        return bibliography(HitWrapper, q, db, dbname) ## the default should be an error message
+    else:
+        hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
+        results = HitWrapper.results_wrapper(hits,db)
+    return render_template(results=results,db=db,dbname=dbname,q=q,fetch_collocation=fetch_collocation,h=h,format=format,
+                                path=path, results_per_page=q['results_per_page'], template_name='collocation.mako')
+
+def fetch_collocation(results, path, q):
 
   ## set up filtering of most frequent 100 terms ##
 

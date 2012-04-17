@@ -6,22 +6,24 @@
   <div class='initial_report'>
   <p class='description'>Ranked relevance Report</p>
   <%
-  start, end, n = page_interval(results_per_page, len(results), q["start"], q["end"])
-  biblio = set()
+  start, end, n = h.page_interval(results_per_page, len(results), q["start"], q["end"])
+  biblio = []
   kwic = True
   %>
-  Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${hitnum} for query "${q['q'].decode("utf-8", "ignore")}"
+  Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)} for query "${q['q'].decode("utf-8", "ignore")}"
   </div>
   % for i in results[start - 1:end]:
    <div class='philologic_occurence'>
    <%
    n += 1
-   biblio.add(i)
+   biblio.append(i)
    author = i.author
    title = i.title
-   q["metadata"]['author'] = author
-   q["metadata"]['title'] = title
-   url = make_query_link(q["q"],q["method"],q["arg"],**q["metadata"])
+   from copy import deepcopy
+   link_metadata = deepcopy(q["metadata"])
+   link_metadata['author'] = author
+   link_metadata['title'] = title
+   url = h.make_query_link(q["q"],q["method"],q["arg"],**link_metadata)
    hit_num = len(i.bytes)
    if hit_num >= 4:
        sample_num = 4
@@ -32,7 +34,7 @@
    % if kwic:
     <div class="kwic_concordance">
    % endif
-    <div class='philologic_context'>${report_function(i, path, q, kwic=kwic)}</div>
+    <div class='philologic_context'>${fetch_relevance(i, path, q, kwic=kwic)}</div>
    % if kwic:
    </div>
    % endif
@@ -41,7 +43,7 @@
  </div>
  <div class="more">
  <%
- prev, next = page_links(start, end, results_per_page, q, len(results))
+ prev, next = h.page_links(start, end, results_per_page, q, len(results))
  %>
  % if prev:
      <a href="${prev}" class="previous"> Back </a>
