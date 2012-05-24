@@ -13,8 +13,8 @@
          <% href = "./" + str(i.philo_id[0]) %>
          <a href="${href}">
          % for field in metadata:
-             % if field == 'title':
-                 <i>${i.title}</i>,
+             % if field == 'volume':
+                 Vol. ${i.volume},
              % else:
                  ${i[field]},
              % endif

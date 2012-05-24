@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 
 from MakoWrapper import render_template
-
-def bibliography(HitWrapper, q, db, dbname):
+def bibliography(h, path, path_components, db, dbname, q, environ):
     if q["no_q"]:
-            hits = db.toms.get_documents()
+            hits = db.get_all("doc");
     else:
-        hits = db.toms.query(**q["metadata"])
-    results = HitWrapper.metadata_results_wrapper(hits, db)
-    return render_template(results=results,db=db,dbname=dbname,q=q, template_name='bibliography.mako')
+        hits = db.query(**q["metadata"])
+    return render_template(results=hits,db=db,dbname=dbname,q=q, template_name='bibliography.mako',h=h)

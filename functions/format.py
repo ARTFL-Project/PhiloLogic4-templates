@@ -3,7 +3,7 @@
 import re
 import htmlentitydefs
 from BeautifulSoup import BeautifulSoup
-from philologic.DirtyFormatter import Formatter
+from DirtyFormatter import Formatter
 from custom_object_format import custom_format
 
 def adjust_bytes(bytes, length):
