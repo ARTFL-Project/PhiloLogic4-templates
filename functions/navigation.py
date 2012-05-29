@@ -11,8 +11,10 @@ philo_types = set(['div1', 'div2', 'div3'])
 
 def navigation(h, path, path_components, db, dbname, q, environ):
     obj = db[path_components]
-    return render_template(obj=obj,dbname=dbname,doc=obj.doc,path_components=path_components,h=h,
-                           navigate_doc=navigate_doc,navigate_object=navigate_object,db=db,q=q, form=False, template_name='object.mako')
+    if obj.philo_type == 'doc':
+        return render_template(obj=obj,dbname=dbname,h=h,navigate_doc=navigate_doc,db=db,q=q,form=False,template_name='navigation.mako')
+    else:
+        return render_template(obj=obj,dbname=dbname,h=h,navigate_obj=navigate_obj,db=db,q=q,form=False,template_name='object.mako')
 
 def navigate_doc(obj, db):
     print >> sys.stderr, type(obj.philo_id)
@@ -32,7 +34,7 @@ def navigate_doc(obj, db):
 #        text_hierarchy.append(hit_object)
     return text_hierarchy
 
-def navigate_object(obj, query_args=False):
+def navigate_obj(obj, query_args=False):
     path = "./data/TEXT/" + obj.filename
     file = open(path)
     byte_start = obj.byte_start
