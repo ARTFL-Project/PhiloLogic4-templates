@@ -8,7 +8,10 @@ import os
 from philologic.DB import DB
 from scripts.crapser import *
 
+### CGI PARAMETER PARSING ###
+
 def parse_cgi(environ):
+    """ Parses CGI parameters from Apache, returns a tuple with a philologic database, remaining path components, and a query dict. """
     myname = environ["SCRIPT_FILENAME"]
     myname = myname.replace('scripts/get_hit_num.py', '') ## when get_hit_num calls this function
     dbfile = os.path.dirname(myname) + "/data"
@@ -75,9 +78,41 @@ def parse_cgi(environ):
     except IndexError:
         path_components = False
     
-    return (db, path_components, query)
+    return (db, path_components, query)    
+    
+### CITATIONS ###
+    
+def make_div_cite(i):
+    """ Returns a representation of a PhiloLogic object and all it's ancestors suitable for a precise concordance citation. """
+    doc_href = make_object_link(i.philo_id[:1],i.bytes)
+    section_href = make_object_link(i.philo_id[:2], i.bytes)
+    sub_section_href = make_object_link(i.philo_id[:3], i.bytes)
+    para_href = make_object_link(i.philo_id[:5], i.bytes)
+    section_names = [i.div1.head,i.div2.head,i.div3.head]
+    section_name = section_names[0]
+    try:
+        sub_section_name = section_names[1]
+    except IndexError:
+        sub_section_name = section_name
+    speaker_name = i.who
+    cite = u"<span class='philologic_cite'>%s <a href='%s' title='title'>%s</a>" % (i.author,doc_href,i.title)
+    if section_name:
+        cite += u" - <a href='%s'>%s</a>" % (section_href,section_name)
+    if sub_section_name:
+        cite += u" - <a href='%s'>%s</a>" % (sub_section_href,sub_section_name)
+    cite += "</span>"
+    return cite
+    
+def make_doc_cite(i):
+    """ Returns a representation of a PhiloLogic object suitable for a bibliographic report. """
+    doc_href = make_object_link(i.philo_id[:1], i.bytes)
+    record = u"%s, <i><a href='%s'>%s</a></i> [%s]" % (i.author, doc_href,i.title, i.date)
+    return record
+
+### LINKING ###
 
 def hit_to_link(db,hit):
+    ## We should remove this function, it has been superseded.
     i = 0
     partial = []
     best = []
@@ -89,7 +124,8 @@ def hit_to_link(db,hit):
             break
     return "./" + "/".join(str(b) for b in best)
 
-def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=None,results_per_page=None,**metadata):
+def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=None,results_per_page=None,**metadata): 
+    """ Takes a dictionary of query parameters as produced by parse_cgi, and returns a relative URL representation of such. """
     try:
         q_params = [("q",query.encode('utf-8', 'ignore'))] ## urlencode does not like unicode...
     except UnicodeDecodeError:
@@ -114,33 +150,20 @@ def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=
     return "./?" + urllib.urlencode(q_params)
 
 def make_object_link(philo_id, hit_bytes):
+    """ Takes a valid PhiloLogic object, and returns a relative URL representation of such. """
     href = "./" + "/".join(str(x) for x in philo_id) + byte_query(hit_bytes)
     return href
 
-def make_div_cite(i):
-    doc_href = make_object_link(i.philo_id[:1],i.bytes)
-    section_href = make_object_link(i.philo_id[:2], i.bytes)
-    sub_section_href = make_object_link(i.philo_id[:3], i.bytes)
-    para_href = make_object_link(i.philo_id[:5], i.bytes)
-    section_names = [i.div1.head,i.div2.head,i.div3.head]
-    section_name = section_names[0]
-    try:
-        sub_section_name = section_names[1]
-    except IndexError:
-        sub_section_name = section_name
-    speaker_name = i.who
-    cite = u"<span class='philologic_cite'>%s <a href='%s' title='title'>%s</a>" % (i.author,doc_href,i.title)
-    if section_name:
-        cite += u" - <a href='%s'>%s</a>" % (section_href,section_name)
-    if sub_section_name:
-        cite += u" - <a href='%s'>%s</a>" % (sub_section_href,sub_section_name)
-    cite += "</span>"
-    return cite
+def make_absolute_object_link(db,id,bytes = []):
+    """ Takes a valid PhiloLogic object, and returns an absolute URL representation of such. """
+    href = db.locals["db_url"] +"/dispatcher.py/" + "/".join(str(x) for x in id)
+    if bytes:
+        href += byte_query(bytes)
+    return href
     
-def make_doc_cite(i):
-    doc_href = make_object_link(i.philo_id[:1], i.bytes)
-    record = u"%s, <i><a href='%s'>%s</a></i> [%s]" % (i.author, doc_href,i.title, i.date)
-    return record
+def make_absolute_query_link(db,**params):
+    """ Takes a dictionary of query parameters as produced by parse_cgi, and returns an absolute URL representation of such. """
+    pass
     
 def byte_query(hit_bytes):
     """This is used for navigating concordance results and highlighting hits"""
@@ -178,3 +201,5 @@ def page_links(start, end, results_per_page, q, results_len):
         next_page = make_query_link(q["q"],q["method"],q["arg"],q['report'],next_start,next_end,results_per_page,**q["metadata"])
     
     return prev_page, next_page
+
+### TEI FORMATTING ###

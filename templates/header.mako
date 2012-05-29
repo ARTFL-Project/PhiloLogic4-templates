@@ -4,10 +4,10 @@
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link type="text/css" rel="stylesheet" media="all" href="http://artflx.uchicago.edu/drupalparts/style.css?x" />
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="/philo4beta2/${dbname}/style.css" type="text/css" media="screen, projection">
-<link type="text/css" href="/philo4beta2/${dbname}/css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
+<link rel="stylesheet" href="${db.locals['db_url']}/style.css" type="text/css" media="screen, projection">
+<link type="text/css" href="${db.locals['db_url']}/css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js" type="text/javascript"></script>
-<script type="text/javascript" src="/philo4beta2/${dbname}/js/jquery-ui-1.8.17.custom.min.js"></script>
+<script type="text/javascript" src="${db.locals['db_url']}/js/jquery-ui-1.8.17.custom.min.js"></script>
 <%include file="form_header.js"/>
 </head>
 <body >
