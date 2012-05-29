@@ -7,10 +7,14 @@ def custom_format():
     format["p"] = "\n<p/>"
     format["/p"] = ""
     format["br"] = "<br/>\n"
+    format["/br"] = ""
     format["span"] = "<span>"
     format["/span"] = "</span>"
+    format["b"] = "<b>"
+    format["/b"] = "</b>"
     format["s"] = ""
     format["/s"] = ""
+    format["l"] = ""
     format["/l"] = "<br/>\n"
     format["/ab"] = "<br/>\n"
     format["speaker"] = "<p><b>"
@@ -18,5 +22,6 @@ def custom_format():
     format["stage"] = "<br/><i>"
     format["/stage"] = "</i>"
     format["head"] = "<p><b>"
-    format["/head"] = "</p></b>"
+    format["/head"] = "</b></p>"
+
     return format

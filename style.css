@@ -2,6 +2,7 @@
 /* Edit as you see fit, but you will probably need to modify traps in */
 /* philosubs.pl in the database lib/ directory.  Yes, indeed, it is */
 /* a bit fiddly.  One day, XSLT!  If you do it, please let us know. */
+div.main_body {margin-left:10px;}
 span.emph {font-weight: bolder; }
 span.emphsc {FONT-SIZE: 12px;}
 span.hi   {font-weight: bolder;}
@@ -58,6 +59,7 @@ span.navlevel2 {display: block; text-align: left; margin-left: 40px; FONT-SIZE: 
 span.navlevel3 {display: block; text-align: left; margin-left: 60px; FONT-SIZE: 12;}
 span.projecthead { text-align: right; font-size: 20; color: #000000;}
 
+
 /* For pop-in notes */
 .hiddennote {
         display: none;
@@ -76,10 +78,11 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
         font-size: 12;
 }
 .philologic_concordance {
+        list-style-type: none;
         padding-left: 20px;
         padding-right: 20px;
 }
-.philologic_occurence {
+.philologic_concordance .philologic_occurrence {
         padding-top: 10px;
         padding-bottom : 10px;
         border-style:solid;
@@ -96,12 +99,20 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
         color: #FF0000;
 }
 .more {
-        padding-top: 10px;
-        font-size: 160%;
+        font-size: 130%;
         margin-left: auto;
         margin-right: auto;
-        width:10%;
+        width:80%;
 }
+
+.more .previous {
+    float:left;
+    }
+
+.more .next {
+    float: right;
+    }
+
 .separation {
         width:40%;
         text-align:left;

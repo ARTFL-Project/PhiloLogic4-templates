@@ -7,13 +7,12 @@ from bibliography import bibliography
 from MakoWrapper import render_template
 
 
-def kwic(h, HitWrapper, IRHitWrapper, path, db, dbname, q, environ):
+def kwic(h, path, path_components, db, dbname, q, environ):
     if q['q'] == '':
         return bibliography(HitWrapper, q, db, dbname)
     else:
         hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
-        results = HitWrapper.results_wrapper(hits,db)
-        return render_template(results=results,db=db,dbname=dbname,q=q,fetch_kwic=fetch_kwic,h=h,
+        return render_template(results=hits,db=db,dbname=dbname,q=q,fetch_kwic=fetch_kwic,h=h,
                                 path=path, results_per_page=q['results_per_page'], template_name='kwic.mako')
 
 def fetch_kwic(results, path, q, byte_query, start, end, length=400):

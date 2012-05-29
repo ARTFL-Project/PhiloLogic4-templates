@@ -5,8 +5,6 @@ import urlparse
 from wsgiref.handlers import CGIHandler
 import functions
 import philo_helpers as h
-import HitWrapper
-import IRHitWrapper
 
 
 def philo_dispatcher(environ,start_response):
@@ -17,11 +15,15 @@ def philo_dispatcher(environ,start_response):
     myname = environ["SCRIPT_FILENAME"]
     dbname = os.path.basename(myname.replace("/dispatcher.py",""))
     db, path_components, q = h.parse_cgi(environ)
+    path_components = [c for c in environ["PATH_INFO"].split("/") if c]
     path = os.getcwd()
     if path_components:
-        yield getattr(functions, q["report"] or "navigation")(h, path, path_components, db, dbname, q, environ)
+        if path_components[0] == "form":
+            yield functions.form(h,path,path_components,db,dbname,q,environ)
+        else:
+            yield getattr(functions, q["report"] or "navigation")(h, path, path_components, db, dbname, q, environ)
     else:
-        yield getattr(functions, q["report"] or "form")(h, HitWrapper, IRHitWrapper, path, db, dbname, q, environ)
+        yield getattr(functions, q["report"] or "concordance")(h, path, path_components, db, dbname, q, environ)
         
 if __name__ == "__main__":
     CGIHandler().run(philo_dispatcher)

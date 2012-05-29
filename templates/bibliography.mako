@@ -1,5 +1,4 @@
 <%include file="header.mako"/>
-<%namespace file="bibliographic_info.mako" import="bibliography"/>
 <form action="./">
 <table>
  <tr><td>Query Terms:</td><td><input type='text' name='query'></input></td></tr>
@@ -9,11 +8,18 @@
  </select></td><td>
  <input type='text' name='query_arg'></input> words.</td></tr>
  </table>
-
-<div class='philologic_concordance'>
+<div class='philologic_response'>
  <p class='description'>Bibliography Report: ${len(results)} results.</p>
- <ol>
-  ${bibliography(results, 'author', 'title', form=True)}
+ <ol class='philologic_cite_list'>
+ % for i in results:
+  <li class='philologic_occurrence'>
+  % if i.type == 'doc':
+  <span class='philologic_cite'>${h.make_doc_cite(i)}</span>
+  % else:
+  <span class='philologic_cite'>${h.make_div_cite(i)}</span>
+  % endif
+  </li>
+ % endfor
  </ol>
 </div>
 <input type='submit'/>

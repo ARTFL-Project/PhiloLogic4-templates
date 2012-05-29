@@ -6,13 +6,12 @@ from format import adjust_bytes, clean_text, chunkifier
 from bibliography import bibliography
 
 
-def collocation(h, HitWrapper, IRHitWrapper, path, db, dbname, q, environ):
+def collocation(h, path, path_components, db, dbname, q, environ):
     if q['q'] == '':
-        return bibliography(HitWrapper, q, db, dbname) ## the default should be an error message
+        return bibliography(h, path, path_components, db, dbname, q, environ) ## the default should be an error message
     else:
         hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
-        results = HitWrapper.results_wrapper(hits,db)
-    return render_template(results=results,db=db,dbname=dbname,q=q,fetch_collocation=fetch_collocation,h=h,format=format,
+    return render_template(results=hits,db=db,dbname=dbname,q=q,fetch_collocation=fetch_collocation,h=h,format=format,
                                 path=path, results_per_page=q['results_per_page'], template_name='collocation.mako')
 
 def fetch_collocation(results, path, q):

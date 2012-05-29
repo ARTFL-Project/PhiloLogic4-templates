@@ -4,30 +4,32 @@ import sqlite3
 import re
 import sys
 from MakoWrapper import render_template
-from HitWrapper import *
 from format import *
+from philologic import HitWrapper
 
 philo_types = set(['div1', 'div2', 'div3'])
 
 def navigation(h, path, path_components, db, dbname, q, environ):
-    obj = hit_wrapper(path_components,None,db)
-    doc = db[path_components[0]]
-    return render_template(obj=obj,dbname=dbname,doc=doc,path_components=path_components,
+    obj = db[path_components]
+    return render_template(obj=obj,dbname=dbname,doc=obj.doc,path_components=path_components,h=h,
                            navigate_doc=navigate_doc,navigate_object=navigate_object,db=db,q=q, form=False, template_name='object.mako')
 
-def navigate_doc(philo_id, db):
-    conn = db.toms.dbh ## make this more accessible 
+def navigate_doc(obj, db):
+    print >> sys.stderr, type(obj.philo_id)
+    conn = db.dbh ## make this more accessible 
     c = conn.cursor()
-    query =  philo_id + " _%"
+    query =  str(obj.philo_id[0]) + " _%"
     c.execute("select philo_id, philo_name, philo_type, byte_start from toms where philo_id like ?", (query,))
     text_hierarchy = []
     for id, philo_name, philo_type, byte in c.fetchall():
         if philo_type not in philo_types or philo_name == '__philo_virtual':
             continue
-        id = re.sub(' 0$', '', id)
-        hit_object = object_wrapper(id.split(), byte, db, obj_type=philo_type)
-        obj_name = getattr(hit_object, philo_type)
-        text_hierarchy.append(hit_object)
+        else:
+            text_hierarchy.append(db[id])
+#        id = re.sub(' 0$', '', id)
+#        hit_object = object_wrapper(id.split(), byte, db, obj_type=philo_type)
+#        obj_name = getattr(hit_object, philo_type)
+#        text_hierarchy.append(hit_object)
     return text_hierarchy
 
 def navigate_object(obj, query_args=False):
