@@ -3,8 +3,8 @@
 import os
 import urlparse
 from wsgiref.handlers import CGIHandler
-import functions
-import philo_helpers as h
+import reports
+from functions import parse_cgi
 
 
 def philo_dispatcher(environ,start_response):
@@ -14,16 +14,16 @@ def philo_dispatcher(environ,start_response):
     environ["parsed_params"] = urlparse.parse_qs(environ["QUERY_STRING"],keep_blank_values=True)
     myname = environ["SCRIPT_FILENAME"]
     dbname = os.path.basename(myname.replace("/dispatcher.py",""))
-    db, path_components, q = h.parse_cgi(environ)
+    db, path_components, q = parse_cgi(environ)
     path_components = [c for c in environ["PATH_INFO"].split("/") if c]
     path = os.getcwd()
     if path_components:
         if path_components[0] == "form":
-            yield functions.form(h,path,path_components,db,dbname,q,environ)
+            yield reports.form(path,path_components,db,dbname,q,environ)
         else:
-            yield getattr(functions, q["report"] or "navigation")(h, path, path_components, db, dbname, q, environ)
+            yield getattr(reports, q["report"] or "navigation")(path, path_components, db, dbname, q, environ)
     else:
-        yield getattr(functions, q["report"] or "concordance")(h, path, path_components, db, dbname, q, environ)
+        yield getattr(reports, q["report"] or "concordance")(path, path_components, db, dbname, q, environ)
         
 if __name__ == "__main__":
     CGIHandler().run(philo_dispatcher)
