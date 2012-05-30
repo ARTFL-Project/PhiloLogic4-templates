@@ -1,24 +1,26 @@
 #!/usr/bin/env python
 
 from __future__ import division
+import sys
+sys.path.append('..')
+import functions as f
 import sqlite3
 from math import log
 from random import sample
-from format import adjust_bytes, chunkifier, clean_text, align_text
+from functions.format import adjust_bytes, chunkifier, clean_text, align_text
 from get_text import get_text
 from bibliography import bibliography
-import sys
 import re
-from MakoWrapper import render_template
+from render_template import render_template
 
 
-def relevance(h, HitWrapper, IRHitWrapper, path, db, dbname, q, environ):
+def relevance(HitWrapper, IRHitWrapper, path, db, dbname, q, environ):
     if q['q'] == '':
         return bibliography(HitWrapper, q, db, dbname)
     else:
         hits = retrieve_hits(q, path)
         results = IRHitWrapper.ir_results_wrapper(hits,db,path)
-    return render_template(results=results,db=db,dbname=dbname,q=q,fetch_relevance=fetch_relevance,h=h,format=format,
+    return render_template(results=results,db=db,dbname=dbname,q=q,fetch_relevance=fetch_relevance,f=f,format=format,
                                 path=path, results_per_page=q['results_per_page'], template_name='relevance.mako')
 
 def retrieve_hits(q, path):

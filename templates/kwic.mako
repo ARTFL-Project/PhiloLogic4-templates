@@ -4,8 +4,8 @@
  <div class='initial_report'>
  <p class='description'>Kwic Report</p>
   <%
-  start, end, n = h.page_interval(results_per_page, len(results), q["start"], q["end"])
-  kwic_results = fetch_kwic(results, path, q, h.byte_query, start-1, end)
+  start, end, n = f.link.page_interval(results_per_page, len(results), q["start"], q["end"])
+  kwic_results = fetch_kwic(results, path, q, f.link.byte_query, start-1, end)
   biblio = []
   %>
   Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)} for query "${q['q'].decode("utf-8", "ignore")}"
@@ -16,7 +16,7 @@
   % endfor
  <div class="more">
  <%
- prev, next = h.page_links(start, end, results_per_page, q, len(results))
+ prev, next = f.link.page_links(start, end, results_per_page, q, len(results))
  %>
  % if prev:
      <a href="${prev}" class="previous"> Back </a>

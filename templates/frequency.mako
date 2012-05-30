@@ -7,7 +7,7 @@
 % for k,v in counts:
    <% 
    q["metadata"][field] = '"%s"' % k or "NULL"
-   url = h.make_query_link(q["q"],q["method"],q["arg"],**q["metadata"])
+   url = f.link.make_query_link(q["q"],q["method"],q["arg"],**q["metadata"])
    %>
    <tr><td><a href='${url}'>${k}</a></td><td>${v}</td></tr>
 % endfor

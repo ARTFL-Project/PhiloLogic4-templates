@@ -1,18 +1,21 @@
 #!/usr/bin/env python
+
 import sys
+sys.path.append('..')
+import functions as f
 import re
-from MakoWrapper import render_template
-from format import adjust_bytes, clean_text, chunkifier
+from render_template import render_template
+from functions.format import adjust_bytes, clean_text, chunkifier
 from bibliography import bibliography
 
 
-def collocation(h, path, path_components, db, dbname, q, environ):
+def collocation(path, path_components, db, dbname, q, environ):
     if q['q'] == '':
-        return bibliography(h, path, path_components, db, dbname, q, environ) ## the default should be an error message
+        return bibliography(f,path,path_components, db, dbname,q,environ) ## the default should be an error message
     else:
         hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
-    return render_template(results=hits,db=db,dbname=dbname,q=q,fetch_collocation=fetch_collocation,h=h,format=format,
-                                path=path, results_per_page=q['results_per_page'], template_name='collocation.mako')
+    return render_template(results=hits,db=db,dbname=dbname,q=q,fetch_collocation=fetch_collocation,f=f,
+                            path=path, results_per_page=q['results_per_page'], template_name='collocation.mako')
 
 def fetch_collocation(results, path, q):
 

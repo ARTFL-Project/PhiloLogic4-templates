@@ -14,9 +14,9 @@
  % for i in results:
   <li class='philologic_occurrence'>
   % if i.type == 'doc':
-  <span class='philologic_cite'>${h.make_doc_cite(i)}</span>
+  <span class='philologic_cite'>${f.cite.make_doc_cite(i)}</span>
   % else:
-  <span class='philologic_cite'>${h.make_div_cite(i)}</span>
+  <span class='philologic_cite'>${f.cite.make_div_cite(i)}</span>
   % endif
   </li>
  % endfor

@@ -10,14 +10,14 @@
         % if obj.prev:
             <% 
             prev_id = obj.prev.split(" ")[:7]
-            prev_url = h.make_absolute_object_link(db,prev_id)
+            prev_url = f.link.make_absolute_object_link(db,prev_id)
             %>
             <a href='${prev_url}' class='previous'>Previous</a>
         % endif
         % if obj.next:
             <%
             next_id = obj.next.split(" ")[:7]
-            next_url = h.make_absolute_object_link(db,next_id)
+            next_url = f.link.make_absolute_object_link(db,next_id)
             %>
             <a href='${next_url}' class='next'>Next</a>
         % endif
