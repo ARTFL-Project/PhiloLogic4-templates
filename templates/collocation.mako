@@ -19,8 +19,8 @@
         right_q = q['q'] + ' %s' % right[0]
         left_q = '%s ' % left[0] + q['q']
         q['arg'] = q['word_num']
-        href_left = h.make_query_link(left_q,q["method"],q["arg"],**q["metadata"])
-        href_right = h.make_query_link(right_q,q["method"],q["arg"],**q["metadata"])
+        href_left = f.link.make_query_link(left_q,q["method"],q["arg"],**q["metadata"])
+        href_right = f.link.make_query_link(right_q,q["method"],q["arg"],**q["metadata"])
         %>
 	    <tr><td width="25%">${all[0]} (${all[1]})</td>
 	    <td width="25%"><a href="${href_left}">${left[0]}</a> (${left[1]})</td>

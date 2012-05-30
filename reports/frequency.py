@@ -1,11 +1,12 @@
 #!/usr/bin env python
-
 from __future__ import division
-from MakoWrapper import render_template
-from philo_helpers import make_query_link
+import sys
+sys.path.append('..')
+import functions as f
+from render_template import render_template
 import json
 
-def frequency(h, path, path_components, db, dbname, q, environ):
+def frequency(path, path_components, db, dbname, q, environ):
     hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
     if q["format"] == "json":
         field, counts = generate_frequency(hits,q,db)
@@ -19,7 +20,7 @@ def frequency(h, path, path_components, db, dbname, q, environ):
         return json.dumps(wrapper,indent=1)
         
     else:
-        return render_template(results=hits,db=db,dbname=dbname,q=q,generate_frequency=generate_frequency,h=h, template_name='frequency.mako')
+        return render_template(results=hits,db=db,dbname=dbname,q=q,generate_frequency=generate_frequency,f=f, template_name='frequency.mako')
 
 def generate_frequency(results, q, db):
     field = q["field"]
@@ -35,7 +36,7 @@ def generate_frequency(results, q, db):
         else:
             counts[label] = 1
     if q['rate'] == 'relative':
-        conn = db.toms.dbh ## make this more accessible 
+        conn = db.dbh ## make this more accessible 
         c = conn.cursor()
         for label, count in counts.iteritems():
             counts[label] = relative_frequency(field, label, count, c)

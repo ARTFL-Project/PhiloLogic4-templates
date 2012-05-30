@@ -3,7 +3,7 @@
   <div class='initial_report'>
    <p class='description'>
     <%
-     start, end, n = h.page_interval(results_per_page, len(results), q["start"], q["end"])
+     start, end, n = f.link.page_interval(results_per_page, len(results), q["start"], q["end"])
     %>
     Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)}
    </p>
@@ -15,14 +15,14 @@
     <%
      n += 1
     %>
-    <span class='hit_n'>${n}.</span> ${h.make_div_cite(i)}
+    <span class='hit_n'>${n}.</span> ${f.cite.make_div_cite(i)}
     <div class='philologic_context'>${fetch_concordance(i, path, q)}</div>
    </li>
   % endfor
  </ol>
  <div class="more">
   <%
-   prev, next = h.page_links(start, end, results_per_page, q, len(results))
+   prev, next = f.link.page_links(start, end, results_per_page, q, len(results))
   %>
    % if prev:
     <a href="${prev}" class="previous"> Back </a>

@@ -6,7 +6,7 @@
   <div class='initial_report'>
   <p class='description'>Ranked relevance Report</p>
   <%
-  start, end, n = h.page_interval(results_per_page, len(results), q["start"], q["end"])
+  start, end, n = f.link.page_interval(results_per_page, len(results), q["start"], q["end"])
   biblio = []
   kwic = True
   %>
@@ -23,7 +23,7 @@
    link_metadata = deepcopy(q["metadata"])
    link_metadata['author'] = author
    link_metadata['title'] = title
-   url = h.make_query_link(q["q"],q["method"],q["arg"],**link_metadata)
+   url = f.link.make_query_link(q["q"],q["method"],q["arg"],**link_metadata)
    hit_num = len(i.bytes)
    if hit_num >= 4:
        sample_num = 4
@@ -43,7 +43,7 @@
  </div>
  <div class="more">
  <%
- prev, next = h.page_links(start, end, results_per_page, q, len(results))
+ prev, next = f.link.page_links(start, end, results_per_page, q, len(results))
  %>
  % if prev:
      <a href="${prev}" class="previous"> Back </a>
