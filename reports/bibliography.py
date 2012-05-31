@@ -2,7 +2,7 @@
 
 from render_template import render_template
 
-def bibliography(f,path, path_components, db, dbname, q, environ):
+def bibliography(f,path, db, dbname, q, environ):
     if q["no_q"]:
             hits = db.get_all("doc");
     else:

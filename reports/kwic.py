@@ -1,16 +1,21 @@
 #!/usr/bin/env python
+
 import sys
 sys.path.append('..')
 import functions as f
+import os
 import re
+from functions.wsgi_handler import wsgi_response
 from get_text import get_text
 from bibliography import bibliography
 from render_template import render_template
 
 
-def kwic(path, path_components, db, dbname, q, environ):
+def kwic(start_response, environ):
+    db, dbname, path_components, q = wsgi_response(start_response, environ)
+    path = os.getcwd().replace('functions/', '')
     if q['q'] == '':
-        return bibliography(f,path,path_components, db, dbname,q,environ)
+        return bibliography(f,path, db, dbname,q,environ)
     else:
         hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
         return render_template(results=hits,db=db,dbname=dbname,q=q,fetch_kwic=fetch_kwic,f=f,

@@ -3,15 +3,19 @@
 import sys
 sys.path.append('..')
 import functions as f
+import os
 import re
+from functions.wsgi_handler import wsgi_response
 from render_template import render_template
 from functions.format import adjust_bytes, clean_text, chunkifier
 from bibliography import bibliography
 
 
-def collocation(path, path_components, db, dbname, q, environ):
+def collocation(start_response, environ):
+    db, dbname, path_components, q = wsgi_response(start_response, environ)
+    path = os.getcwd().replace('functions/', '')
     if q['q'] == '':
-        return bibliography(f,path,path_components, db, dbname,q,environ) ## the default should be an error message
+        return bibliography(f,path, db, dbname,q,environ) ## the default should be an error message
     else:
         hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
     return render_template(results=hits,db=db,dbname=dbname,q=q,fetch_collocation=fetch_collocation,f=f,
@@ -80,8 +84,6 @@ def fetch_collocation(results, path, q):
     all_out = sorted(all_collocates.items(), key=lambda x: x[1], reverse=True)
 
     tuple_out = zip(all_out, left_out, right_out)
-
-    print >> sys.stderr, tuple_out
 
     return tuple_out
 

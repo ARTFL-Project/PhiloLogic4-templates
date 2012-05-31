@@ -5,6 +5,7 @@ import sys
 sys.path.append('..')
 import functions as f
 import sqlite3
+import os
 from math import log
 from random import sample
 from functions.format import adjust_bytes, chunkifier, clean_text, align_text
@@ -15,6 +16,7 @@ from render_template import render_template
 
 
 def relevance(HitWrapper, IRHitWrapper, path, db, dbname, q, environ):
+    path = os.getcwd().replace('functions/', '')
     if q['q'] == '':
         return bibliography(HitWrapper, q, db, dbname)
     else:
