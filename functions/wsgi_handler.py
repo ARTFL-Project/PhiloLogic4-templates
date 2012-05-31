@@ -17,7 +17,7 @@ def wsgi_response(start_response, environ):
     start_response(status,headers)
     environ["parsed_params"] = urlparse.parse_qs(environ["QUERY_STRING"],keep_blank_values=True)
     myname = environ["SCRIPT_FILENAME"]
-    dbname = os.path.basename(myname.replace("/functions/wsgi_handler.py",""))
+    dbname = os.path.basename(myname.replace("/dispatcher.py",""))
     db, path_components, q = parse_cgi(environ)
     return db, dbname, path_components, q
 
