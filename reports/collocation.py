@@ -92,12 +92,8 @@ def colloc_churner(hit, path, q, filter_list, length=400, highlighting=False, kw
     within_x_words = q['word_num']
 
     ## get my chunk of text ##
-
-    file_path = path + '/data/TEXT/' + hit.filename
     bytes, byte_start = adjust_bytes(hit.bytes, length)
-    file = open(file_path)        
-    file.seek(byte_start)
-    conc_text = file.read(length)
+    conc_text = f.get_text(hit, byte_start, length, path)
 
     conc_left, conc_middle, conc_right = chunkifier(conc_text, bytes)
 
