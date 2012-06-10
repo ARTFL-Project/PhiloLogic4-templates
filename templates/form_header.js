@@ -46,26 +46,37 @@ $(document).ready(function(){
     if ($("#report option[value='concordance']").attr('selected')) {
         $("#frequency").hide()
         $("#collocation").hide()
+        $("#theme_rheme").hide()
         $("#results_per_page").show()
     }
     if ($("#report option[value='kwic']").attr('selected')) {
         $("#frequency").hide()
         $("#collocation").hide()
+        $("#theme_rheme").hide()
         $("#results_per_page").show()
     }
     if ($("#report option[value='collocation']").attr('selected')) {
         $("#frequency").hide()
         $("#results_per_page").hide()
+        $("#theme_rheme").hide()
         $("#collocation").show()
     }
     if ($("#report option[value='frequency']").attr('selected')) {
         $("#collocation").hide()
         $("#results_per_page").hide()
+        $("#theme_rheme").hide()
         $("#frequency").show()
     }
     if ($("#report option[value='relevance']").attr('selected')) {
         $("#frequency").hide()
         $("#collocation").hide()
+        $("#theme_rheme").hide()
+        $("#results_per_page").show()
+    }
+    if ($("#report option[value='theme_rheme']").attr('selected')) {
+        $("#frequency").hide()
+        $("#collocation").hide()
+        $("#theme_rheme").show()
         $("#results_per_page").show()
     }
 });
@@ -74,16 +85,25 @@ function showHide(value) {
     if (value == 'frequency') {
         $("#collocation").hide()
         $("#results_per_page").hide()
+        $("#theme_rheme").hide()
         $("#frequency").show()
     }
     if (value == 'collocation') {
         $("#frequency").hide()
         $("#results_per_page").hide()
+        $("#theme_rheme").hide()
         $("#collocation").show()
     }
     if (value == 'concordance' || value == 'kwic' || value == 'relevance') {
         $("#frequency").hide()
         $("#collocation").hide()
+        $("#theme_rheme").hide()
+        $("#results_per_page").show()
+    }
+    if (value == 'theme_rheme') {
+        $("#frequency").hide()
+        $("#collocation").hide()
+        $("#theme_rheme").show()
         $("#results_per_page").show()
     }
 }

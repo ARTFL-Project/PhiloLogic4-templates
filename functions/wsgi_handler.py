@@ -54,6 +54,9 @@ def parse_cgi(environ):
     ## This is for ranked relevancy
     query['obj_type'] = 'doc'
     
+    ## This is for theme rheme searches
+    query['theme_rheme'] = cgi.get("theme_rheme", [''])[0]
+    
 #    query["dbname"] = dbname
     query["dbpath"] = dbfile
     query["start"] = int(cgi.get('start',[0])[0]) # special range handling done in each service now.
