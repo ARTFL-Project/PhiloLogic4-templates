@@ -45,6 +45,9 @@
 <tr id="theme_rheme"><td>Word position:</td><td><select name='theme_rheme'>
 <option value="front">Front of clause</option>
 <option value="end">End of clause</option>
+<option value="front_end">Front and end only</option>
+<option value="front_middle_end">Front, middle and end</option>
+<option value="full">Full report</option>
 </select></td></tr>
 
 <tr id="results_per_page"><td>Results per page:</td><td><select name='results_per_page'>
