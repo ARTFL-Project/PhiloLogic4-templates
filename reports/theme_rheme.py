@@ -35,7 +35,7 @@ def adjust_results(hits, path, q):
         conc_end = conc_text[bytes[0]:]
         clause_end = punctuation.split(conc_end)[0] # keep only first bit
         clause = f.format.clean_text(clause_start + clause_end)
-        new_clause = [i for i in clause.split() if len(i) > 2 or i == word]
+        new_clause = [i for i in clause.split() if len(i) > 2 or i.lower() == word]
         if len(new_clause) < 3:
             continue
         word_position = 0
