@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import sqlite3
-from HitWrapper import *
 import sys
 
 obj_dict = {'doc': 1, 'div1': 2, 'div2': 3, 'div3': 4, 
@@ -10,9 +9,8 @@ obj_dict = {'doc': 1, 'div1': 2, 'div2': 3, 'div3': 4,
 
 class ir_hit_wrapper(object):
     
-    def __init__(self, hit, bytes, score, path, obj_type=False, encoding='utf-8'):
-        conn = sqlite3.connect(path + '/data/' + 'toms.db')
-        self.db = conn.cursor()
+    def __init__(self, db,hit, bytes, score, path, obj_type=False, encoding='utf-8'):
+        self.db = db.dbh.cursor()
         self.hit = hit
         self.philo_id = hit.split()
         self.bytes = bytes
@@ -30,6 +28,7 @@ class ir_hit_wrapper(object):
         metadata = None
         try:
             query = 'select %s from %s_word_counts where philo_id=? limit 1' % (field, self.type)
+            print >> sys.stderr, query, self.hit
             self.db.execute(query, (self.hit, ))
             metadata = self.db.fetchone()[0]
         except (TypeError,IndexError):
@@ -52,15 +51,16 @@ class ir_results_wrapper(object):
     def __init__(self, sqlhits, db, path):
         self.sqlhits = sqlhits
         self.path = path
+        self.db = db
     
     def __getitem__(self,n):
         if isinstance(n,slice):
             hits = self.sqlhits[n]
-            return [ir_hit_wrapper(philo_id, hit['bytes'], hit['tf_idf'], self.path, obj_type=hit['obj_type']) for philo_id, hit in hits]
+            return [ir_hit_wrapper(self.db,philo_id, hit['bytes'], hit['tf_idf'], self.path, obj_type=hit['obj_type']) for philo_id, hit in hits]
     
     def __iter__(self):
         for philo_id, hit in self.sqlhits:
-            yield ir_hit_wrapper(philo_id, hit['bytes'], hit['tf_idf'], self.path, obj_type=hit['obj_type'])
+            yield ir_hit_wrapper(self.db,philo_id, hit['bytes'], hit['tf_idf'], self.path, obj_type=hit['obj_type'])
         
     def __len__(self):
         return len(self.sqlhits)

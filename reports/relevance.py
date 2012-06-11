@@ -6,22 +6,24 @@ sys.path.append('..')
 import functions as f
 import sqlite3
 import os
+from functions.wsgi_handler import wsgi_response
 from math import log
 from random import sample
 from functions.format import adjust_bytes, chunkifier, clean_text, align_text
-from get_text import get_text
 from bibliography import bibliography
 import re
 from render_template import render_template
 
 
-def relevance(HitWrapper, IRHitWrapper, path, db, dbname, q, environ):
+def relevance(start_response, environ):
+    db, dbname, path_components, q = wsgi_response(start_response, environ)
     path = os.getcwd().replace('functions/', '')
     if q['q'] == '':
-        return bibliography(HitWrapper, q, db, dbname)
+        return bibliography(f,path, db, dbname,q,environ)
     else:
         hits = retrieve_hits(q, path)
-        results = IRHitWrapper.ir_results_wrapper(hits,db,path)
+        print >> sys.stderr, len(hits)
+        results = f.IRHitWrapper.ir_results_wrapper(hits,db,path)
     return render_template(results=results,db=db,dbname=dbname,q=q,fetch_relevance=fetch_relevance,f=f,format=format,
                                 path=path, results_per_page=q['results_per_page'], template_name='relevance.mako')
 
@@ -55,6 +57,7 @@ def retrieve_hits(q, path):
     
     query_words = q['q'].replace('|', ' ') ## Handle ORs from crapser
     q['q'] = q['q'].replace(' ', '|') ## Add ORs for search links
+    print >> sys.stderr, query_words
     
     ## Compute IDF
     idfs = {}
@@ -77,6 +80,7 @@ def retrieve_hits(q, path):
         query = 'select * from %s_word_counts where philo_name=?' % obj_type
         c.execute(query, (query_words,))
     
+    print >> sys.stderr, query, query_words
     new_results = {}
     for i in c.fetchall():
         philo_id = i['philo_id']
@@ -121,7 +125,7 @@ def fetch_relevance(hit, path, q, kwic=True, samples=4):
     for byte in byte_sample: 
         byte = [int(byte)]
         bytes, byte_start = adjust_bytes(byte, length)
-        conc_text = get_text(hit, byte_start, length, path)
+        conc_text = f.get_text(hit, byte_start, length, path)
         conc_start, conc_middle, conc_end = chunkifier(conc_text, bytes, highlight=True, kwic=kwic)
         conc_start = clean_text(conc_start, kwic=kwic)
         conc_end = clean_text(conc_end, kwic=kwic)
