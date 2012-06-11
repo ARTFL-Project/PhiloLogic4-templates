@@ -3,10 +3,12 @@ from __future__ import division
 import sys
 sys.path.append('..')
 import functions as f
+from functions.wsgi_handler import wsgi_response
 from render_template import render_template
 import json
 
-def frequency(path, path_components, db, dbname, q, environ):
+def frequency(start_response, environ):
+    db, dbname, path_components, q = wsgi_response(start_response, environ)
     hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
     if q["format"] == "json":
         field, counts = generate_frequency(hits,q,db)

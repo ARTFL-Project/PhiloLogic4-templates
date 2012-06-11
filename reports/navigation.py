@@ -2,16 +2,20 @@
 
 import sys
 sys.path.append('..')
+import os
 import sqlite3
 import re
 import sys
 import functions as f
+from functions.wsgi_handler import wsgi_response
 from render_template import render_template
 from philologic import HitWrapper
 
 philo_types = set(['div1', 'div2', 'div3'])
 
-def navigation(path, path_components, db, dbname, q, environ):
+def navigation(start_response, environ):
+    db, dbname, path_components, q = wsgi_response(start_response, environ)
+    path = os.getcwd().replace('functions/', '')
     obj = db[path_components]
     if obj.philo_type == 'doc':
         return render_template(obj=obj,dbname=dbname,f=f,navigate_doc=navigate_doc,db=db,q=q,form=False,template_name='navigation.mako')

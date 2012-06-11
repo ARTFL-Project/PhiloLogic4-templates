@@ -1,16 +1,20 @@
 #!/usr/bin/env python
+
 import sys
 sys.path.append('..')
 import functions as f
+import os
 import re
-from get_text import get_text
+from functions.wsgi_handler import wsgi_response
 from bibliography import bibliography
 from render_template import render_template
 
 
-def kwic(path, path_components, db, dbname, q, environ):
+def kwic(start_response, environ):
+    db, dbname, path_components, q = wsgi_response(start_response, environ)
+    path = os.getcwd().replace('functions/', '')
     if q['q'] == '':
-        return bibliography(f,path,path_components, db, dbname,q,environ)
+        return bibliography(f,path, db, dbname,q,environ)
     else:
         hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
         return render_template(results=hits,db=db,dbname=dbname,q=q,fetch_kwic=fetch_kwic,f=f,
@@ -33,7 +37,7 @@ def fetch_kwic(results, path, q, byte_query, start, end, length=400):
             
         ## Get concordance and align it
         bytes, byte_start = f.format.adjust_bytes(hit.bytes, length)
-        conc_text = get_text(hit, byte_start, length, path)
+        conc_text = f.get_text(hit, byte_start, length, path)
         conc_start, conc_middle, conc_end = f.format.chunkifier(conc_text, bytes, highlight=True, kwic=True)
         conc_start = f.format.clean_text(conc_start, kwic=True)
         conc_end = f.format.clean_text(conc_end, kwic=True)

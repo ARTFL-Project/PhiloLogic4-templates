@@ -18,7 +18,8 @@
  <option value='relevance'>Ranked relevance</option>
  <option value='kwic'>KWIC</option>
  <option value='collocation'>Collocation</option>
- <option value='frequency'>Frequency Table</option></select></td></tr>
+ <option value='frequency'>Frequency Table</option>
+ <option value='theme_rheme'>Theme Rheme</option></select></td></tr>
  
  <tr id="collocation"><td>Within </td><td><select name='word_num'>
  <option value='1'>1</option>
@@ -36,10 +37,19 @@
  <tr id="frequency"><td>Frequency by:</td><td><select name='field'>
 % for facet in db.locals["metadata_fields"]:
     <option value='${facet}'>${facet}</option>
-%endfor
+% endfor
 <input type="radio" name="rate" value="raw" checked/>Normal</input>
 <input type="radio" name="rate" value="relative"/>per 10,000</input>
 </td></tr>
+
+<tr id="theme_rheme"><td>Word position:</td><td><select name='theme_rheme'>
+<option value="front">Front of clause</option>
+<option value="end">End of clause</option>
+<option value="front_end">Front and end only</option>
+<option value="front_middle_end">Front, middle and end</option>
+<option value="full">Full report</option>
+</select></td></tr>
+
 <tr id="results_per_page"><td>Results per page:</td><td><select name='results_per_page'>
  <option value='20' selected="selected">20</option>
  <option value='50'>50</option>

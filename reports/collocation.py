@@ -3,15 +3,19 @@
 import sys
 sys.path.append('..')
 import functions as f
+import os
 import re
+from functions.wsgi_handler import wsgi_response
 from render_template import render_template
 from functions.format import adjust_bytes, clean_text, chunkifier
 from bibliography import bibliography
 
 
-def collocation(path, path_components, db, dbname, q, environ):
+def collocation(start_response, environ):
+    db, dbname, path_components, q = wsgi_response(start_response, environ)
+    path = os.getcwd().replace('functions/', '')
     if q['q'] == '':
-        return bibliography(f,path,path_components, db, dbname,q,environ) ## the default should be an error message
+        return bibliography(f,path, db, dbname,q,environ) ## the default should be an error message
     else:
         hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
     return render_template(results=hits,db=db,dbname=dbname,q=q,fetch_collocation=fetch_collocation,f=f,
@@ -81,8 +85,6 @@ def fetch_collocation(results, path, q):
 
     tuple_out = zip(all_out, left_out, right_out)
 
-    print >> sys.stderr, tuple_out
-
     return tuple_out
 
 def colloc_churner(hit, path, q, filter_list, length=400, highlighting=False, kwic=False, left=False, right=False):
@@ -90,12 +92,8 @@ def colloc_churner(hit, path, q, filter_list, length=400, highlighting=False, kw
     within_x_words = q['word_num']
 
     ## get my chunk of text ##
-
-    file_path = path + '/data/TEXT/' + hit.filename
     bytes, byte_start = adjust_bytes(hit.bytes, length)
-    file = open(file_path)        
-    file.seek(byte_start)
-    conc_text = file.read(length)
+    conc_text = f.get_text(hit, byte_start, length, path)
 
     conc_left, conc_middle, conc_right = chunkifier(conc_text, bytes)
 

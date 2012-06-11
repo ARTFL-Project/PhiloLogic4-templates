@@ -9,7 +9,7 @@ from philologic.DB import DB
 from scripts.crapser import *
 
 
-def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=None,results_per_page=None,**metadata): 
+def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=None,results_per_page=None,theme_rheme=None,**metadata): 
     """ Takes a dictionary of query parameters as produced by parse_cgi, and returns a relative URL representation of such. """
     try:
         q_params = [("q",query.encode('utf-8', 'ignore'))] ## urlencode does not like unicode...
@@ -32,6 +32,8 @@ def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=
         q_params.append(("end", end))
     if results_per_page:
         q_params.append(("results_per_page", results_per_page))
+    if theme_rheme:
+        q_params.append(("theme_rheme", theme_rheme))
     return "./?" + urllib.urlencode(q_params)
 
 def make_object_link(philo_id, hit_bytes):
@@ -71,18 +73,19 @@ def page_links(start, end, results_per_page, q, results_len):
     prev_end = end - results_per_page
     next_start = start + results_per_page
     next_end = end + results_per_page
+    theme_rheme = q['theme_rheme']
     if next_start > results_len and prev_start < 0:
         prev_page = ''
         next_page = ''
     elif next_start > results_len:
         next_page = ''
         prev_end = start - 1
-        prev_page = make_query_link(q["q"],q["method"],q["arg"],q['report'],prev_start,prev_end,results_per_page,**q["metadata"])
+        prev_page = make_query_link(q["q"],q["method"],q["arg"],q['report'],prev_start,prev_end,results_per_page,theme_rheme,**q["metadata"])
     else:
         if prev_start > 0:
-            prev_page = make_query_link(q["q"],q["method"],q["arg"],q['report'],prev_start,prev_end,results_per_page,**q["metadata"])
+            prev_page = make_query_link(q["q"],q["method"],q["arg"],q['report'],prev_start,prev_end,results_per_page,theme_rheme,**q["metadata"])
         else:
             prev_page = ''
-        next_page = make_query_link(q["q"],q["method"],q["arg"],q['report'],next_start,next_end,results_per_page,**q["metadata"])
+        next_page = make_query_link(q["q"],q["method"],q["arg"],q['report'],next_start,next_end,results_per_page,theme_rheme,**q["metadata"])
     
     return prev_page, next_page
