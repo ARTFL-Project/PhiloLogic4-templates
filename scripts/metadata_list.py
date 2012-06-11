@@ -4,10 +4,9 @@ import os
 import cgi
 import sys
 import json
-from philologic.PhiloDB import PhiloDB
 from script_helpers import *
     
-def autocomplete_metadata(metadata, field, db):
+def autocomplete_metadata(metadata, field):
     path = frequencies_file(os.environ, field)
     
     ## Workaround for when jquery sends a list of words: this happens when using the back button
@@ -19,14 +18,10 @@ def autocomplete_metadata(metadata, field, db):
     return json.dumps(words)
 
 if __name__ == "__main__":
-    path = os.environ['SCRIPT_FILENAME']
-    path = path.replace('scripts/metadata_list.py', '')
-    path += 'data/'
-    db = PhiloDB(path)
     form = cgi.FieldStorage()
     metadata = form.getvalue('term')
     field = form.getvalue('field')
-    content = autocomplete_metadata(metadata, field, db)
+    content = autocomplete_metadata(metadata, field)
     print "Content-Type: text/html\n"
     print content
     
