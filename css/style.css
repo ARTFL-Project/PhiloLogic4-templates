@@ -1,15 +1,35 @@
-body {
-  margin:0;
+/* Get the footer to stick at the bottom */
+#container {
+    position: relative;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+}
+#wrapper {
+    padding-bottom: 211px;
+}
+#footer {
+    bottom: 0 !important;
+    bottom: -1px;
+    position: absolute;
+    width: 100%;
+}
+html, body {
+    margin:0;
+    padding: 0;
+    height:100%;
 }
 
 /* The following is for the header and footer */
 #header {
   background: url(images/header_pattern.png);
   height: 118px;
+  border-bottom: 1px #ECECEC solid;
 }
 #footer {
-  background-image: url(images/footer_pattern.png);
-  height: 210px;
+    background-image: url(images/footer_pattern.png);
+    height: 210px;
+    border-top: 1px #ECECEC solid;
 }
 
 .secondary-links {
@@ -167,10 +187,8 @@ tr, td {
 
 
 .form_body {
-    padding: 25px;
     max-width:1165px; 
     min-width:725px;
-    margin: 0px auto;
 }
 
 /**
@@ -258,11 +276,18 @@ fieldset ul.clear-block li {
   background-image: none;
 }
 
+
+
+div.main_body {
+    padding-top: 25px;
+    padding-bottom: 25px;
+    margin-left:10px;
+}
+
 /* The following is PhiloLogic specific CSS to handle TEI encoding */
 /* Edit as you see fit, but you will probably need to modify traps in */
 /* philosubs.pl in the database lib/ directory.  Yes, indeed, it is */
 /* a bit fiddly.  One day, XSLT!  If you do it, please let us know. */
-div.main_body {margin-left:10px;}
 span.emph {font-weight: bolder; }
 span.emphsc {FONT-SIZE: 12px;}
 span.hi   {font-weight: bolder;}
@@ -347,14 +372,14 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
         padding-bottom : 10px;
         border-style:solid;
         border-width:1px;
-        border-color: LightGray;
+        border-color: #ECECEC;
         border-left:0px;
         border-right:0px;
         border-bottom:0px;
 }
 .description {
         font-size: 180%;
-        color: #FF0000;
+        padding-left: 50px;
 }
 .highlight {
         color: #FF0000;

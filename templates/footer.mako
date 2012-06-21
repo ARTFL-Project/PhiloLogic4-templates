@@ -1,5 +1,6 @@
 ## -*- coding: utf-8 -*-
   </div>
+  </div>
   <div id="footer">
     <div class="bottom-border">
       <div class="region-content">                        
@@ -18,5 +19,6 @@
       </div>
   </div>
 </div> <!-- /footer -->
-    </div> <!-- /container -->
-    </body>
+</div> <!-- /container -->
+</body>
+</html>

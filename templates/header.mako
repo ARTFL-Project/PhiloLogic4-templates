@@ -1,4 +1,5 @@
 ## -*- coding: utf-8 -*-
+<html>
 <head>
   <title>${dbname}</title>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -9,7 +10,9 @@
 <script type="text/javascript" src="${db.locals['db_url']}/js/jquery-ui-1.8.17.custom.min.js"></script>
 <%include file="form_header.js"/>
 </head>
-<body >
+<body>
+<div id="container">
+<div id="wrapper">
     <div id="header">
       <div id="top-bar">
         <div class="region-content">
