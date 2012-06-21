@@ -2,16 +2,14 @@
 <head>
   <title>${dbname}</title>
  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link type="text/css" rel="stylesheet" media="all" href="http://artflx.uchicago.edu/drupalparts/style.css?x" />
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
-<link rel="stylesheet" href="${db.locals['db_url']}/style.css" type="text/css" media="screen, projection">
+<link rel="stylesheet" href="${db.locals['db_url']}/css/style.css" type="text/css" media="screen, projection">
 <link type="text/css" href="${db.locals['db_url']}/css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js" type="text/javascript"></script>
 <script type="text/javascript" src="${db.locals['db_url']}/js/jquery-ui-1.8.17.custom.min.js"></script>
 <%include file="form_header.js"/>
 </head>
 <body >
-  <div id="container" class="clear-block">
     <div id="header">
       <div id="top-bar">
         <div class="region-content">
@@ -26,8 +24,7 @@
       </div>
             
       <div class="region-content">
-        <h1><a href="/philo4/${dbname}/dispatcher.py/form" title="ARTFL Encyclopédie Project - Robert Morrissey,General Editor"><span class="site-name">${dbname} development</span> <span class="site-slogan">- ARTFL crew</span></a></h1>           
+        <h1><a href="/philo4/${dbname}/dispatcher.py/form" title="ARTFL Encyclopédie Project - Robert Morrissey,General Editor"><span class="site-name">${dbname} development</span></a></h1>           
       </div>
     </div>
-  </div>
   <div class="main_body">

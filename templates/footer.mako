@@ -1,7 +1,7 @@
 ## -*- coding: utf-8 -*-
   </div>
   <div id="footer">
-    <div class="top-border"><div class="bottom-border">
+    <div class="bottom-border">
       <div class="region-content">                        
         <div class="footer-nav" style="float:left;">
           <ul class="links primary-links"><li class="menu-204 first"><a href="/content/about-artfl" title="General Information about the ARTFL Project">about artfl</a></li>
@@ -16,7 +16,6 @@
         </div>
         <p id="footer-message">The ARTFL Project<br>Department of Romance Languages and Literatures<br>Division of the Humanities<br>University of Chicago<br>1115 East 58th Street Chicago, IL 60637<br>tel: 773-702-8488 | email: artfl[at]artfl[dot]uchicago[dot]edu<br></p>         <span class="clear"></span>
       </div>
-    </div>
   </div>
 </div> <!-- /footer -->
     </div> <!-- /container -->
