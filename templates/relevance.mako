@@ -11,7 +11,6 @@
   </div>
   <ol class='philologic_concordance'>
   % for i in results[start - 1:end]:
-   <li class='philologic_occurence'>
    <%
    n += 1
    author = i.author
@@ -27,14 +26,11 @@
    else:
        sample_num = hit_num 
    %>
-   <span class='hit_n'>${n}.</span><a href='${url}'>${title}, ${author}</a>: ${sample_num} of ${hit_num} occurences displayed
-   % if kwic:
-    <div class="kwic_concordance">
-   % endif
-    <div class='philologic_context'>${fetch_relevance(i, path, q, kwic=kwic)}</div>
-   % if kwic:
-   </div>
-   % endif
+   <li class='philologic_occurrence'>
+   <span class='hit_n'>${n}.</span><a href='${url}'> ${title}, ${author}</a>: ${sample_num} of ${hit_num} occurences displayed
+   <span class="kwic_concordance">
+   <div class='philologic_context'>${fetch_relevance(i, path, q, kwic=kwic)}</div>
+   </span>
    </li>
   % endfor
   </ol>
