@@ -27,7 +27,7 @@
       </div>
             
       <div class="region-content">
-        <h1><a href="/philo4/${dbname}/dispatcher.py/form" title="ARTFL Encyclopédie Project - Robert Morrissey,General Editor"><span class="site-name">${dbname} development</span></a></h1>           
+        <h1><a href="/philo4/${dbname}/" title="ARTFL Encyclopédie Project - Robert Morrissey,General Editor"><span class="site-name">${dbname} development</span></a></h1>           
       </div>
     </div>
   <div class="main_body">
