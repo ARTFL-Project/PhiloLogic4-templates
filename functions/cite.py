@@ -28,6 +28,17 @@ def make_div_cite(i):
         cite += u" - <a href='%s'>%s</a>" % (section_href,section_name)
     if sub_section_name:
         cite += u" - <a href='%s'>%s</a>" % (sub_section_href,sub_section_name)
+        
+    # hack alert
+    if len(i.philo_id) >= 8:
+        page_id = [i.philo_id[0],0,0,0,0,0,0,0,i.philo_id[7]]
+        page_id = " ".join(str(s) for s in page_id)
+        page_q = i.db.dbh.execute("SELECT * FROM pages WHERE philo_id = ?;",(page_id,))
+        page_obj = page_q.fetchone()
+        if page_obj:
+            page_n = page_obj['n']
+            cite += ", page " + page_n + "."
+            
     cite += "</span>"
     return cite
     
