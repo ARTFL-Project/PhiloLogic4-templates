@@ -88,11 +88,11 @@ def parse_cgi(environ):
         if re.search('([A-Z]+|\*)', query['q']):
             query['q'] = crapser(query['q'])
     
-    path_components = [c for c in environ["PATH_INFO"].split("/") if c]
     try:
+        path_components = [c for c in environ["PATH_INFO"].split("/") if c]
         if path_components[0] == 'form':
             query['report'] = 'form'
-    except IndexError:
+    except:
         path_components = False
     
     return (db, path_components, query)
