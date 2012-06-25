@@ -1,6 +1,6 @@
 <%include file="header.mako"/>
-<div class='form_body' style="max-width:1165px; min-width:725px; margin 0px auto;">
 
+<div class='form_body'>
 <form action="${db.locals['db_url'] + "/dispatcher.py/"}" style='width:600px; margin-left:100px; margin-right: auto;'>
 <table>
  <tr><td>Query Terms:</td><td><input type='text' name='q' id='q'></input></td></tr>

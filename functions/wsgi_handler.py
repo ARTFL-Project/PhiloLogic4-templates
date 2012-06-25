@@ -57,6 +57,9 @@ def parse_cgi(environ):
     ## This is for theme rheme searches
     query['theme_rheme'] = cgi.get("theme_rheme", [''])[0]
     
+    ## This is for searches done from the bibliography template and possibly other use cases
+    query['philo_id'] = cgi.get("philo_id", [''])
+    
 #    query["dbname"] = dbname
     query["dbpath"] = dbfile
     query["start"] = int(cgi.get('start',[0])[0]) # special range handling done in each service now.
@@ -85,7 +88,6 @@ def parse_cgi(environ):
         if re.search('([A-Z]+|\*)', query['q']):
             query['q'] = crapser(query['q'])
     
-
     try:
         path_components = [c for c in environ["PATH_INFO"].split("/") if c]
         if path_components[0] == 'form':
