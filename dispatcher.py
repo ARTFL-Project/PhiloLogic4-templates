@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import os
+import sys
 import urlparse
 import reports
 from wsgiref.handlers import CGIHandler

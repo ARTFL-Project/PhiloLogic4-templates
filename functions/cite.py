@@ -28,7 +28,7 @@ def make_div_cite(i):
         cite += u" - <a href='%s'>%s</a>" % (section_href,section_name)
     if sub_section_name:
         cite += u" - <a href='%s'>%s</a>" % (sub_section_href,sub_section_name)
-        
+
     # hack alert
     if len(i.philo_id) >= 8:
         page_id = [i.philo_id[0],0,0,0,0,0,0,0,i.philo_id[7]]
@@ -38,7 +38,7 @@ def make_div_cite(i):
         if page_obj:
             page_n = page_obj['n']
             cite += ", page " + page_n + "."
-            
+
     cite += "</span>"
     return cite
     
