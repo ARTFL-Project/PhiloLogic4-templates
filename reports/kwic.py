@@ -52,6 +52,6 @@ def fetch_kwic(results, path, q, byte_query, start, end, length=400):
         short_biblio = '<span id="short_biblio">%s</span>' % biblio[:shortest_biblio]
         end_biblio = '<span id="end_biblio" style="display:none;">%s</span>' % biblio[shortest_biblio:]
         full_biblio = short_biblio + end_biblio
-        full_biblio = '<a href="%s" id="kwic_biblio">' % href + full_biblio + '</a>: '
+        full_biblio = '<a href="%s" id="kwic_biblio" style="white-space:pre-wrap;">' % href + full_biblio + '</a>: '
         kwic_results[pos] = (full_biblio + text, hit)
     return kwic_results
