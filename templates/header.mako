@@ -8,6 +8,7 @@
 <link type="text/css" href="${db.locals['db_url']}/css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js" type="text/javascript"></script>
 <script type="text/javascript" src="${db.locals['db_url']}/js/jquery-ui-1.8.17.custom.min.js"></script>
+<script type="text/javascript" src="${db.locals['db_url']}/js/jquery.hoverIntent.minified.js"></script>
 <%include file="form_header.js"/>
 </head>
 <body>

@@ -28,6 +28,17 @@ function autocomplete_metadata(metadata, field) {
 }
 
 var fields = ${repr(db.locals['metadata_fields'])}
+
+
+// These functions are for the kwic bibliography whic is shortened by default
+function showBiblio() {
+    $(this).find("#end_biblio").show(200);
+}
+
+function hideBiblio() {
+    $(this).find("#end_biblio").hide(200);
+}
+
 $(document).ready(function(){
     
     monkeyPatchAutocomplete();    
@@ -79,6 +90,15 @@ $(document).ready(function(){
         $("#theme_rheme").show()
         $("#results_per_page").show()
     }
+    
+//  This is for displaying the full bibliogrpahy on mouse hover
+//  in kwic reports
+    var config = {    
+        over: showBiblio, 
+        timeout: 500,  
+        out: hideBiblio   
+    };
+    $(".kwic_concordance").hoverIntent(config)
 });
 
 function showHide(value) {
