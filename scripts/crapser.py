@@ -29,17 +29,23 @@ def expand_query(term, path):
     matching_list = [i.strip() for i in matching_list if i]
     return matching_list
 
-def crapser(term):
+def crapser(terms):
     """ Expand queries"""
     ## Find path to all_frequencies
     path = frequencies_file(os.environ, 'word')
     
+    ## Compile regex for testing wether we want to expand
+    expand = re.compile('([A-Z]+|\*)')
+    
     ## Iterate through query
-    matching_list = []
-    for t in term.split():
-        matching_list.extend(expand_query(t, path))
-    matching_list = list(set(matching_list))
-    return '|'.join(matching_list)
+    matching_list = ''
+    for t in terms.split():
+        if expand.search(t):
+            t = '|'.join(expand_query(t, path))
+        matching_list = matching_list + ' ' + t
+        
+    matching_list = matching_list.lstrip().rstrip() ## remove leading and trailing chars
+    return matching_list
     
 def sql_crapser(term, field, db):
     """Expand metadata queries"""
