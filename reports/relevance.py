@@ -9,6 +9,7 @@ import os
 from functions.wsgi_handler import wsgi_response
 from math import log
 from random import sample
+from philologic.DB import DB
 from functions.format import adjust_bytes, chunkifier, clean_text, align_text
 from bibliography import bibliography
 import re
@@ -21,43 +22,36 @@ def relevance(start_response, environ):
     if q['q'] == '':
         return bibliography(f,path, db, dbname,q,environ)
     else:
-        hits = retrieve_hits(q, path)
-        print >> sys.stderr, len(hits)
-        results = f.IRHitWrapper.ir_results_wrapper(hits,db,path)
+        results = retrieve_hits(q, db)
     return render_template(results=results,db=db,dbname=dbname,q=q,fetch_relevance=fetch_relevance,f=f,format=format,
                                 path=path, results_per_page=q['results_per_page'], template_name='relevance.mako')
 
-def retrieve_hits(q, path):
+def retrieve_hits(q, db):
     object_types = ['doc', 'div1', 'div2', 'div3', 'para', 'sent', 'word']
     obj_type = q['obj_type']
     depth = object_types.index(obj_type) + 1 ## this is for philo_id slices
     
     ## Open cursors for sqlite tables
-    conn = sqlite3.connect(path + '/data/' + 'toms.db')
-    conn.row_factory = sqlite3.Row
-    conn.text_factory = str
+    conn = db.dbh
     c = conn.cursor()
-    toms_conn = sqlite3.connect(path + '/data/toms.db')
-    toms_c = toms_conn.cursor()
     
     ## Filter out if necessary
     philo_ids = []
     for field in q['metadata']:
         if field != 'n' and q['metadata'][field] != '':
             query = 'select philo_id from toms where %s=? and philo_type=?' % field
-            toms_c.execute(query, (q['metadata'][field], obj_type))
-            results = [i[0].split()[0] for i in toms_c.fetchall()] ## just keep doc id
+            c.execute(query, (q['metadata'][field], obj_type))
+            results = [i[0].split()[0] for i in c.fetchall()] ## just keep doc id
             philo_ids.extend(results)
     if philo_ids:
         philo_ids = set(philo_ids)
         total_docs = len(philo_ids)
     else:
-        toms_c.execute('select count(*) from toms where philo_type="%s"' % obj_type)
-        total_docs = int(toms_c.fetchone()[0])
+        c.execute('select count(*) from toms where philo_type="%s"' % obj_type)
+        total_docs = int(c.fetchone()[0])
     
     query_words = q['q'].replace('|', ' ') ## Handle ORs from crapser
     q['q'] = q['q'].replace(' ', '|') ## Add ORs for search links
-    print >> sys.stderr, query_words
     
     ## Compute IDF
     idfs = {}
@@ -80,7 +74,7 @@ def retrieve_hits(q, path):
         query = 'select * from %s_word_counts where philo_name=?' % obj_type
         c.execute(query, (query_words,))
     
-    print >> sys.stderr, query, query_words
+    #print >> sys.stderr, query, query_words
     new_results = {}
     for i in c.fetchall():
         philo_id = i['philo_id']
@@ -103,7 +97,9 @@ def retrieve_hits(q, path):
                 new_results[philo_id]['tf_idf'] = 0
             new_results[philo_id]['tf_idf'] += tf_idf * boost
             new_results[philo_id]['bytes'].extend(bytes.split()) 
-    return sorted(new_results.iteritems(), key=lambda x: x[1]['tf_idf'], reverse=True)
+    hits = sorted(new_results.iteritems(), key=lambda x: x[1]['tf_idf'], reverse=True)
+    return f.IRHitWrapper.ir_results_wrapper(hits, db)
+    
     
 def metadata_boost(word, metadata, i):
     boost = 0

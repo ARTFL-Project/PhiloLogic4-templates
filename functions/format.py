@@ -112,8 +112,6 @@ def align_text(text, byte_num, chars=40):
     tag_length = 7 * byte_num
     start_text = convert_entities(text[:start_hit])
     if len(start_text) < chars:
-        import sys
-        print >> sys.stderr, "hi"
         white_space = ' ' * (chars - len(start_text))
         start_text = white_space + start_text
     start_text = '<span style="white-space:pre-wrap;">' + start_text[-chars:] + '</span>'

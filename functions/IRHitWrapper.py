@@ -7,10 +7,13 @@ obj_dict = {'doc': 1, 'div1': 2, 'div2': 3, 'div3': 4,
             'para': 5, 'sent': 6, 'word': 7}
             
 
+            
+
 class ir_hit_wrapper(object):
     
-    def __init__(self, db,hit, bytes, score, path, obj_type=False, encoding='utf-8'):
+    def __init__(self, db,hit, bytes, score, obj_type=False, encoding='utf-8'):
         self.db = db.dbh.cursor()
+        self.toms_table = set(db.locals["metadata_fields"])
         self.hit = hit
         self.philo_id = hit.split()
         self.bytes = bytes
@@ -27,8 +30,12 @@ class ir_hit_wrapper(object):
     def __metadata_lookup(self, field):
         metadata = None
         try:
-            query = 'select %s from %s_word_counts where philo_id=? limit 1' % (field, self.type)
-            print >> sys.stderr, query, self.hit
+            if field in self.toms_table:
+                table = 'toms'
+            else:
+                table = '%s_word_counts' % self.type
+            query = 'select %s from %s where philo_id=? limit 1' % (field, table)
+            #print >> sys.stderr, query, self.hit
             self.db.execute(query, (self.hit, ))
             metadata = self.db.fetchone()[0]
         except (TypeError,IndexError):
@@ -48,19 +55,18 @@ class ir_hit_wrapper(object):
 
 class ir_results_wrapper(object):
     
-    def __init__(self, sqlhits, db, path):
+    def __init__(self, sqlhits, db):
         self.sqlhits = sqlhits
-        self.path = path
         self.db = db
     
     def __getitem__(self,n):
         if isinstance(n,slice):
             hits = self.sqlhits[n]
-            return [ir_hit_wrapper(self.db,philo_id, hit['bytes'], hit['tf_idf'], self.path, obj_type=hit['obj_type']) for philo_id, hit in hits]
+            return [ir_hit_wrapper(self.db,philo_id, hit['bytes'], hit['tf_idf'], obj_type=hit['obj_type']) for philo_id, hit in hits]
     
     def __iter__(self):
         for philo_id, hit in self.sqlhits:
-            yield ir_hit_wrapper(self.db,philo_id, hit['bytes'], hit['tf_idf'], self.path, obj_type=hit['obj_type'])
+            yield ir_hit_wrapper(self.db,philo_id, hit['bytes'], hit['tf_idf'], obj_type=hit['obj_type'])
         
     def __len__(self):
         return len(self.sqlhits)
