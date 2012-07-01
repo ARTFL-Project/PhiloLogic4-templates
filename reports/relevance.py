@@ -65,13 +65,16 @@ def retrieve_hits(q, db):
         idfs[word] = idf
     
     ## Construct query
+    table = '%s_word_counts' % obj_type
+    fields = ['%s.' % table + i for i in ['philo_id', 'philo_name', 'doc_token_count', 'bytes']]
+    fields.extend(['toms.word_count'] + ['toms.' + i for i in q['metadata'] if i != 'n' and q['metadata'][i] != ''])
     if len(query_words.split()) > 1:
-        query = 'select * from %s_word_counts where ' % obj_type
+        query = 'select %s from %s inner join toms on toms.philo_id=%s.philo_id where ' % (','.join(fields), table, table)
         words =  query_words.split()
-        query += ' or '.join(['philo_name=?' for i in words])
+        query += ' or '.join(['%s.philo_name=?' % table for i in words])
         c.execute(query, words)
     else:
-        query = 'select * from %s_word_counts where philo_name=?' % obj_type
+        query = 'select %s from %s inner join toms on toms.philo_id=%s.philo_id where %s.philo_name=?' % (','.join(fields),table, table, table)
         c.execute(query, (query_words,))
     
     #print >> sys.stderr, query, query_words
