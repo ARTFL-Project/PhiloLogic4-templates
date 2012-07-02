@@ -28,7 +28,7 @@
       </div>
             
       <div class="region-content">
-        <h1><a href="/philo4/${dbname}/" title="ARTFL Encyclopédie Project - Robert Morrissey,General Editor"><span class="site-name">${dbname} development</span></a></h1>           
+        <h1><a href="/philo4/${dbname}/" title="${dbname}"><span class="site-name">${dbname} Alpha 2</span></a></h1>           
       </div>
     </div>
   <div class="main_body">
