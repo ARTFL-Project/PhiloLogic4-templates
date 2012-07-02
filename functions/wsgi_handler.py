@@ -8,6 +8,7 @@ import sys
 sys.path.append('../scripts/')
 import os
 from philologic.DB import DB
+from query_parser import query_parser
 from scripts.crapser import *
 
 
@@ -84,7 +85,8 @@ def parse_cgi(environ):
     else:
         query["no_q"] = False
     
-    if query['q']:  
+    if query['q']:
+        query['q'] = query_parser(query['q'])
         if re.search('([A-Z]+|\*)', query['q']):
             query['q'] = crapser(query['q'])
     
