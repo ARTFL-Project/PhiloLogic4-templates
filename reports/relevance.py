@@ -69,7 +69,7 @@ def retrieve_hits(q, db):
     c.execute('select * from %s_word_counts limit 1' % obj_type)
     fields = ['%s.' % table + i[0] for i in c.description]
     c.execute('select * from toms limit 1')
-    extra_fields = ['toms.' + i[0] for i in c.description]
+    extra_fields = ['toms.' + i[0] for i in c.description if '%s.%s' % (table, i[0]) not in fields]
     fields.extend(extra_fields)
     if len(query_words.split()) > 1:
         query = 'select %s from %s inner join toms on toms.philo_id=%s.philo_id where ' % (','.join(fields), table, table)
@@ -79,6 +79,7 @@ def retrieve_hits(q, db):
     else:
         query = 'select %s from %s inner join toms on toms.philo_id=%s.philo_id where %s.philo_name=?' % (','.join(fields),table, table, table)
         c.execute(query, (query_words,))
+    print >> sys.stderr, "This is the QUERY:", query
     
     #print >> sys.stderr, query, query_words
     new_results = {}
@@ -111,13 +112,14 @@ def metadata_boost(word, metadata, i):
     boost = 0
     for field in metadata:
         try:
-            if re.search(word, i[field], re.I):
+            field = i[field].decode('utf-8', 'ignore').lower().encode('utf-8', 'ignore')
+            if re.search(word, field):
                 boost += 4
-        except (IndexError, TypeError):
+        except (IndexError, TypeError, AttributeError):
             pass
     return boost or 1
  
-def fetch_relevance(hit, path, q, kwic=True, samples=4):
+def fetch_relevance(hit, path, q, kwic=True, samples=3):
     length = 400
     text_snippet = []
     if len(hit.bytes) >= samples:

@@ -7,8 +7,6 @@ obj_dict = {'doc': 1, 'div1': 2, 'div2': 3, 'div3': 4,
             'para': 5, 'sent': 6, 'word': 7}
             
 
-            
-
 class ir_hit_wrapper(object):
     
     def __init__(self, db,hit, bytes, score, obj_type=False, encoding='utf-8'):
@@ -35,7 +33,7 @@ class ir_hit_wrapper(object):
             else:
                 table = '%s_word_counts' % self.type
             query = 'select %s from %s where philo_id=? limit 1' % (field, table)
-            print >> sys.stderr, query, self.hit
+            #print >> sys.stderr, query, self.hit
             self.db.execute(query, (self.hit, ))
             metadata = self.db.fetchone()[0]
         except (TypeError,IndexError):

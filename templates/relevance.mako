@@ -6,7 +6,7 @@
   start, end, n = f.link.page_interval(results_per_page, len(results), q["start"], q["end"])
   kwic = True
   %>
-  Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)} for query "${q['q'].decode("utf-8", "ignore")}"
+  Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)}
   </p>
   </div>
   <ol class='philologic_concordance'>
