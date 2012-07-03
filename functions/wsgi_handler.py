@@ -5,11 +5,9 @@ from wsgiref.util import shift_path_info
 import urlparse
 import re
 import sys
-sys.path.append('../scripts/')
 import os
 from philologic.DB import DB
 from query_parser import query_parser
-from scripts.crapser import *
 
 
 def wsgi_response(start_response, environ):
@@ -87,8 +85,6 @@ def parse_cgi(environ):
     
     if query['q']:
         query['q'] = query_parser(query['q'])
-        if re.search('([A-Z]+|\*)', query['q']):
-            query['q'] = crapser(query['q'])
     
     try:
         path_components = [c for c in environ["PATH_INFO"].split("/") if c]
