@@ -2,7 +2,7 @@
 <%namespace file="bibliographic_info.mako" import="bibliography"/>
 <div class='philologic_collocation'>
  <p class='description'>Collocation Report</p>
- <p><b>Search Term: ${q['q']}</b></p>
+ <p><b>Search Term: ${q['q'].decode('utf-8', 'ignore')}</b></p>
  <p>Your search found ${len(results)} occurrences</p>
  <ol>
   <% colloc_results = fetch_collocation(results, path, q) %>
@@ -16,8 +16,8 @@
 
     % for all, left, right in colloc_results:
         <% 
-        right_q = q['q'] + ' %s' % right[0]
-        left_q = '%s ' % left[0] + q['q']
+        right_q = q['q'].decode('utf-8', 'ignore') + ' %s' % right[0]
+        left_q = '%s ' % left[0] + q['q'].decode('utf-8', 'ignore')
         q['arg'] = q['word_num']
         href_left = f.link.make_query_link(left_q,q["method"],q["arg"],**q["metadata"])
         href_right = f.link.make_query_link(right_q,q["method"],q["arg"],**q["metadata"])
