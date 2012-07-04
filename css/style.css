@@ -367,6 +367,7 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
         list-style-type: none;
         padding-left: 20px;
         padding-right: 20px;
+        float: left;
 }
 .philologic_concordance .philologic_occurrence {
         padding-top: 10px;
@@ -416,4 +417,26 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
 .bibliography {
         padding-left: 20px;
         padding-bottom: 10px;
+}
+.show_frequency {
+        float: right;
+        padding-right: 20px;
+        color: #800000;
+}
+.show_frequency:hover {
+        text-decoration: underline;
+}
+.hide_frequency {
+        float: right;
+        padding-right: 20px;
+        color: #800000;
+}
+.hide_frequency:hover {
+        text-decoration: underline;
+}
+.frequency_display {
+        float: right;
+}
+.frequency_table {
+        padding-top: 20px;
 }
