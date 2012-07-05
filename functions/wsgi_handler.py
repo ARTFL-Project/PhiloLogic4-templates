@@ -35,7 +35,7 @@ def parse_cgi(environ):
     query["arg"] = cgi.get("arg",[0])[0]
     query["report"] = cgi.get("report",[None])[0]
     query["format"] = cgi.get("format",[None])[0]
-    query["results_per_page"] = int(cgi.get("results_per_page",[50])[0])
+    query["results_per_page"] = int(cgi.get("results_per_page",[20])[0])
     
     ## Hack so that even if there are multiple byte offsets
     ## we still have it stored as a string in query
