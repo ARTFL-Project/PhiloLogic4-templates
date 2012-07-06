@@ -19,17 +19,16 @@ def theme_rheme(start_response, environ):
         return render_template(results=new_hits,full_report=full_report,db=db,dbname=dbname,q=q,f=f,path=path,
                                results_per_page=q['results_per_page'], template_name="theme_rheme.mako")
                                 
-def fetch_concordance(conc_text, bytes):
+def theme_rheme_concordance(conc_text, bytes):
     conc_start, conc_middle, conc_end = f.format.chunkifier(conc_text, bytes, highlight=True)
     conc_start = f.format.clean_text(conc_start)
     conc_end = f.format.clean_text(conc_end)
     conc_text = conc_start + conc_middle + conc_end
     return conc_text.decode('utf-8', 'ignore')
 
-def adjust_results(hits, path, q):
+def adjust_results(hits, path, q, length=600):
     front_of_clause = 35
     end_of_clause = 90
-    length = 600 ## pull 600 bytes for concordance: maybe adjust dynamically?
     word = q['q']
     punctuation = re.compile('([,|?|;|.|:|!])')
     new_results = []
@@ -37,7 +36,7 @@ def adjust_results(hits, path, q):
     for hit in hits:
         bytes, byte_start = f.format.adjust_bytes(hit.bytes, length)
         conc_text = f.get_text(hit, byte_start, length, path)
-        hit.concordance = fetch_concordance(conc_text, bytes)
+        hit.concordance = theme_rheme_concordance(conc_text, bytes)
         conc_start = conc_text[:bytes[0]]
         clause_start = punctuation.split(conc_start)[-1] # keep only last bit
         conc_end = conc_text[bytes[0]:]

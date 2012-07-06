@@ -99,8 +99,6 @@ $(document).ready(function(){
         out: hideBiblio   
     };
     $(".kwic_concordance").hoverIntent(config)
-    
-    
        
 });
 

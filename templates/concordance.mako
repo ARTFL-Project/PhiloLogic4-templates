@@ -9,6 +9,7 @@
    </p>
   </div>
 <%include file="show_frequency.mako"/>
+<%include file="more_context.mako"/>
  <div class="results_container">
  <ol class='philologic_concordance'>
   % for i in results[start - 1:end]:
@@ -18,6 +19,7 @@
     %>
     <span class='hit_n'>${n}.</span> ${f.cite.make_div_cite(i)}
     <div class='philologic_context'>${fetch_concordance(i, path, q)}</div>
+    <a href="javascript:void(0)" class="more_context">Show more context</a>
    </li>
   % endfor
  </ol>

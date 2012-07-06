@@ -14,7 +14,9 @@
     Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)}
    </p>
   </div>
-
+<%include file="show_frequency.mako"/>
+<%include file="more_context.mako"/>
+<div class="results_container">
  <ol class='philologic_concordance'>
   % for i in results[start - 1:end]:
    <li class='philologic_occurrence'>
@@ -24,6 +26,7 @@
     <span class='hit_n'>${n}.</span> ${f.cite.make_div_cite(i)}
     <br><b>${i.position} of clause: [${i.score} = ${i.percentage}]</b><br>
     <div class='philologic_context'>${i.concordance}</div>
+    <a href="javascript:void(0)" class="more_context">Show more context</a>
    </li>
   % endfor
  </ol>
@@ -34,6 +37,7 @@
     End of clause: ${full_report['End']} out of ${len(results)}
     </div>
  % endif
+ </div>
  <div class="more">
   <%
    prev, next = f.link.page_links(start, end, results_per_page, q, len(results))
