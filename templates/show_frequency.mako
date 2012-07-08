@@ -13,12 +13,15 @@ $(document).ready(function(){
 
 function toggle_frequency() {
     var field = $("#frequency_field").val()
+    var spinner = '<img style="padding-left:80px;" src="/philo4/${dbname}/js/spinner-round.gif" alt="Loading..." />'
     if ($("#toggle_frequency").hasClass('show_frequency')) {
         $(".results_container").animate({
             "margin-right": "330px"},
             50);
         $("#freq").empty()
-        $.getJSON("/philo4/${dbname}/scripts/get_frequency.py?term=${q['q']}&field=" + field, function(data) {
+        $(".loading").append(spinner).show()
+        $.getJSON("/philo4/${dbname}/scripts/get_frequency.py?term=${q['q'].decode('utf-8', 'ignore')}&field=" + field, function(data) {
+            $(".loading").hide().empty()
             $.each(data, function(index, item) {
                 $("#freq").append('<p><li>' + item[0] + '<span style="float:right;padding-right:20px;">' + item[1] + '</li></p>');
             });
@@ -36,13 +39,14 @@ function hide_frequency() {
 }
 </script>
 <div class="frequency_display">
-<span class="hide_frequency" style="display:none;">X</span>
+<a href="javascript:void(0)" class="hide_frequency" style="display:none;">X</a>
 <span id="toggle_frequency" class="show_frequency">
-Click to show frequency by:<select id='frequency_field' style="float:right;">
+<a href="javascript:void(0)">Click to show frequency by:</a><select id='frequency_field' style="float:right;">
 % for facet in db.locals["metadata_fields"]:
     <option value='${facet}'>${facet}</option>
 % endfor
 </select>
 </span>
+<div class="loading" style="display:none;"></div>
 <div id="freq" class="frequency_table" style="display:none;"></div>
 </div>

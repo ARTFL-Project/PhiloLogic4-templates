@@ -22,9 +22,9 @@ if __name__ == "__main__":
     length = int(form.getvalue('length'))
     db, path_components, q = parse_cgi(environ)
     hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
-    if q['report'] == 'concordance':
+    if q['report'] != 'theme_rheme':
         conc_text = fetch_concordance(hits[num], path, q, length=length)
-    elif q['report'] == "theme_rheme":
+    else:
         new_hits, full_report = adjust_results(hits, path, q, length=length)
         conc_text = new_hits[num].concordance
     print "Content-Type: text/html\n"
