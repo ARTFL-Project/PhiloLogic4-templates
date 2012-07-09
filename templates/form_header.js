@@ -41,6 +41,18 @@ function hideBiblio() {
 
 $(document).ready(function(){
     
+    $(".show_search_form").click(function() {
+        link = $(this).text()
+        if (link == 'Show search form') {
+            $(".form_body").slideDown()
+            $(this).empty().append('Hide search form')
+        }
+        else {
+            $(".form_body").slideUp()
+            $(this).empty().append('Show search form')
+        }
+    });
+    
     monkeyPatchAutocomplete();    
     
     $("#q").autocomplete({

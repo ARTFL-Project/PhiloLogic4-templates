@@ -1,4 +1,6 @@
 <%include file="header.mako"/>
+<a href="javascript:void(0)" class="show_search_form">Show search form</a>
+<%include file="search_boxes.mako"/>
 <%namespace file="bibliographic_info.mako" import="bibliography"/>
 <div class='philologic_collocation'>
  <p class='description'>Collocation Report</p>

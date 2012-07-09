@@ -441,3 +441,6 @@ a.hide_frequency:hover {
         color: Black;
         float: right;
 }
+.show_search_form {
+        padding-left: 50px;
+}
