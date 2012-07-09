@@ -3,8 +3,9 @@
 import os
 import cgi
 import sys
+sys.path.append('..')
+from functions.query_parser import *
 import json
-from script_helpers import *
 
     
 def autocomplete_term(word_start):

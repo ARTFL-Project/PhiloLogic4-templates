@@ -4,7 +4,8 @@ import os
 import cgi
 import sys
 import json
-from script_helpers import *
+sys.path.append('..')
+from functions.query_parser import *
     
 def autocomplete_metadata(metadata, field):
     path = frequencies_file(os.environ, field)
