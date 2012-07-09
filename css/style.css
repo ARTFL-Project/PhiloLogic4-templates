@@ -45,7 +45,7 @@ html, body {
 #header .region-content, #footer .region-content {
   min-width: 725px;
   max-width: 1165px;
-  padding-left:100px;
+  padding-left:50px;
 }
 #header h1 {
   font-size: 2.5em;
@@ -356,9 +356,6 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
 }
 
 /* New Philo4 styles */
-.initial_report{
-        padding-bottom:10px;
-}
 .kwic_concordance {
         font-family: 'Droid Sans Mono', sans-serif;
         font-size: 12;

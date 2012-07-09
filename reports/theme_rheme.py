@@ -24,9 +24,13 @@ def theme_rheme_concordance(conc_text, bytes):
     conc_start = f.format.clean_text(conc_start)
     conc_end = f.format.clean_text(conc_end)
     conc_text = conc_start + conc_middle + conc_end
-    return conc_text.decode('utf-8', 'ignore')
+    conc_text = conc_text.decode('utf-8', 'ignore')
+    first_span = '<span class="begin_concordance" style="display:none;">'
+    second_span = '<span class="end_concordance" style="display:none;">'
+    conc_text =  first_span + conc_text[:800] + '</span>' + conc_text[800:1200] + second_span + conc_text[1200:] + '</span>'
+    return conc_text
 
-def adjust_results(hits, path, q, length=600):
+def adjust_results(hits, path, q, length=2000):
     front_of_clause = 35
     end_of_clause = 90
     word = q['q']
