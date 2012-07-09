@@ -1,16 +1,21 @@
 <%include file="header.mako"/>
+<a href="javascript:void(0)" class="show_search_form">Show search form</a>
+<%include file="search_boxes.mako"/>
 <div class='philologic_response'>
   <div class='initial_report'>
-  <p class='description'>
-  <%
-  start, end, n = f.link.page_interval(results_per_page, len(results), q["start"], q["end"])
-  kwic = True
-  %>
-  Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)}
-  </p>
+   <p class='description'>
+    <%
+     start, end, n = f.link.page_interval(results_per_page, len(results), q["start"], q["end"])
+    %>
+    Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)}
+   </p>
   </div>
-  <ol class='philologic_concordance'>
+<%include file="show_frequency.mako"/>
+<%include file="more_context.mako"/>
+ <div class="results_container">
+ <ol class='philologic_concordance'>
   % for i in results[start - 1:end]:
+    <li class='philologic_occurrence'>
    <%
    n += 1
    author = i.author
@@ -21,19 +26,18 @@
    link_metadata['title'] = title
    url = f.link.make_query_link(q["q"],q["method"],q["arg"],**link_metadata)
    hit_num = len(i.bytes)
-   if hit_num >= 4:
-       sample_num = 4
+   if hit_num >= 3:
+       sample_num = 3
    else:
        sample_num = hit_num 
    %>
-   <li class='philologic_occurrence'>
    <span class='hit_n'>${n}.</span><a href='${url}'> ${title}, ${author}</a>: ${sample_num} of ${hit_num} occurences displayed
-   <span class="kwic_concordance">
-   <div class='philologic_context'>${fetch_relevance(i, path, q, kwic=kwic)}</div>
-   </span>
+   <span class="score">score: ${i.score}</span>
+   <div class='philologic_context'><span class="kwic_concordance">${fetch_relevance(i, path, q)}</span></div>
    </li>
   % endfor
   </ol>
+  </div>
   <div class="more">
   <%
    prev, next = f.link.page_links(start, end, results_per_page, q, len(results))

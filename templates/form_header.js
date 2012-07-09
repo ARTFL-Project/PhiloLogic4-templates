@@ -41,6 +41,18 @@ function hideBiblio() {
 
 $(document).ready(function(){
     
+    $(".show_search_form").click(function() {
+        link = $(this).text()
+        if (link == 'Show search form') {
+            $(".form_body").slideDown()
+            $(this).empty().append('Hide search form')
+        }
+        else {
+            $(".form_body").slideUp()
+            $(this).empty().append('Show search form')
+        }
+    });
+    
     monkeyPatchAutocomplete();    
     
     $("#q").autocomplete({
@@ -99,6 +111,22 @@ $(document).ready(function(){
         out: hideBiblio   
     };
     $(".kwic_concordance").hoverIntent(config)
+    
+// This will show more context for concordance and theme-rheme searches    
+    $(".more_context").click(function() {
+        var context_link = $(this).text();
+        if (context_link == 'Show more context') {
+            $(this).prevAll('.philologic_context:last').children('.begin_concordance').show()
+            $(this).prevAll('.philologic_context:last').children('.end_concordance').show()
+            $(this).empty().fadeIn().append('Hide')
+        } 
+        else {
+            $(this).prevAll('.philologic_context:last').children('.begin_concordance').hide()
+            $(this).prevAll('.philologic_context:last').children('.end_concordance').hide()
+            $(this).empty().fadeIn().append('Show more context')
+        }
+    });
+       
 });
 
 function showHide(value) {

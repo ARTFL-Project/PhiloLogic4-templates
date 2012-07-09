@@ -33,10 +33,9 @@ def generate_frequency(results, q, db):
         label = n[field]
         if label == '':
             label = 'NULL'
-        if label in counts:
-            counts[label] += 1
-        else:
-            counts[label] = 1
+        if label not in counts:
+            counts[label] = 0
+        counts[label] += 1
     if q['rate'] == 'relative':
         conn = db.dbh ## make this more accessible 
         c = conn.cursor()

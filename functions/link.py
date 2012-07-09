@@ -6,7 +6,6 @@ import re
 import sys
 import os
 from philologic.DB import DB
-from scripts.crapser import *
 
 
 def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=None,results_per_page=None,theme_rheme=None,**metadata): 

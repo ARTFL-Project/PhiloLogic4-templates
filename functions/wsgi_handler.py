@@ -23,19 +23,20 @@ def wsgi_response(start_response, environ):
 def parse_cgi(environ):
     """ Parses CGI parameters from Apache, returns a tuple with a philologic database, remaining path components, and a query dict. """
     myname = environ["SCRIPT_FILENAME"]
-    myname = myname.replace('scripts/get_hit_num.py', '') ## when get_hit_num calls this function
+    myname = myname.replace('scripts/more_context.py', '') ## when more_context.py calls this function
     dbfile = os.path.dirname(myname) + "/data"
     db = DB(dbfile,encoding='utf-8')
     print >> sys.stderr, environ["QUERY_STRING"]
     cgi = urlparse.parse_qs(environ["QUERY_STRING"],keep_blank_values=True)
    
     query = {}
+    query["q_string"] = environ["QUERY_STRING"] ## this might be useful to have around
     query["q"] = cgi.get("q",[None])[0]
     query["method"] = cgi.get("method",[None])[0] 
     query["arg"] = cgi.get("arg",[0])[0]
     query["report"] = cgi.get("report",[None])[0]
     query["format"] = cgi.get("format",[None])[0]
-    query["results_per_page"] = int(cgi.get("results_per_page",[50])[0])
+    query["results_per_page"] = int(cgi.get("results_per_page",[20])[0])
     
     ## Hack so that even if there are multiple byte offsets
     ## we still have it stored as a string in query

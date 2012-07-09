@@ -6,7 +6,6 @@ import re
 import sys
 import os
 from philologic.DB import DB
-from scripts.crapser import *
 from link import *
 
 
