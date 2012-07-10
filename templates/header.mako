@@ -6,7 +6,7 @@
 <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="${db.locals['db_url']}/css/style.css" type="text/css" media="screen, projection">
 <link type="text/css" href="${db.locals['db_url']}/css/ui-lightness/jquery-ui-1.8.17.custom.css" rel="stylesheet" />
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js" type="text/javascript"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js" type="text/javascript"></script>
 <script type="text/javascript" src="${db.locals['db_url']}/js/jquery-ui-1.8.17.custom.min.js"></script>
 <script type="text/javascript" src="${db.locals['db_url']}/js/jquery.hoverIntent.minified.js"></script>
 <%include file="form_header.js"/>
