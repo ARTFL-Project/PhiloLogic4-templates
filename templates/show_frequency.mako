@@ -14,7 +14,7 @@ $(document).ready(function(){
 function toggle_frequency() {
     $(".loading").empty().hide();
     var field = $("#frequency_field").val();
-    var spinner = '<img style="padding-left:80px;" src="/philo4/${dbname}/js/spinner-round.gif" alt="Loading..." />';
+    var spinner = '<img src="/philo4/${dbname}/js/spinner-round.gif" alt="Loading..." />';
     if ($("#toggle_frequency").hasClass('show_frequency')) {
         $(".results_container").animate({
             "margin-right": "330px"},

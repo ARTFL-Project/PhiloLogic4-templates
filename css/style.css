@@ -439,3 +439,8 @@ a.hide_frequency:hover {
 .show_search_form {
         padding-left: 50px;
 }
+.loading {
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+}

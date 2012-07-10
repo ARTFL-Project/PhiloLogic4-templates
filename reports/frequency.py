@@ -32,7 +32,7 @@ def generate_frequency(results, q, db):
     for n in results:
         label = n[field]
         if label == '':
-            label = 'NULL'
+            label = 'NO %s' % field.upper()
         if label not in counts:
             counts[label] = 0
         counts[label] += 1
