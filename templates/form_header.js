@@ -45,11 +45,11 @@ $(document).ready(function(){
         link = $(this).text()
         if (link == 'Show search form') {
             $(".form_body").slideDown()
-            $(this).empty().append('Hide search form')
+            $(this).fadeOut(100).empty().append('Hide search form').fadeIn(100)
         }
         else {
             $(".form_body").slideUp()
-            $(this).empty().append('Show search form')
+            $(this).fadeOut(100).empty().append('Show search form').fadeIn(100)
         }
     });
     
