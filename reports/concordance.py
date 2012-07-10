@@ -26,8 +26,11 @@ def fetch_concordance(hit, path, q, length=2000):
     conc_end = f.format.clean_text(conc_end)
     conc_text = conc_start + conc_middle + conc_end
     conc_text = conc_text.decode('utf-8', 'ignore')
+    highlight_index = conc_text.find('<span class="highlight"')
+    begin = highlight_index - 200 ## make sure the highlighted term does not get hidden
+    end = highlight_index + 200
     first_span = '<span class="begin_concordance" style="display:none;">'
     second_span = '<span class="end_concordance" style="display:none;">'
-    conc_text =  first_span + conc_text[:800] + '</span>' + conc_text[800:1200] + second_span + conc_text[1200:] + '</span>'
+    conc_text =  first_span + conc_text[:begin] + '</span>' + conc_text[begin:end] + second_span + conc_text[end:] + '</span>'
     return conc_text
     
