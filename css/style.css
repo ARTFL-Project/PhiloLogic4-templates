@@ -415,13 +415,10 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
         padding-left: 20px;
         padding-bottom: 10px;
 }
-.show_frequency {
-        float: right;
-        padding-right: 20px;
-}
 a.hide_frequency {
         float: right;
         padding-right: 20px;
+        padding-left: 20px;
         color: Gray;
 }
 a.hide_frequency:hover {
@@ -430,9 +427,10 @@ a.hide_frequency:hover {
 }
 .frequency_display {
         float: right;
+        padding-right: 20px;
 }
 .frequency_table {
-        padding-top: 20px;
+        padding-top: 10px;
 }
 .score {
         color: Black;
