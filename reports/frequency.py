@@ -11,13 +11,14 @@ def frequency(start_response, environ):
     db, dbname, path_components, q = wsgi_response(start_response, environ)
     hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
     if q["format"] == "json":
+        # if we have a json report, directly dump the table in a json wrapper.
+        # if you want to change the URL value of a key, do it in generate_frequency() below.
         field, counts = generate_frequency(hits,q,db)
+
         l = len(counts)
         wrapper = {"length":l,"result":[],"field":field}
-        for k,v in counts:
-            q["metadata"][field] = '"%s"' % k or "NULL"
-            url = make_query_link(q["q"],q["method"],q["arg"],**q["metadata"])
-            table_row = {"label":k,"count":v,"url":url}
+        for label,count,url in counts:
+            table_row = {"label":label,"count":count,"url":url}
             wrapper["result"].append(table_row)
         return json.dumps(wrapper,indent=1)
         
@@ -25,25 +26,56 @@ def frequency(start_response, environ):
         return render_template(results=hits,db=db,dbname=dbname,q=q,generate_frequency=generate_frequency,f=f, template_name='frequency.mako')
 
 def generate_frequency(results, q, db):
+    """reads through a hitlist. looks up q["field"] in each hit, and builds up a list of 
+       unique values and their frequencies."""
     field = q["field"]
     if field == None:
         field = 'title'
     counts = {}
     for n in results:
-        label = n[field]
-        if label == '':
-            label = 'NO %s' % field.upper()
-        if label not in counts:
-            counts[label] = 0
-        counts[label] += 1
+        # This loop is the place to modify metadata values for tabulation.
+        # All changes to key will be reflected in the generated search URL.
+        # Cosmetic changes that shouldn't show in results should be done below.
+        key = n[field]
+        # You could group date values by decade here, for example.
+        if key == '':
+            key = 'NULL' # NULL is a magic value for queries, don't change it recklessly.
+        if key not in counts:
+            counts[key] = 0
+        counts[key] += 1
+
     if q['rate'] == 'relative':
         conn = db.dbh ## make this more accessible 
         c = conn.cursor()
-        for label, count in counts.iteritems():
-            counts[label] = relative_frequency(field, label, count, c)
-    return field, sorted(counts.iteritems(), key=lambda x: x[1], reverse=True)
+        for key, count in counts.iteritems():
+            counts[key] = relative_frequency(field, key, count, db)
+
+    table = []
+    for k,v in sorted(counts.iteritems(),key=lambda x: x[1], reverse=True):
+        # for each item in the table, we modify the query params to generate a link url.
+        if k == "NULL":
+            q["metadata"][field] = k # NULL is a magic boolean keyword, not a string value.
+        else:
+            q["metadata"][field] = '"%s"' % k # we want to do exact queries on defined values.
+        # Now build the url from q.
+        url = f.link.make_query_link(q["q"],q["method"],q["arg"],**q["metadata"])     
+
+        # Contruct the label for the item.
+        # This is the place to modify the displayed label of frequency table item.
+        label = k #for example, replace NULL with '[None]', 'N.A.', 'Untitled', etc.
+        
+        # We can also modify the count.
+        if q['rate'] == 'relative':
+            count = relative_frequency(field,key,v,db)
+        else:
+            count = v
+            
+        table.append( (label,v,url) )
+
+    return field, table
     
-def relative_frequency(field, label, count, c):
+def relative_frequency(field, label, count, db):
+    c = db.dbh.cursor()
     query = '''select sum(word_count) from toms where %s="%s"''' % (field, label)
     c.execute(query)
     return count / c.fetchone()[0] * 10000
