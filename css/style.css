@@ -444,3 +444,8 @@ a.hide_frequency:hover {
     margin-right: auto;
     width: 30%;
 }
+.more_context {
+    display: none;
+    float: right;
+    font-size: 80%;
+}

@@ -112,18 +112,26 @@ $(document).ready(function(){
     };
     $(".kwic_concordance").hoverIntent(config)
     
-// This will show more context for concordance and theme-rheme searches    
+// This will show more context for concordance and theme-rheme searches
+    $(".philologic_occurrence").hover(
+        function() {
+            $(this).children(".more_context").fadeIn(100);
+        },
+        function() {
+            $(this).children(".more_context").fadeOut(100);
+        }
+    );
     $(".more_context").click(function() {
         var context_link = $(this).text();
         if (context_link == 'Show more context') {
-            $(this).prevAll('.philologic_context:last').children('.begin_concordance').show()
-            $(this).prevAll('.philologic_context:last').children('.end_concordance').show()
-            $(this).empty().fadeIn().append('Hide')
+            $(this).siblings('.philologic_context').children('.begin_concordance').show()
+            $(this).siblings('.philologic_context').children('.end_concordance').show()
+            $(this).empty().fadeIn(100).append('Show less context')
         } 
         else {
-            $(this).prevAll('.philologic_context:last').children('.begin_concordance').hide()
-            $(this).prevAll('.philologic_context:last').children('.end_concordance').hide()
-            $(this).empty().fadeIn().append('Show more context')
+            $(this).siblings('.philologic_context').children('.begin_concordance').hide()
+            $(this).siblings('.philologic_context').children('.end_concordance').hide()
+            $(this).empty().fadeIn(100).append('Show more context')
         }
     });
        
