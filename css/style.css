@@ -187,8 +187,6 @@ tr, td {
 
 
 .form_body {
-    max-width:1165px; 
-    min-width:725px;
     padding-top: 10px;
 }
 
@@ -227,7 +225,6 @@ ul li, ul.menu li, .item-list ul li, li.leaf {
   padding: 0 0 .2em 1.25em;
   list-style-type: none;
   list-style-image: none;
-  background: transparent url(images/menu_leaf.png) no-repeat 0 .45em;
 }
 
 ol li {
@@ -364,7 +361,6 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
         list-style-type: none;
         padding-left: 20px;
         padding-right: 20px;
-        float: left;
 }
 .philologic_concordance .philologic_occurrence {
         padding-top: 10px;
@@ -428,6 +424,7 @@ a.hide_frequency:hover {
 .frequency_display {
         float: right;
         padding-right: 20px;
+        margin-top: -40px;
 }
 .frequency_table {
         padding-top: 10px;
@@ -446,6 +443,7 @@ a.hide_frequency:hover {
 }
 .more_context {
     display: none;
-    float: right;
-    font-size: 80%;
+    padding-left: 40px;
+    color: Gray !important;
+    font-weight: 300;
 }
