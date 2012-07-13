@@ -79,7 +79,6 @@ def retrieve_hits(q, db):
     else:
         query = 'select %s from %s inner join toms on toms.philo_id=%s.philo_id where %s.philo_name=?' % (','.join(fields),table, table, table)
         c.execute(query, (query_words,))
-    print >> sys.stderr, "This is the QUERY:", query
     
     #print >> sys.stderr, query, query_words
     new_results = {}

@@ -56,6 +56,7 @@ class ir_results_wrapper(object):
     def __init__(self, sqlhits, db):
         self.sqlhits = sqlhits
         self.db = db
+        self.done = True
     
     def __getitem__(self,n):
         if isinstance(n,slice):
