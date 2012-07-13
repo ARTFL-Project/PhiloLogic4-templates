@@ -2,17 +2,17 @@
 <form action="${db.locals['db_url'] + "/dispatcher.py/"}" style='width:600px; margin-left:40px; margin-right: auto;'>
 <table>
  <tr><td>Query Terms:</td><td><input type='text' name='q' id='q'></input></td></tr>
- <tr><td><select name='method'>
+ <tr><td><select name='method' id='method'>
  <option value='proxy'>Within</option>
  <option value='phrase'>Exactly</option>
  </select></td><td>
- <input type='text' name='arg'></input> words.</td></tr>
+ <input type='text' name='arg' id='arg'></input> words.</td></tr>
  
 % for facet in db.locals["metadata_fields"]:
     <tr><td>${facet}:</td><td><input type='text' name='${facet}' id="${facet}"></input></td></tr>
 % endfor
 
- <tr><td>Report Generator:</td><td><select name='report' id="report" onchange="showHide(this.value);">
+ <tr><td>Report Generator:</td><td><select name='report' id="report">
  <option value='concordance' selected="selected">Concordance</option>
  <option value='relevance'>Ranked relevance</option>
  <option value='kwic'>KWIC</option>
@@ -20,7 +20,7 @@
  <option value='frequency'>Frequency Table</option>
  <option value='theme_rheme'>Theme Rheme</option></select></td></tr>
  
- <tr id="collocation"><td>Within </td><td><select name='word_num'>
+ <tr id="collocation"><td>Within </td><td><select name='word_num' id='word_num'>
  <option value='1'>1</option>
  <option value='2'>2</option>
  <option value='3'>3</option>
@@ -33,12 +33,11 @@
  <option value='10'>10</option>
  </select> words</td></tr>
  
- <tr id="frequency"><td>Frequency by:</td><td><select name='field'>
+ <tr id="frequency"><td>Frequency by:</td><td><select name='field' id='field'>
 % for facet in db.locals["metadata_fields"]:
     <option value='${facet}'>${facet}</option>
 % endfor
-<input type="radio" name="rate" value="raw" checked/>Normal</input>
-<input type="radio" name="rate" value="relative"/>per 10,000</input>
+<input type="checkbox" name="rate" id="rate" value="relative"/>per 10,000</input>
 </td></tr>
 
 <tr id="theme_rheme"><td>Word position:</td><td><select name='theme_rheme'>

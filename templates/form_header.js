@@ -134,10 +134,36 @@ $(document).ready(function(){
             $(this).empty().fadeIn(100).append('Show more context')
         }
     });
-       
+    
+//  This will prefill the search form with the current query
+    var url = $(location).attr('href');
+    var db_url = "${db.locals['db_url']}" + '/dispatcher.py/?';
+    var q_string = url.replace(db_url, '');
+    var val_list = q_string.split('&');
+    for (var i = 0; i < val_list.length; i++) {
+        var key_value = val_list[i].split('=');
+        var my_value = decodeURIComponent((key_value[1]+'').replace(/\+/g, '%20'));
+        var key = $('#' + key_value[0]);
+        if (key_value[0] != 'rate') {
+            key.val(my_value);  
+        }
+        else {
+            if (my_value == 'relative') {
+                key.prop('checked', true);
+            }
+        }
+    }
+    
+    showHide($("#report").val());
+    
+    $('#report').change(function() {
+        var report = $(this).val();
+        showHide(report);
+    });
 });
 
 function showHide(value) {
+    console.log(value);
     if (value == 'frequency') {
         $("#collocation").hide()
         $("#results_per_page").hide()
