@@ -5,7 +5,7 @@
   <div class='initial_report'>
    <p class='description'>
     <%
-     start, end, n = f.link.page_interval(results_per_page, len(results), q["start"], q["end"])
+     start, end, n = f.link.page_interval(results_per_page, results, q["start"], q["end"])
     %>
     Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)}
    </p>

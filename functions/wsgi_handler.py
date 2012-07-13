@@ -23,7 +23,6 @@ def wsgi_response(start_response, environ):
 def parse_cgi(environ):
     """ Parses CGI parameters from Apache, returns a tuple with a philologic database, remaining path components, and a query dict. """
     myname = environ["SCRIPT_FILENAME"]
-    myname = myname.replace('scripts/more_context.py', '') ## when more_context.py calls this function
     dbfile = os.path.dirname(myname) + "/data"
     db = DB(dbfile,encoding='utf-8')
     print >> sys.stderr, environ["QUERY_STRING"]

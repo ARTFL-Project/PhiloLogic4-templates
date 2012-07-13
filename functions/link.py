@@ -5,6 +5,7 @@ import urlparse
 import re
 import sys
 import os
+import time
 from philologic.DB import DB
 
 
@@ -55,14 +56,16 @@ def byte_query(hit_bytes):
     """This is used for navigating concordance results and highlighting hits"""
     return '?' + '&'.join(['byte=%d' % int(byte) for byte in hit_bytes])
 
-def page_interval(num, results_len, start, end):
-    if start > results_len:
-        start = results_len - 1
+def page_interval(num, results, start, end):
+    while len(results) == 0:
+        if results.done:
+            break
     if start <= 0:
         start = 1
     if end <= 0:
         end = start + (num - 1)
-    if end > results_len:
+    results_len = len(results)
+    if end > results_len and results.done:
         end = results_len
     n = start - 1
     return start, end, n

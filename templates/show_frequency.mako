@@ -21,10 +21,11 @@ function toggle_frequency() {
             50);
         $("#freq").empty();
         $(".loading").append(spinner).show();
-        $.getJSON("/philo4/${dbname}/scripts/get_frequency.py?term=${q['q'].decode('utf-8', 'ignore')}&field=" + field, function(data) {
+        $.getJSON("/philo4/${dbname}/scripts/get_frequency.py?frequency_field=" + field + '&${q['q_string']}', function(data) {
             $(".loading").hide().empty();
             $.each(data, function(index, item) {
-                $("#freq").append('<p><li>' + item[0] + '<span style="float:right;padding-right:20px;">' + item[1] + '</span></li></p>');
+                var url = '<a href="' + item[2] + '">' + item[0] + '</a>' 
+                $("#freq").append('<p><li>' + url + '<span style="float:right;padding-right:20px;">' + item[1] + '</span></li></p>');
             });
         });
         $(".hide_frequency").show();

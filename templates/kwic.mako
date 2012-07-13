@@ -6,7 +6,7 @@
  <div class='initial_report'>
  <p class='description'>Kwic Report</p>
   <%
-  start, end, n = f.link.page_interval(results_per_page, len(results), q["start"], q["end"])
+  start, end, n = f.link.page_interval(results_per_page, results, q["start"], q["end"])
   kwic_results = fetch_kwic(results, path, q, f.link.byte_query, start-1, end)
   biblio = []
   %>
