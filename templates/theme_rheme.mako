@@ -5,7 +5,7 @@
   <div class='initial_report'>
    <p class='description'>
     <%
-     start, end, n = f.link.page_interval(results_per_page, len(results), q["start"], q["end"])
+     start, end, n = f.link.page_interval(results_per_page, results, q["start"], q["end"])
     %>
     % if q['theme_rheme'] == 'full':
         <% 
