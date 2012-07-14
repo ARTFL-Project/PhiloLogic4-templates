@@ -447,3 +447,6 @@ a.hide_frequency:hover {
     color: Gray !important;
     font-weight: 300;
 }
+.collocate {
+    color:green;
+}
