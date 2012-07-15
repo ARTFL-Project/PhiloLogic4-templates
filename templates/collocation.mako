@@ -15,9 +15,9 @@
      </tr>
 
     % for all, left, right in colloc_results:
-	    <tr><td align="center" width="25%"><a href="${link(q, all[0], 'all')}">${all[0]}</a> (${all[1]})</td>
-	    <td align="center" width="25%"><a href="${link(q, left[0], 'left')}">${left[0]}</a> (${left[1]})</td>
-	    <td align="center" width="25%"><a href="${link(q, right[0], 'right')}">${right[0]}</a> (${right[1]})</td></tr>
+	    <tr><td align="center" width="25%"><a href="${link(q, all[0], 'all', all[1])}">${all[0]}</a> (${all[1]})</td>
+	    <td align="center" width="25%"><a href="${link(q, left[0], 'left', left[1])}">${left[0]}</a> (${left[1]})</td>
+	    <td align="center" width="25%"><a href="${link(q, right[0], 'right', right[1])}">${right[0]}</a> (${right[1]})</td></tr>
     % endfor
    </table>
  </div>

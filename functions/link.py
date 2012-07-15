@@ -39,6 +39,7 @@ def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=
         q_params.append(('collocate', collocate[0]))
         q_params.append(('direction', collocate[1]))
         q_params.append(('word_num', collocate[2]))
+        q_params.append(('collocate_num', collocate[3]))
     return "./?" + urllib.urlencode(q_params)
 
 def make_object_link(philo_id, hit_bytes):
@@ -81,7 +82,7 @@ def page_links(start, end, results_per_page, q, results_len):
     next_start = start + results_per_page
     next_end = end + results_per_page
     theme_rheme = q['theme_rheme']
-    collocate = [q['collocate'], q['direction'], q['word_num']]
+    collocate = [q['collocate'], q['direction'], q['word_num'], q['collocate_num']]
     if next_start > results_len and prev_start < 0:
         prev_page = ''
         next_page = ''

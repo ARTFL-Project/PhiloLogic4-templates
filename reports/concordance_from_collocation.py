@@ -26,6 +26,7 @@ def fetch_colloc_concordance(results, path, q, filter_words=100):
     within_x_words = q['word_num']
     direction = q['direction']
     collocate = q['collocate']
+    collocate_num = q['collocate_num']
     
     ## set up filtering of most frequent 100 terms ##
     filter_list_path = path + '/data/frequencies/word_frequencies'
@@ -54,11 +55,12 @@ def fetch_colloc_concordance(results, path, q, filter_words=100):
         else:
             words = tokenize(conc_left, filter_list, within_x_words, 'left')
             words.extend(tokenize(conc_right, filter_list, within_x_words, 'right'))
-        for w in words:
-            if collocate == w:
-                new_hitlist.append(hit)
+        if collocate in set(words):
+            count = words.count(collocate)
+            hit.collocate_num = count
+            new_hitlist.append(hit)
     
-    return collocation_hitlist(new_hitlist)
+    return collocation_hitlist(new_hitlist, collocate_num)
 
 def fetch_concordance(hit, path, q, length=2000):
     bytes, byte_start = f.format.adjust_bytes(hit.bytes, length)
@@ -74,13 +76,21 @@ def fetch_concordance(hit, path, q, length=2000):
     first_span = '<span class="begin_concordance" style="display:none;">'
     second_span = '<span class="end_concordance" style="display:none;">'
     conc_text =  first_span + conc_text[:begin] + '</span>' + conc_text[begin:end] + second_span + conc_text[end:] + '</span>'
-    conc_text = re.sub("(%s)" % q['collocate'], '<span class="collocate">\\1</span>', conc_text, re.I)
+    split_text = re.split(r"([^ \.,;:?!\"\n\r\t\(\)]+)|([\.;:?!])", conc_text)
+    keep_text = []
+    for w in split_text:
+        if w:
+            if w.lower() == q['collocate']:
+                w = '<span class="collocate">%s</span>' % w
+            keep_text.append(w)
+    conc_text = ''.join(keep_text)
     return conc_text  
     
 class collocation_hitlist(object):
     
-    def __init__(self, hitlist):
+    def __init__(self, hitlist, collocate_num):
         self.done = True
+        self.num = collocate_num
         self.hitlist = hitlist
         
     def __getitem__(self, key):

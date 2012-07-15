@@ -110,8 +110,11 @@ def filter(word_list, filter_list, within_x_words):
             break
     return words_to_pass
 
-def link_to_concordance(q, collocate, direction):
-    collocate_values = [collocate, direction, q['word_num']]
+def link_to_concordance(q, collocate, direction, collocate_num):
+    collocate_values = [collocate, direction, q['word_num'], collocate_num]
+    if len(collocate_values) != 4:
+        print >> sys.stderr, collocate_values
+        sys.exit()
     return f.link.make_query_link(q['q'], method=q['method'], arg=q['arg'], report="concordance_from_collocation",
                                   collocate=collocate_values,**q['metadata'])
     
