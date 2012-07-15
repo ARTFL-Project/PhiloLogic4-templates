@@ -132,7 +132,7 @@ def clean_word(word):
 def tokenize_text(text):
     """Returns a list of individual tokens"""
     text = text.lower()
-    text_tokens = re.split('[ ,;:?.!"]+', text) ## this splits on whitespaces and punctuation
+    text_tokens = re.split(r"([^ \.,;:?!\"\n\r\t\(\)]+)|([\.;:?!])", text) ## this splits on whitespaces and punctuation
     text_tokens = [clean_word(token) for token in text_tokens if token] ## remove empty strings
     return text_tokens
  

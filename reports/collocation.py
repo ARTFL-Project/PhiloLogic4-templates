@@ -7,7 +7,7 @@ import os
 import re
 from functions.wsgi_handler import wsgi_response
 from render_template import render_template
-from functions.format import adjust_bytes, clean_text, chunkifier
+from functions.format import adjust_bytes, clean_text, chunkifier, tokenize_text
 from bibliography import bibliography
 
 
@@ -85,11 +85,11 @@ def tokenize(text, filter_list, within_x_words, direction, highlighting=False):
     
     if direction == 'left':
         text = re.sub("^[^\s]* ", "", text) ## hack off left-most word (potentially truncated)
-        word_list = re.split("\s+", text) 
+        word_list = tokenize_text(text) 
         word_list.reverse() ## left side needs to be reversed
     else:
         text = re.sub(" [^\s]*$", "", text) ## hack off right-most word (potentially truncated)
-        word_list = re.split("\s+", text)
+        word_list = tokenize_text(text)
         
     word_list = filter(word_list, filter_list, within_x_words)
 
