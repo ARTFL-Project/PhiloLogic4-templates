@@ -35,7 +35,7 @@ def chunkifier(conc_text, bytes, kwic=False, highlight=False):
     end_byte = int
     for pos, word_byte in enumerate(bytes):
         if highlight: 
-            text, end_byte = highlighter(conc_text, word_byte, kwic=kwic)
+            text, end_byte = highlighter(conc_text, word_byte)
         else:
             text_chunks = re.split("([\w']+)", conc_text[word_byte:])
             end_byte = word_byte + len(text_chunks[1])
@@ -53,11 +53,11 @@ def chunkifier(conc_text, bytes, kwic=False, highlight=False):
     return conc_start, conc_middle, conc_end
 
 
-def highlighter(text, word_byte, kwic=False):
+def highlighter(text, word_byte):
     """This function highlights a passage based on the hit's byte offset"""
     # the split returns an empty list if the word_byte goes beyond the text excerpt
     # which causes an index error on the following line
-    unicode_str = re.compile("([\w']+)", re.UNICODE)
+    unicode_str = re.compile(r"([^ \.,;:?!\"\n\r\t\(\)]+)|([\.;:?!])", re.UNICODE)
     text_chunks = unicode_str.split(text[word_byte:].decode('utf-8', 'ignore'))
     end_byte = word_byte + len(text_chunks[1].encode('utf-8', 'ignore'))
     text = '<span class="highlight">' + text_chunks[1].encode('utf-8', 'ignore') + '</span>' # 0 element is always an empty string
