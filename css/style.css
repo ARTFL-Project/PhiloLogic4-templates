@@ -377,9 +377,19 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
     padding-right: 50px;
 }
 .philologic_table {
+    border-collapse:collapse;
+}
+.table_header {
+    background-color: #ECECEC;
     border-style:solid;
     border-width:1px;
-    border-color: #ECECEC;
+    border-color: LightGray;
+}
+.table_column {
+    width: 25%;
+    border-style:solid;
+    border-width:1px;
+    border-color: LightGray;
 }
 .bibliographic_results {
         list-style-type: none;
