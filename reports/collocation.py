@@ -56,6 +56,8 @@ def fetch_collocation(results, path, q, filter_words=100):
         right_words = tokenize(conc_right, filter_list, within_x_words, 'right')
     
         for l_word in left_words:
+            if l_word == q['q']:
+                continue
             if l_word not in left_collocates:
                 left_collocates[l_word] = 0
             left_collocates[l_word] += 1
@@ -64,6 +66,8 @@ def fetch_collocation(results, path, q, filter_words=100):
             all_collocates[l_word] += 1 
 
         for r_word in right_words:
+            if r_word == q['q']:
+                continue
             if r_word not in right_collocates:
                 right_collocates[r_word] = 0
             if r_word not in all_collocates:
