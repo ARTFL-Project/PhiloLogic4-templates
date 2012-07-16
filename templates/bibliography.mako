@@ -24,7 +24,7 @@ function float_left() {
     $(".results_container").css('float', 'left');
     $(".description").css('padding-left', '0px');
     $(".bibliographic_results").css('padding-left', '0px');
-    $('.description').hide().fadeIn();
+    $('.description').fadeIn();
     $(".bibliographic_results").fadeIn();
 }
 function float_below() {
@@ -32,12 +32,13 @@ function float_below() {
     $(".form_body").css('float', 'none');
     $(".description").css('padding-left', '40px');
     $(".bibliographic_results").css('padding-left', '40px');
+    $('.description').show();
     $(".bibliographic_results").show();
 }
 </script>
 <div class="results_container">
 <div class='philologic_response'>
- <p class='description'>Bibliography Report: ${len(results)} results.</p>
+ <p class='description' style="display:none;padding-top:20px;">Bibliography Report: ${len(results)} results.</p>
  <div class='bibliographic_results'>
  <ol class='philologic_cite_list'>
  % for i in results:
