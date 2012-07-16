@@ -1,5 +1,5 @@
-<div class='form_body' style="display:none;">
-<form action="${db.locals['db_url'] + "/dispatcher.py/"}" style='width:600px; margin-left:40px; margin-right: auto;'>
+<div class='form_body'>
+<form action="${db.locals['db_url'] + "/dispatcher.py/"}">
 <table>
  <tr><td>Query Terms:</td><td><input type='text' name='q' id='q'></input></td></tr>
  <tr><td><select name='method' id='method'>

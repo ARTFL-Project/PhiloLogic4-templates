@@ -185,11 +185,6 @@ tr, td {
   padding: .50em;
 }
 
-
-.form_body {
-    padding-top: 10px;
-}
-
 /**
  * Lists
  */
@@ -353,6 +348,12 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
 }
 
 /* New Philo4 styles */
+.form_body {
+    padding-top: 10px;
+    padding-left: 40px;
+    width: 500px;
+    display: none;
+}
 .kwic_concordance {
         font-family: 'Droid Sans Mono', sans-serif;
         font-size: 12;
@@ -394,7 +395,7 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
 .bibliographic_results {
         list-style-type: none;
         padding-left: 40px;
-        padding-right: 40px;
+        display: none;
 }
 .description {
         font-size: 180%;
