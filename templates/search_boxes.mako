@@ -1,5 +1,5 @@
-<div class='form_body' style="display:none;">
-<form action="${db.locals['db_url'] + "/dispatcher.py/"}" style='width:600px; margin-left:40px; margin-right: auto;'>
+<div class='form_body'>
+<form action="${db.locals['db_url'] + "/dispatcher.py/"}">
 <table>
  <tr><td>Query Terms:</td><td><input type='text' name='q' id='q'></input></td></tr>
  <tr><td><select name='method' id='method'>
@@ -48,11 +48,12 @@
 <option value="full">Full report</option>
 </select></td></tr>
 
-<tr id="results_per_page"><td>Results per page:</td><td><select name='results_per_page'>
- <option value='20' selected="selected">20</option>
+<tr id="results_per_page"><td>Results per page:</td><td><select name='results_per_page'n id='page_num'>
+ <option value='20'>20</option>
  <option value='50'>50</option>
  <option value='100'>100</option></select></td></tr>
- <tr><td><input type='submit'/></td></tr>
+ <tr><td><input type='submit'/></td>
+ <td><button type="reset" id="reset">Clear form</button></td></tr>
 </table>
 </form>
 </div>

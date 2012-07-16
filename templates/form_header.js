@@ -144,13 +144,14 @@ $(document).ready(function(){
         var key_value = val_list[i].split('=');
         var my_value = decodeURIComponent((key_value[1]+'').replace(/\+/g, '%20'));
         var key = $('#' + key_value[0]);
-        if (key_value[0] != 'rate') {
-            key.val(my_value);  
+        if (key_value[0] == 'results_per_page') {
+            $("#page_num").val(my_value);
+        }
+        else if (my_value == 'relative') {
+            key.prop('checked', true);
         }
         else {
-            if (my_value == 'relative') {
-                key.prop('checked', true);
-            }
+            key.val(my_value);
         }
     }
     
@@ -160,10 +161,25 @@ $(document).ready(function(){
         var report = $(this).val();
         showHide(report);
     });
+    
+    
+//  Clear search form
+    $("#reset").click(function() {
+        $("#q").empty();
+        $("#method").val("proxy");
+        $("#arg").empty();
+        for (i in fields) {
+            var field = $("#" + i);
+            $(field).empty();
+        }
+        $("#report").val('concordance');
+        $("#results_per_page").val("20");
+        showHide('concordance');
+    });
+    
 });
 
 function showHide(value) {
-    console.log(value);
     if (value == 'frequency') {
         $("#collocation").hide()
         $("#results_per_page").hide()

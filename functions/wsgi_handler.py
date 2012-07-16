@@ -46,6 +46,8 @@ def parse_cgi(environ):
     
     # This defines the collocate for collocation to concordance searches
     query["collocate"] = cgi.get("collocate",[None])[0]
+    query['direction'] = cgi.get("direction",[None])[0]
+    query['collocate_num'] = cgi.get("collocate_num", [None])[0]
     
     ## This is for frequency searches: raw count or per n number of words
     query["rate"] = cgi.get("rate", [None])[0]

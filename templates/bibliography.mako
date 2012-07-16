@@ -1,59 +1,44 @@
 <%include file="header.mako"/>
-<div class='form_body'>
-<form action="./" style='width:600px; margin-left:100px; margin-right: auto;'>
-<table>
- <tr><td>Query Terms:</td><td><input type='text' name='q' id='q'></input></td></tr>
- <tr><td><select name='query_method'>
- <option value='proxy'>Within</option>
- <option value='phrase'>Exactly</option>
- </select></td><td>
- <input type='text' name='query_arg'></input> words.</td></tr>
- <tr><td>Report Generator:</td><td><select name='report' id="report" onchange="showHide(this.value);">
- <option value='concordance' selected="selected">Concordance</option>
- <option value='relevance'>Ranked relevance</option>
- <option value='kwic'>KWIC</option>
- <option value='collocation'>Collocation</option>
- <option value='frequency'>Frequency Table</option>
- <option value='theme_rheme'>Theme Rheme</option></select></td></tr>
- 
- <tr id="collocation"><td>Within </td><td><select name='word_num'>
- <option value='1'>1</option>
- <option value='2'>2</option>
- <option value='3'>3</option>
- <option value='4'>4</option>
- <option value='5' selected="selected">5</option>
- <option value='6'>6</option>
- <option value='7'>7</option>
- <option value='8'>8</option>
- <option value='9'>9</option>
- <option value='10'>10</option>
- </select> words</td></tr>
- 
- <tr id="frequency"><td>Frequency by:</td><td><select name='field'>
-% for facet in db.locals["metadata_fields"]:
-    <option value='${facet}'>${facet}</option>
-% endfor
-<input type="radio" name="rate" value="raw" checked/>Normal</input>
-<input type="radio" name="rate" value="relative"/>per 10,000</input>
-</td></tr>
+<%include file="search_boxes.mako"/>
+<script>
+$(document).ready(function(){
+    $(".form_body").show();
+    if ($(window).width() > 1000) {
+        float_left();
+    }
+    else {
+        float_below();
+    }
+    $(window).resize(function() {
+        if ($(window).width() > 1000) {
+            float_left();
+        }
+        else {
+            float_below();
+        }
+    });
+});
 
-<tr id="theme_rheme"><td>Word position:</td><td><select name='theme_rheme'>
-<option value="front">Front of clause</option>
-<option value="end">End of clause</option>
-<option value="front_end">Front and end only</option>
-<option value="front_middle_end">Front, middle and end</option>
-<option value="full">Full report</option>
-</select></td></tr>
-
-<tr id="results_per_page"><td>Results per page:</td><td><select name='results_per_page'>
- <option value='20' selected="selected">20</option>
- <option value='50'>50</option>
- <option value='100'>100</option></select></td></tr>
- <tr><td><input type='submit'/></td></tr>
-</table>
-</div>
-<div class='philologic_response' style="padding-left: 60px;">
- <p class='description'>Bibliography Report: ${len(results)} results.</p>
+function float_left() {
+    $(".form_body").css('float', 'left');
+    $(".results_container").css('float', 'left');
+    $(".description").css('padding-left', '0px');
+    $(".bibliographic_results").css('padding-left', '0px');
+    $('.description').fadeIn();
+    $(".bibliographic_results").fadeIn();
+}
+function float_below() {
+    $(".results_container").css('float', 'none');
+    $(".form_body").css('float', 'none');
+    $(".description").css('padding-left', '40px');
+    $(".bibliographic_results").css('padding-left', '40px');
+    $('.description').show();
+    $(".bibliographic_results").show();
+}
+</script>
+<div class="results_container">
+<div class='philologic_response'>
+ <p class='description' style="display:none;padding-top:20px;">Bibliography Report: ${len(results)} results.</p>
  <div class='bibliographic_results'>
  <ol class='philologic_cite_list'>
  % for i in results:
@@ -67,8 +52,7 @@
   </li>
  % endfor
  </ol>
-<input type='submit'/>
 </div>
-</form>
 </div>
+</dvi>
 <%include file="footer.mako"/>
