@@ -136,7 +136,7 @@ body {
   color: #333;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1 {
   margin: 0;
   padding: 0;
   font-weight: normal;
@@ -145,109 +145,19 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2em;
 }
 
-h2 {
-  font-size: 1.5em;
-  margin-bottom: 1em;
-}
-
-h3 {
-  font-size: 1.3em;
-  color: #5c4c30;
-}
-
-h4 {
-  font-size: 1.2em;
-}
-
-h5 {
-  font-size: 1.2em;
-}
-
-h6 {
-  font-size: 1.1em;
-}
-
-ul, quote, code, fieldset {
-  margin: .5em 0;
-}
-
-p {
-  margin: .6em 0 1.2em;
-  padding: 0;
-}
-
 /* Tables */
 table {
   width: 100%;
 }
 tr, td {
-  padding-bottom: 10px;
-}
-
-/**
- * Lists
- */
-
-ul {
-  margin: .5em 0 1em;
-  padding: 0;
+  padding-bottom: 15px;
 }
 
 ol {
-  margin: .75em 0 1.25em;
-  padding: 0;
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
 }
-
-ul.menu, .item-list ul {
-  margin: .35em 0 0 -0.35em;
-  padding: 0;
-}
-
-ul.menu ul, .item-list ul ul {
-  margin-left: 0em;
-}
-
-ul li, ul.menu li, .item-list ul li, li.leaf {
-  padding: 0 0 .2em 1.25em;
-  list-style-type: none;
-  list-style-image: none;
-}
-
-ul li.leaf a, ul li.expanded a, ul li.collapsed a {
-  display: block;
-}
-
-ul.inline li {
-  background: none;
-  margin: 0;
-  padding: 0 1em 0 0;
-}
-
-ol.task-list {
-  margin-left: 0;
-  list-style-type: none;
-  list-style-image: none;
-}
-ol.task-list li {
-  padding: .5em 1em .5em 2em;
-}
-ol.task-list li.active {
-  background: transparent url(images/menu_expanded.png) no-repeat 3px 50%;
-}
-ol.task-list li.done {
-  color: #393;
-  background: transparent url(../../misc/watchdog-ok.png) no-repeat 0px 50%;
-}
-ol.task-list li.active {
-  margin-right: 1em;
-}
-
-fieldset ul.clear-block li {
-  margin: 0;
-  padding: 0;
-  background-image: none;
-}
-
 
 
 div.main_body {
