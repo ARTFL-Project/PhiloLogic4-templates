@@ -178,11 +178,10 @@ p {
 
 /* Tables */
 table {
-  margin: 1em 0;
   width: 100%;
 }
 tr, td {
-  padding: .50em;
+  padding-bottom: 10px;
 }
 
 /**
@@ -199,10 +198,6 @@ ol {
   padding: 0;
 }
 
-ol li, ul li {
-  margin: .4em 0 .4em .35em;
-}
-
 ul.menu, .item-list ul {
   margin: .35em 0 0 -0.35em;
   padding: 0;
@@ -212,26 +207,10 @@ ul.menu ul, .item-list ul ul {
   margin-left: 0em;
 }
 
-ol li, ul li, ul.menu li, .item-list ul li, li.leaf {
-  margin: .15em 0 .15em .35em;
-}
-
 ul li, ul.menu li, .item-list ul li, li.leaf {
   padding: 0 0 .2em 1.25em;
   list-style-type: none;
   list-style-image: none;
-}
-
-ol li {
-  margin-left: 2em;
-}
-
-ul li.expanded {
-  background: transparent url(images/menu_expanded.png) no-repeat 0 .45em;
-}
-
-ul li.collapsed {
-  background: transparent url(images/menu_collapsed.png) no-repeat 0 .45em;
 }
 
 ul li.leaf a, ul li.expanded a, ul li.collapsed a {
@@ -274,7 +253,7 @@ fieldset ul.clear-block li {
 div.main_body {
     padding-top: 20px;
     padding-bottom: 10px;
-    margin-left:10px;
+    margin-left:50px;
 }
 
 /* The following is PhiloLogic specific CSS to handle TEI encoding */
@@ -350,7 +329,6 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
 /* New Philo4 styles */
 .form_body {
     padding-top: 10px;
-    padding-left: 40px;
     width: 500px;
     display: none;
 }
@@ -360,7 +338,6 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
 }
 .philologic_concordance {
         list-style-type: none;
-        padding-left: 20px;
         padding-right: 20px;
 }
 .philologic_concordance .philologic_occurrence {
@@ -374,7 +351,6 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
         border-bottom:0px;
 }
 .philologic_collocation {
-    padding-left: 50px;
     padding-right: 50px;
 }
 .philologic_table {
@@ -394,12 +370,10 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
 }
 .bibliographic_results {
         list-style-type: none;
-        padding-left: 40px;
         display: none;
 }
 .description {
         font-size: 180%;
-        padding-left: 50px;
 }
 .highlight {
         color: #FF0000;
@@ -428,7 +402,6 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
         height: 1px;
 }
 .bibliography {
-        padding-left: 20px;
         padding-bottom: 10px;
 }
 a.hide_frequency {
@@ -452,9 +425,6 @@ a.hide_frequency:hover {
 .score {
         color: Black;
         float: right;
-}
-.show_search_form {
-        padding-left: 50px;
 }
 .loading {
     margin-left: auto;
