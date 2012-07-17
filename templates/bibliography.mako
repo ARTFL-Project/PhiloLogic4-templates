@@ -54,5 +54,5 @@ function float_below() {
  </ol>
 </div>
 </div>
-</dvi>
+</div>
 <%include file="footer.mako"/>
