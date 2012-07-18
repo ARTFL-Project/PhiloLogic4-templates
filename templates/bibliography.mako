@@ -3,14 +3,15 @@
 <script>
 $(document).ready(function(){
     $(".form_body").show();
-    if ($(window).width() > 1000) {
+    var content_width = 100 + $(".form_body").width() + $(".bibliography_results").width();
+    if ($(window).width() > content_width) {
         float_left();
     }
     else {
         float_below();
     }
     $(window).resize(function() {
-        if ($(window).width() > 1000) {
+        if ($(window).width() > content_width) {
             float_left();
         }
         else {
@@ -22,16 +23,12 @@ $(document).ready(function(){
 function float_left() {
     $(".form_body").css('float', 'left');
     $(".results_container").css('float', 'left');
-    $(".description").css('padding-left', '0px');
-    $(".bibliographic_results").css('padding-left', '0px');
     $('.description').fadeIn();
     $(".bibliographic_results").fadeIn();
 }
 function float_below() {
     $(".results_container").css('float', 'none');
     $(".form_body").css('float', 'none');
-    $(".description").css('padding-left', '40px');
-    $(".bibliographic_results").css('padding-left', '40px');
     $('.description').show();
     $(".bibliographic_results").show();
 }
@@ -54,5 +51,5 @@ function float_below() {
  </ol>
 </div>
 </div>
-</dvi>
+</div>
 <%include file="footer.mako"/>
