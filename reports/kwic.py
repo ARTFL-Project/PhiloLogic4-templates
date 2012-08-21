@@ -25,6 +25,10 @@ def fetch_kwic(results, path, q, byte_query, start, end, length=400):
     shortest_biblio = 0
     for hit in results[start:end]:
         biblio = hit.author + ', ' +  hit.title
+        
+        ## additional clean-up for titles
+        biblio = ' '.join(biblio.split()) ## maybe hackish, but it works
+        
         get_query = byte_query(hit.bytes)
         href = "./" + '/'.join([str(i) for i in hit.philo_id[:5]]) + get_query
         

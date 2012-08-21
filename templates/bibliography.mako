@@ -35,7 +35,7 @@ function float_below() {
 </script>
 <div class="results_container">
 <div class='philologic_response'>
- <p class='description' style="display:none;padding-top:20px;">Bibliography Report: ${len(results)} results.</p>
+ <p class='description' style="display:none;">Bibliography Report: ${len(results)} results.</p>
  <div class='bibliographic_results'>
  <ol class='philologic_cite_list'>
  % for i in results:
