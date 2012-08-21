@@ -35,8 +35,9 @@ def make_div_cite(i):
         page_q = i.db.dbh.execute("SELECT * FROM pages WHERE philo_id = ?;",(page_id,))
         page_obj = page_q.fetchone()
         if page_obj:
-            page_n = page_obj['n']
-            cite += ", page " + page_n + "."
+            if page_obj['n']:
+                page_n = page_obj['n'].decode('utf-8', 'ignore') 
+                cite += u", page " + page_n + u"."
 
     cite += "</span>"
     return cite
