@@ -36,7 +36,7 @@ def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=
     if theme_rheme:
         q_params.append(("theme_rheme", theme_rheme))
     if collocate:
-        q_params.append(('collocate', collocate[0]))
+        q_params.append(('collocate', collocate[0].encode('utf-8', 'ignore')))
         q_params.append(('direction', collocate[1]))
         q_params.append(('word_num', collocate[2]))
         q_params.append(('collocate_num', collocate[3]))
