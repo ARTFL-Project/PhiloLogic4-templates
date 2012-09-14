@@ -12,6 +12,7 @@ class ir_hit_wrapper(object):
     def __init__(self, db,hit, bytes, score, obj_type=False, encoding='utf-8'):
         self.db = db.dbh.cursor()
         self.toms_table = set(db.locals["metadata_fields"] + ['word_count', 'filename'])
+        self.rr_table_name = db.locals['ranked_relevance_table_name']
         self.hit = hit
         self.philo_id = hit.split()
         self.bytes = bytes
@@ -27,13 +28,15 @@ class ir_hit_wrapper(object):
         
     def __metadata_lookup(self, field):
         metadata = None
+        if field == "filename":
+            self.hit = self.hit[:1] + ' 0 0 0 0 0 0'
         try:
             if field in self.toms_table:
                 table = 'toms'
             else:
-                table = '%s_word_counts' % self.type
+                table = self.rr_table_name
             query = 'select %s from %s where philo_id=? limit 1' % (field, table)
-            #print >> sys.stderr, query, self.hit
+            print >> sys.stderr, query, self.hit
             self.db.execute(query, (self.hit, ))
             metadata = self.db.fetchone()[0]
         except (TypeError,IndexError):
