@@ -29,7 +29,7 @@ class ir_hit_wrapper(object):
     def __metadata_lookup(self, field):
         metadata = None
         if field == "filename":
-            self.hit = self.hit[:1] + ' 0 0 0 0 0 0'
+            self.hit = ' '.join(self.philo_id[:1]) + ' 0 0 0 0 0 0'
         try:
             if field in self.toms_table:
                 table = 'toms'
