@@ -66,7 +66,7 @@ def compute_idf(query_words, table, c, total_docs):
 def retrieve_hits(q, db):
     object_types = ['doc', 'div1', 'div2', 'div3', 'para', 'sent', 'word']
     obj_types = db.locals['ranked_relevance_objects']
-    table = db.locals['ranked_relevance_table_name']
+    table = "ranked_relevance"
     
     ## Get the depths for philo_id slices
     #depths = []

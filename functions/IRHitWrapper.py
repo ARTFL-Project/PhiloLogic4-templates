@@ -12,7 +12,6 @@ class ir_hit_wrapper(object):
     def __init__(self, db,hit, bytes, score, obj_type=False, encoding='utf-8'):
         self.db = db.dbh.cursor()
         self.toms_table = set(db.locals["metadata_fields"] + ['word_count', 'filename'])
-        self.rr_table_name = db.locals['ranked_relevance_table_name']
         self.hit = hit
         self.philo_id = hit.split()
         self.bytes = bytes
@@ -34,7 +33,7 @@ class ir_hit_wrapper(object):
             if field in self.toms_table:
                 table = 'toms'
             else:
-                table = self.rr_table_name
+                table = "ranked_relevance"
             query = 'select %s from %s where philo_id=? limit 1' % (field, table)
             print >> sys.stderr, query, self.hit
             self.db.execute(query, (self.hit, ))
