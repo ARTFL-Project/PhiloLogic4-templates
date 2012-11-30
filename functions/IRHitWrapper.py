@@ -27,13 +27,15 @@ class ir_hit_wrapper(object):
         
     def __metadata_lookup(self, field):
         metadata = None
+        if field == "filename":
+            self.hit = ' '.join(self.philo_id[:1]) + ' 0 0 0 0 0 0'
         try:
             if field in self.toms_table:
                 table = 'toms'
             else:
-                table = '%s_word_counts' % self.type
+                table = "ranked_relevance"
             query = 'select %s from %s where philo_id=? limit 1' % (field, table)
-            #print >> sys.stderr, query, self.hit
+            print >> sys.stderr, query, self.hit
             self.db.execute(query, (self.hit, ))
             metadata = self.db.fetchone()[0]
         except (TypeError,IndexError):
@@ -56,6 +58,7 @@ class ir_results_wrapper(object):
     def __init__(self, sqlhits, db):
         self.sqlhits = sqlhits
         self.db = db
+        self.done = True
     
     def __getitem__(self,n):
         if isinstance(n,slice):

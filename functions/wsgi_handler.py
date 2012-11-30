@@ -23,7 +23,6 @@ def wsgi_response(start_response, environ):
 def parse_cgi(environ):
     """ Parses CGI parameters from Apache, returns a tuple with a philologic database, remaining path components, and a query dict. """
     myname = environ["SCRIPT_FILENAME"]
-    myname = myname.replace('scripts/more_context.py', '') ## when more_context.py calls this function
     dbfile = os.path.dirname(myname) + "/data"
     db = DB(dbfile,encoding='utf-8')
     print >> sys.stderr, environ["QUERY_STRING"]
@@ -47,6 +46,8 @@ def parse_cgi(environ):
     
     # This defines the collocate for collocation to concordance searches
     query["collocate"] = cgi.get("collocate",[None])[0]
+    query['direction'] = cgi.get("direction",[None])[0]
+    query['collocate_num'] = cgi.get("collocate_num", [None])[0]
     
     ## This is for frequency searches: raw count or per n number of words
     query["rate"] = cgi.get("rate", [None])[0]

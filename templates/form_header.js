@@ -112,21 +112,71 @@ $(document).ready(function(){
     };
     $(".kwic_concordance").hoverIntent(config)
     
-// This will show more context for concordance and theme-rheme searches    
+// This will show more context for concordance and theme-rheme searches
+    $(".philologic_occurrence").hover(
+        function() {
+            $(this).children(".more_context").fadeIn(100);
+        },
+        function() {
+            $(this).children(".more_context").fadeOut(100);
+        }
+    );
     $(".more_context").click(function() {
         var context_link = $(this).text();
         if (context_link == 'Show more context') {
-            $(this).prevAll('.philologic_context:last').children('.begin_concordance').show()
-            $(this).prevAll('.philologic_context:last').children('.end_concordance').show()
-            $(this).empty().fadeIn().append('Hide')
+            $(this).siblings('.philologic_context').children('.begin_concordance').show()
+            $(this).siblings('.philologic_context').children('.end_concordance').show()
+            $(this).empty().fadeIn(100).append('Show less context')
         } 
         else {
-            $(this).prevAll('.philologic_context:last').children('.begin_concordance').hide()
-            $(this).prevAll('.philologic_context:last').children('.end_concordance').hide()
-            $(this).empty().fadeIn().append('Show more context')
+            $(this).siblings('.philologic_context').children('.begin_concordance').hide()
+            $(this).siblings('.philologic_context').children('.end_concordance').hide()
+            $(this).empty().fadeIn(100).append('Show more context')
         }
     });
-       
+    
+//  This will prefill the search form with the current query
+    var url = $(location).attr('href');
+    var db_url = "${db.locals['db_url']}" + '/dispatcher.py/?';
+    var q_string = url.replace(db_url, '');
+    var val_list = q_string.split('&');
+    for (var i = 0; i < val_list.length; i++) {
+        var key_value = val_list[i].split('=');
+        var my_value = decodeURIComponent((key_value[1]+'').replace(/\+/g, '%20'));
+        var key = $('#' + key_value[0]);
+        if (key_value[0] == 'results_per_page') {
+            $("#page_num").val(my_value);
+        }
+        else if (my_value == 'relative') {
+            key.prop('checked', true);
+        }
+        else {
+            key.val(my_value);
+        }
+    }
+    
+    showHide($("#report").val());
+    
+    $('#report').change(function() {
+        var report = $(this).val();
+        showHide(report);
+    });
+    
+    
+//  Clear search form
+    $("#reset").click(function() {
+        $("#q").empty();
+        $("#method").val("proxy");
+        $("#arg").empty();
+        for (i in fields) {
+            var field = $("#" + i);
+            $(field).empty();
+        }
+        $("#report").val('concordance');
+        $("#results_per_page").val("20");
+        showHide('concordance');
+    });
+    
 });
 
 function showHide(value) {
