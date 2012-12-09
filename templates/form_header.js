@@ -105,12 +105,12 @@ $(document).ready(function(){
     
 //  This is for displaying the full bibliogrpahy on mouse hover
 //  in kwic reports
-    var config = {    
-        over: showBiblio, 
-        timeout: 500,  
-        out: hideBiblio   
-    };
-    $(".kwic_concordance").hoverIntent(config)
+    //var config = {    
+    //    over: showBiblio, 
+    //    timeout: 500,  
+    //    out: hideBiblio   
+    //};
+    //$(".kwic_concordance").hoverIntent(config)
     
 // This will show more context for concordance and theme-rheme searches
     $(".philologic_occurrence").hover(
