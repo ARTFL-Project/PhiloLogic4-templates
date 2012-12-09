@@ -56,7 +56,7 @@ def generate_frequency(results, q, db):
         if k == "NULL":
             q["metadata"][field] = k # NULL is a magic boolean keyword, not a string value.
         else:
-            q["metadata"][field] = '"%s"' % k # we want to do exact queries on defined values.
+            q["metadata"][field] = '"%s"' % k.encode('utf-8', 'ignore') # we want to do exact queries on defined values.
         # Now build the url from q.
         url = f.link.make_query_link(q["q"],q["method"],q["arg"],**q["metadata"])     
 
