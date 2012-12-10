@@ -21,7 +21,7 @@
    % if margin and len(str(p + 1)) == len(str(start)):
     <span id="position" style="white-space:pre-wrap;font-weight:900">${p + 1}. </span>
    % else:
-    <span id="position">${p + 1}.</span>    
+    <span id="position" style="font-weight:900">${p + 1}.</span>    
    % endif
    ${i}</div>  
   % endfor
