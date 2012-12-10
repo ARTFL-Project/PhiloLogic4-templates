@@ -25,7 +25,7 @@ def concordance_from_collocation(start_response, environ):
 def fetch_colloc_concordance(results, path, q, filter_words=100):
     within_x_words = q['word_num']
     direction = q['direction']
-    collocate = q['collocate']
+    collocate = q['collocate'].decode('utf-8', 'ignore')
     collocate_num = q['collocate_num']
     
     ## set up filtering of most frequent 100 terms ##
@@ -80,7 +80,7 @@ def fetch_concordance(hit, path, q, length=2000):
     keep_text = []
     for w in split_text:
         if w:
-            if w.lower() == q['collocate']:
+            if w.lower() == q['collocate'].decode('utf-8', 'ignore'):
                 w = '<span class="collocate">%s</span>' % w
             keep_text.append(w)
     conc_text = ''.join(keep_text)

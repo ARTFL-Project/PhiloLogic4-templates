@@ -1,49 +1,49 @@
 #!/usr/bin/env python
-import urllib
-from wsgiref.util import shift_path_info
 import urlparse
 import re
 import sys
 import os
 import time
+from urllib import quote_plus
 from philologic.DB import DB
 
 
 def make_query_link(query,method=None,methodarg=None,report=None,start=None,end=None,results_per_page=None,theme_rheme=None,
                     collocate=[],**metadata): 
     """ Takes a dictionary of query parameters as produced by parse_cgi, and returns a relative URL representation of such. """
-    try:
-        q_params = [("q",query.encode('utf-8', 'ignore'))] ## urlencode does not like unicode...
-    except UnicodeDecodeError:
-        q_params = [("q",query)]
+    q_params = [("q",query)]
     if method:
         q_params.append(("method",method))
     if methodarg:
         q_params.append(("arg",methodarg))
-    try:
-        metadata = dict([(k, v.encode('utf-8', 'ignore')) for k, v in metadata.items()])
-    except UnicodeDecodeError:
-        pass
+    metadata = dict([(k, v) for k, v in metadata.items()])
     q_params.extend(metadata.items()[:])
     if report:
         q_params.append(("report",report))
     if start:
-        q_params.append(("start" , start))
+        q_params.append(("start" , str(start)))
     if end:
-        q_params.append(("end", end))
+        q_params.append(("end", str(end)))
     if results_per_page:
-        q_params.append(("results_per_page", results_per_page))
+        q_params.append(("results_per_page", str(results_per_page)))
     if theme_rheme:
         q_params.append(("theme_rheme", theme_rheme))
     if collocate:
-        try:
-            q_params.append(('collocate', collocate[0].encode('utf-8', 'ignore')))
-        except AttributeError, UnicodeDecodeError:
-            q_params.append(('collocate', collocate[0]))
+        q_params.append(('collocate', collocate[0]))
         q_params.append(('direction', collocate[1]))
-        q_params.append(('word_num', collocate[2]))
-        q_params.append(('collocate_num', collocate[3]))
-    return "./?" + urllib.urlencode(q_params)
+        q_params.append(('word_num', str(collocate[2])))
+        q_params.append(('collocate_num', str(collocate[3])))
+    return "./?" + url_encode(q_params)
+
+def url_encode(q_params):
+    encoded_str = []
+    for k, v in q_params:
+        #print >> sys.stderr, "KEY", k, "VALUE", v.encode('utf-8')
+        if v:
+            encoded_str.append(quote_plus(k, safe='/') + '=' + quote_plus(v, safe='/'))
+        else: ## Value is None
+            encoded_str.append(quote_plus(k, safe='/') + '=' + '')
+    return '&'.join(encoded_str)
 
 def make_object_link(philo_id, hit_bytes):
     """ Takes a valid PhiloLogic object, and returns a relative URL representation of such. """

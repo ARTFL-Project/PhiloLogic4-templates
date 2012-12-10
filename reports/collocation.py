@@ -51,8 +51,6 @@ def fetch_collocation(results, path, q, filter_words=100):
         conc_left, conc_middle, conc_right = chunkifier(conc_text, bytes)
         
         left_words = tokenize(conc_left, filter_list, within_x_words, 'left')
-        if not sum([len(i) for i in left_words]):
-            count += 1
         right_words = tokenize(conc_right, filter_list, within_x_words, 'right')
     
         for l_word in left_words:
@@ -75,12 +73,11 @@ def fetch_collocation(results, path, q, filter_words=100):
             right_collocates[r_word] += 1
             all_collocates[r_word] += 1
 
-    left_out = sorted(left_collocates.items(), key=lambda x: x[1], reverse=True)
-    right_out = sorted(right_collocates.items(), key=lambda x: x[1], reverse=True)
-    all_out = sorted(all_collocates.items(), key=lambda x: x[1], reverse=True)
+    left_out = sorted(left_collocates.items(), key=lambda x: x[1], reverse=True)[:100]
+    right_out = sorted(right_collocates.items(), key=lambda x: x[1], reverse=True)[:100]
+    all_out = sorted(all_collocates.items(), key=lambda x: x[1], reverse=True)[:100]
 
     tuple_out = zip(all_out, left_out, right_out)
-    print >> sys.stderr, "COUNT", count
     return tuple_out
 
 def tokenize(text, filter_list, within_x_words, direction, highlighting=False):
@@ -115,7 +112,7 @@ def filter(word_list, filter_list, within_x_words):
     return words_to_pass
 
 def link_to_concordance(q, collocate, direction, collocate_num):
-    collocate_values = [collocate, direction, q['word_num'], collocate_num]
+    collocate_values = [collocate.encode('utf-8', 'ignore'), direction, q['word_num'], collocate_num]
     return f.link.make_query_link(q['q'], method=q['method'], arg=q['arg'], report="concordance_from_collocation",
                                   collocate=collocate_values,**q['metadata'])
     

@@ -32,11 +32,15 @@ var fields = ${repr(db.locals['metadata_fields'])}
 
 // These functions are for the kwic bibliography whic is shortened by default
 function showBiblio() {
-    $(this).find("#end_biblio").show(200);
+    $(this).css('background', 'LightGray')
+    $(this).children("#full_biblio").css('position', 'absolute').css('text-decoration', 'underline')
+    $(this).children("#full_biblio").css('background', 'LightGray')
+    $(this).children("#full_biblio").css('display', 'inline')
 }
 
 function hideBiblio() {
-    $(this).find("#end_biblio").hide(200);
+    $(this).css('background', 'white')
+    $(this).children("#full_biblio").hide(200)
 }
 
 $(document).ready(function(){
@@ -107,10 +111,22 @@ $(document).ready(function(){
 //  in kwic reports
     var config = {    
         over: showBiblio, 
-        timeout: 500,  
+        timeout: 100,  
         out: hideBiblio   
     };
-    $(".kwic_concordance").hoverIntent(config)
+    $(".kwic_biblio").hoverIntent(config)
+    //$(".kwic_biblio").hover(
+    //    function() {
+    //        $(this).css('background', '#ECECEC')
+    //        $(this).children("#full_biblio").css('position', 'absolute').css('text-decoration', 'underline')
+    //        $(this).children("#full_biblio").css('background', '#ECECEC')
+    //        $(this).children("#full_biblio").css('display', 'inline')
+    //    },
+    //    function () {
+    //        $(this).css('background', 'white')
+    //        $(this).children("#full_biblio").hide(200)
+    //    }
+    //);
     
 // This will show more context for concordance and theme-rheme searches
     $(".philologic_occurrence").hover(
