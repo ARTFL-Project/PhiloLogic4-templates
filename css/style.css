@@ -278,6 +278,7 @@ span.projecthead { text-align: right; font-size: 20; color: #000000;}
 .table_column {
     padding-top: 10px;
     padding-bottom: 10px;
+    width: 25%;
     display:table-cell;
     text-align: center;
     vertical-align: middle;

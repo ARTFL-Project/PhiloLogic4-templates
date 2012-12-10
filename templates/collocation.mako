@@ -1,7 +1,6 @@
 <%include file="header.mako"/>
 <a href="javascript:void(0)" class="show_search_form">Show search form</a>
 <%include file="search_boxes.mako"/>
-<%namespace file="bibliographic_info.mako" import="bibliography"/>
  <p class='description'>Collocation Report for "${q['q'].decode('utf-8', 'ignore')}"</p>
  <span style="padding-left:50px">Displaying the top 100 collocates: The 100 most common words are being filtered from this report.</span>
  <div class="results_container">
