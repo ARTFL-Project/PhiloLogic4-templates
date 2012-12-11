@@ -10,7 +10,7 @@ from philologic.DB import DB
 from query_parser import query_parser
 
 
-def wsgi_response(start_response, environ):
+def wsgi_response(environ,start_response):
     status = '200 OK'
     headers = [('Content-type', 'text/html; charset=UTF-8'),("Access-Control-Allow-Origin","*")]
     start_response(status,headers)

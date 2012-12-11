@@ -16,8 +16,8 @@ import re
 from render_template import render_template
 
 
-def relevance(start_response, environ):
-    db, dbname, path_components, q = wsgi_response(start_response, environ)
+def relevance(environ,start_response):
+    db, dbname, path_components, q = wsgi_response(environ,start_response)
     path = os.getcwd().replace('functions/', '')
     
     if q['q'] == '':

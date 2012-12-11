@@ -8,8 +8,8 @@ from functions.wsgi_handler import wsgi_response
 from bibliography import bibliography
 from render_template import render_template
 
-def theme_rheme(start_response, environ):
-    db, dbname, path_components, q = wsgi_response(start_response, environ)
+def theme_rheme(environ,start_response):
+    db, dbname, path_components, q = wsgi_response(environ,start_response)
     path = os.getcwd().replace('functions/', '')
     if q['q'] == '':
         return bibliography(f,path, db, dbname,q,environ)

@@ -13,8 +13,8 @@ from philologic import HitWrapper
 
 philo_types = set(['div1', 'div2', 'div3'])
 
-def navigation(start_response, environ):
-    db, dbname, path_components, q = wsgi_response(start_response, environ)
+def navigation(environ,start_response):
+    db, dbname, path_components, q = wsgi_response(environ,start_response)
     path = os.getcwd().replace('functions/', '')
     obj = db[path_components]
     if obj.philo_type == 'doc':

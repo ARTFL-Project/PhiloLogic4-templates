@@ -11,8 +11,8 @@ from functions.format import adjust_bytes, clean_text, chunkifier, tokenize_text
 from bibliography import bibliography
 
 
-def collocation(start_response, environ):
-    db, dbname, path_components, q = wsgi_response(start_response, environ)
+def collocation(environ,start_response):
+    db, dbname, path_components, q = wsgi_response(environ,start_response)
     path = os.getcwd().replace('functions/', '')
     if q['q'] == '':
         return bibliography(f,path, db, dbname,q,environ) ## the default should be an error message
