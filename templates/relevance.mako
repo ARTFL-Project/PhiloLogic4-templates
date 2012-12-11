@@ -22,8 +22,8 @@
    title = i.title
    from copy import deepcopy
    link_metadata = deepcopy(q["metadata"])
-   link_metadata['author'] = author
-   link_metadata['title'] = title
+   link_metadata['author'] = author.encode('utf-8', 'ignore')
+   link_metadata['title'] = title.encode('utf-8', 'ignore')
    url = f.link.make_query_link(q["q"],q["method"],q["arg"],**link_metadata)
    hit_num = len(i.bytes)
    if hit_num >= 3:

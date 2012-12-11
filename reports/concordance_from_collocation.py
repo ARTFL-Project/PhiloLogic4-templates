@@ -11,8 +11,8 @@ from render_template import render_template
 from collocation import tokenize, filter
 from functions.format import adjust_bytes, clean_text, chunkifier
 
-def concordance_from_collocation(start_response, environ):
-    db, dbname, path_components, q = wsgi_response(start_response, environ)
+def concordance_from_collocation(environ,start_response):
+    db, dbname, path_components, q = wsgi_response(environ,start_response)
     path = os.getcwd().replace('functions/', '')
     if q['q'] == '':
         return bibliography(f,path, db, dbname,q,environ)
@@ -25,7 +25,7 @@ def concordance_from_collocation(start_response, environ):
 def fetch_colloc_concordance(results, path, q, filter_words=100):
     within_x_words = q['word_num']
     direction = q['direction']
-    collocate = q['collocate']
+    collocate = q['collocate'].decode('utf-8', 'ignore')
     collocate_num = q['collocate_num']
     
     ## set up filtering of most frequent 100 terms ##
@@ -80,7 +80,7 @@ def fetch_concordance(hit, path, q, length=2000):
     keep_text = []
     for w in split_text:
         if w:
-            if w.lower() == q['collocate']:
+            if w.lower() == q['collocate'].decode('utf-8', 'ignore'):
                 w = '<span class="collocate">%s</span>' % w
             keep_text.append(w)
     conc_text = ''.join(keep_text)

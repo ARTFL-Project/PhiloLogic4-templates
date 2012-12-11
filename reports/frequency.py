@@ -7,8 +7,8 @@ from functions.wsgi_handler import wsgi_response
 from render_template import render_template
 import json
 
-def frequency(start_response, environ):
-    db, dbname, path_components, q = wsgi_response(start_response, environ)
+def frequency(environ,start_response):
+    db, dbname, path_components, q = wsgi_response(environ,start_response)
     hits = db.query(q["q"],q["method"],q["arg"],**q["metadata"])
     if q["format"] == "json":
         # if we have a json report, directly dump the table in a json wrapper.
@@ -56,7 +56,7 @@ def generate_frequency(results, q, db):
         if k == "NULL":
             q["metadata"][field] = k # NULL is a magic boolean keyword, not a string value.
         else:
-            q["metadata"][field] = '"%s"' % k # we want to do exact queries on defined values.
+            q["metadata"][field] = '"%s"' % k.encode('utf-8', 'ignore') # we want to do exact queries on defined values.
         # Now build the url from q.
         url = f.link.make_query_link(q["q"],q["method"],q["arg"],**q["metadata"])     
 
