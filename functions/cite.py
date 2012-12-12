@@ -30,7 +30,7 @@ def make_div_cite(i):
 
     # hack alert
     if len(i.philo_id) >= 8:
-        page_id = [i.philo_id[0],0,0,0,0,0,0,0,i.philo_id[7]]
+        page_id = [i.philo_id[0],0,0,0,0,0,0,0,i.philo_id[6]]
         page_id = " ".join(str(s) for s in page_id)
         page_q = i.db.dbh.execute("SELECT * FROM pages WHERE philo_id = ?;",(page_id,))
         page_obj = page_q.fetchone()
