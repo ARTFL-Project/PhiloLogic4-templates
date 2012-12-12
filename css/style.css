@@ -358,3 +358,6 @@ a.hide_frequency:hover {
 .collocate {
     color:ForestGreen;
 }
+.current_page {
+    font-size: 170%;
+}
