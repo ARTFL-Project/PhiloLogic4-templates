@@ -39,16 +39,8 @@
   </ol>
   </div>
   <div class="more">
-  <%
-   prev, next = f.link.page_links(start, end, results_per_page, q, len(results))
-  %>
-   % if prev:
-    <a href="${prev}" class="previous"> Back </a>
-   % endif
-   % if next:
-    <a href="${next}" class="next"> Next </a>
-   % endif
-   <div style='clear:both;'></div>
+  <%include file="pages.mako" args="start=start,results_per_page=results_per_page,q=q,results=results"/>
+ <div style='clear:both;'></div>
  </div>
 </div>
 <%include file="footer.mako"/>

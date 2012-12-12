@@ -115,18 +115,7 @@ $(document).ready(function(){
         out: hideBiblio   
     };
     $(".kwic_biblio").hoverIntent(config)
-    //$(".kwic_biblio").hover(
-    //    function() {
-    //        $(this).css('background', '#ECECEC')
-    //        $(this).children("#full_biblio").css('position', 'absolute').css('text-decoration', 'underline')
-    //        $(this).children("#full_biblio").css('background', '#ECECEC')
-    //        $(this).children("#full_biblio").css('display', 'inline')
-    //    },
-    //    function () {
-    //        $(this).css('background', 'white')
-    //        $(this).children("#full_biblio").hide(200)
-    //    }
-    //);
+
     
 // This will show more context for concordance and theme-rheme searches
     $(".philologic_occurrence").hover(
@@ -139,15 +128,15 @@ $(document).ready(function(){
     );
     $(".more_context").click(function() {
         var context_link = $(this).text();
-        if (context_link == 'Show more context') {
+        if (context_link == 'More') {
             $(this).siblings('.philologic_context').children('.begin_concordance').show()
             $(this).siblings('.philologic_context').children('.end_concordance').show()
-            $(this).empty().fadeIn(100).append('Show less context')
+            $(this).empty().fadeIn(100).append('Less')
         } 
         else {
             $(this).siblings('.philologic_context').children('.begin_concordance').hide()
             $(this).siblings('.philologic_context').children('.end_concordance').hide()
-            $(this).empty().fadeIn(100).append('Show more context')
+            $(this).empty().fadeIn(100).append('More')
         }
     });
     

@@ -79,28 +79,55 @@ def page_interval(num, results, start, end):
     n = start - 1
     return start, end, n
     
-def page_links(start, end, results_per_page, q, results_len):
-    prev_start = start - results_per_page
-    prev_end = end - results_per_page
-    next_start = start + results_per_page
-    next_end = end + results_per_page
+def page_linker(page, results_per_page, q):
     theme_rheme = q['theme_rheme']
     collocate = [q['collocate'], q['direction'], q['word_num'], q['collocate_num']]
-    if next_start > results_len and prev_start < 0:
-        prev_page = ''
-        next_page = ''
-    elif next_start > results_len:
-        next_page = ''
-        prev_end = start - 1
-        prev_page = make_query_link(q["q"],q["method"],q["arg"],q['report'],prev_start,prev_end,results_per_page,
-                                    theme_rheme,collocate,**q["metadata"])
+    if page == 1:
+        page_start = 1
     else:
-        if prev_start > 0:
-            prev_page = make_query_link(q["q"],q["method"],q["arg"],q['report'],prev_start,prev_end,results_per_page,
-                                        theme_rheme,collocate,**q["metadata"])
+        page_start = results_per_page * (page - 1) + 1
+    page_end = results_per_page * (page)
+    page_link = make_query_link(q["q"],q["method"],q["arg"],q['report'],page_start,page_end,results_per_page,
+                                    theme_rheme,collocate,**q["metadata"])    
+    return page_link
+
+def find_page_number(results_len, results_per_page):
+    page_num = results_len / results_per_page
+    remainder = results_len % results_per_page
+    if remainder:
+        page_num += 1
+    return page_num
+
+def pager(start, results_per_page, q, results):
+    results_len = len(results)
+    page_num = find_page_number(results_len, results_per_page)
+    current_page = start / results_per_page  + 1 or 1
+
+    my_pages = []
+    if current_page == 1:
+        if page_num >= 9:
+            my_pages = [1,2,3,4,5,6,7,8,9]
         else:
-            prev_page = ''
-        next_page = make_query_link(q["q"],q["method"],q["arg"],q['report'],next_start,next_end,results_per_page,
-                                    theme_rheme,collocate,**q["metadata"])
-    
-    return prev_page, next_page
+            my_pages = range(1,page_num + 1)
+    else:
+        first = 1 if (current_page - 4) < 1 else current_page - 4
+        last = current_page + 5 if current_page + 5 < page_num else page_num
+        if last != page_num and (current_page - 4) < 1:
+            diff = 1 - (current_page - 4)
+            last = last + diff if (last + diff) < page_num else page_num    
+        for page in range(first, last):
+            my_pages.append(page)
+            
+    page_links = []
+    add_first = False
+    if my_pages[0] >= 2:
+        my_pages.insert(0, 1)
+        add_first = True
+    for page in my_pages:     
+        page_link = page_linker(page, results_per_page, q)
+        if page == 1 and add_first:
+            page = 'First'
+        page_links.append((page, page_link))
+            
+    return current_page, page_links, page_num
+        
