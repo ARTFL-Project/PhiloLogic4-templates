@@ -19,7 +19,7 @@
  <option value='kwic'>KWIC</option>
  <option value='collocation'>Collocation</option>
  <option value='frequency'>Frequency Table</option>
- <option value='theme_rheme'>Theme Rheme</option></select></td class="search_table"></tr>
+ </select></td class="search_table"></tr>
  
  <tr id="collocation"><td class="search_table">Within </td class="search_table"><td class="search_table"><select name='word_num' id='word_num'>
  <option value='1'>1</option>

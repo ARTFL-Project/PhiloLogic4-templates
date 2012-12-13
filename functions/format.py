@@ -40,7 +40,7 @@ def chunkifier(conc_text, bytes, kwic=False, highlight=False):
             print >> sys.stderr, word_byte, end_byte
             end_byte = word_byte + end_byte
         else:
-            text_chunks = re.split("([\w']+)", conc_text[word_byte:])
+            text_chunks = re.split("([^ \.,;:?!\'\-\"\n\r\t\(\)]+)", conc_text[word_byte:])
             end_byte = word_byte + len(text_chunks[1])
             text = text_chunks[1]
         conc_middle += text
@@ -65,7 +65,7 @@ def highlighter(text):
 #    text_chunks = unicode_str.split(text[word_byte:].decode('utf-8', 'ignore'))
 #    end_byte = word_byte + len(text_chunks[1].encode('utf-8', 'ignore'))
     end_byte = re.match(r"([^ \.,;:?!\'\-\"\n\r\t\(\)]+)",text).end()    
-    r_text = '<span class="highlight">' + text[:end_byte].encode('utf-8', 'ignore') + '</span>' # 0 element is always an empty string
+    r_text = '<span class="highlight">' + text[:end_byte] + '</span>' # 0 element is always an empty string
 #    print >> sys.stderr, r_text,end_byte
     return r_text, end_byte
 
@@ -138,7 +138,7 @@ def clean_word(word):
 def tokenize_text(text):
     """Returns a list of individual tokens"""
     text = text.lower()
-    text_tokens = re.split(r"([^ \.,;:?!\"\n\r\t\(\)]+)|([\.;:?!])", text) ## this splits on whitespaces and punctuation
+    text_tokens = re.split(r"([^ \.,;:?!\'\-\"\n\r\t\(\)]+)|([\.;:?!])", text) ## this splits on whitespaces and punctuation
     text_tokens = [clean_word(token) for token in text_tokens if token] ## remove empty strings
     return text_tokens
  
