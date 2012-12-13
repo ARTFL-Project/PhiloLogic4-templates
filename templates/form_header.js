@@ -19,9 +19,11 @@ function monkeyPatchAutocomplete() {
     };
 }
 
+var pathname = window.location.pathname;
+
 function autocomplete_metadata(metadata, field) {
     $("#" + field).autocomplete({
-        source: "/philo4/${dbname}/scripts/metadata_list.py?field=" + field,
+        source: pathname + "scripts/metadata_list.py?field=" + field,
         minLength: 2,
         dataType: "json"
     });
@@ -30,7 +32,7 @@ function autocomplete_metadata(metadata, field) {
 var fields = ${repr(db.locals['metadata_fields'])}
 
 
-// These functions are for the kwic bibliography whic is shortened by default
+// These functions are for the kwic bibliography which is shortened by default
 function showBiblio() {
     $(this).css('background', 'LightGray')
     $(this).children("#full_biblio").css('position', 'absolute').css('text-decoration', 'underline')
@@ -60,7 +62,7 @@ $(document).ready(function(){
     monkeyPatchAutocomplete();    
     
     $("#q").autocomplete({
-        source: "/philo4/${dbname}/scripts/term_list.py",
+        source: pathname + "scripts/term_list.py",
         minLength: 2,
         "dataType": "json"
     });
