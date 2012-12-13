@@ -100,8 +100,8 @@ def find_page_number(results_len, results_per_page):
 
 def pager(start, results_per_page, q, results):
     results_len = len(results)
-    page_num = find_page_number(results_len, results_per_page)
-    current_page = start / results_per_page  + 1 or 1
+    page_num = find_page_number(results_len, results_per_page) or 1 ## We shouldn't have to specify the "or" once we have a no_results template
+    current_page = start / results_per_page + 1 or 1
 
     my_pages = []
     if current_page == 1:
