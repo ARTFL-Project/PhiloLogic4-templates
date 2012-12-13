@@ -1,12 +1,13 @@
 <div class='form_body'>
 <form action="${db.locals['db_url'] + "/dispatcher.py/"}">
 <table>
- <tr><td class="search_table">Query Terms:</td class="search_table"><td class="search_table"><input type='text' name='q' id='q'></input></td class="search_table"></tr>
- <tr><td class="search_table"><select name='method' id='method'>
- <option value='proxy'>Within</option>
- <option value='phrase'>Exactly</option>
- </select></td class="search_table"><td class="search_table">
- <input type='text' name='arg' id='arg'></input> words.</td class="search_table"></tr>
+ <tr><td>Query Terms:</td><td><input type='text' name='q' id='q'></input></td></tr>
+ <tr><td><select name='method' id='method'>
+ <option value='proxy'>Within x words</option>
+ <option value='phrase'>Exactly x words</option>
+ <option value='sentence'>Within x sentences</option>
+ </select></td><td>
+ <input type='text' name='arg' id='arg'></input></td></tr>
  
 % for facet in db.locals["metadata_fields"]:
     <tr><td class="search_table">${facet}:</td class="search_table"><td class="search_table"><input type='text' name='${facet}' id="${facet}"></input></td class="search_table"></tr>
