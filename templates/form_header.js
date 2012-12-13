@@ -47,8 +47,6 @@ function hideBiblio() {
 
 $(document).ready(function(){
     
-    console.log(pathname)
-    
     $(".show_search_form").click(function() {
         link = $(this).text()
         if (link == 'Show search form') {
