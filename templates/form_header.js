@@ -19,7 +19,7 @@ function monkeyPatchAutocomplete() {
     };
 }
 
-var pathname = window.location.pathname;
+var pathname = window.location.pathname.replace('dispatcher.py/', '');
 
 function autocomplete_metadata(metadata, field) {
     $("#" + field).autocomplete({
@@ -46,6 +46,8 @@ function hideBiblio() {
 }
 
 $(document).ready(function(){
+    
+    console.log(pathname)
     
     $(".show_search_form").click(function() {
         link = $(this).text()
