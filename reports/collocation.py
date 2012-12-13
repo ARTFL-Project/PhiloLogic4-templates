@@ -10,6 +10,11 @@ from render_template import render_template
 from functions.format import adjust_bytes, clean_text, chunkifier, tokenize_text
 from bibliography import bibliography
 
+## Precompiled regexes for performance
+left_truncate = re.compile ("^[^\s]* ")
+right_truncate = re.compile(" [^\s]*$")
+word_identifier = re.compile("[a-z\xa0-\xc3]")
+
 
 def collocation(environ,start_response):
     db, dbname, path_components, q = wsgi_response(environ,start_response)
@@ -85,11 +90,11 @@ def tokenize(text, filter_list, within_x_words, direction, highlighting=False):
     text = text.lower()
     
     if direction == 'left':
-        text = re.sub("^[^\s]* ", "", text) ## hack off left-most word (potentially truncated)
+        text = left_truncate.sub("", text) ## hack off left-most word (potentially truncated)
         word_list = tokenize_text(text) 
         word_list.reverse() ## left side needs to be reversed
     else:
-        text = re.sub(" [^\s]*$", "", text) ## hack off right-most word (potentially truncated)
+        text = right_truncate.sub("", text) ## hack off right-most word (potentially truncated)
         word_list = tokenize_text(text)
         
     word_list = filter(word_list, filter_list, within_x_words)
@@ -105,7 +110,7 @@ def filter(word_list, filter_list, within_x_words):
     words_to_pass = []
 
     for word in word_list:
-        if word not in filter_list and re.search("[a-z\xa0-\xc3]", word):
+        if word not in filter_list and word_identifier.search(word):
             words_to_pass.append(word)
         if len(words_to_pass) == within_x_words:
             break

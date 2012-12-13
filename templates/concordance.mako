@@ -19,22 +19,14 @@
      n += 1
     %>
     <span class='hit_n'>${n}.</span> ${f.cite.make_div_cite(i)}
-    <a href="javascript:void(0)" class="more_context">Show more context</a>
+    <a href="javascript:void(0)" class="more_context">More</a>
     <div class='philologic_context'>${fetch_concordance(i, path, q)}</div>
    </li>
   % endfor
  </ol>
  </div>
  <div class="more">
-  <%
-   prev, next = f.link.page_links(start, end, results_per_page, q, len(results))
-  %>
-   % if prev:
-    <a href="${prev}" class="previous"> Back </a>
-   % endif
-   % if next:
-    <a href="${next}" class="next"> Next </a>
-   % endif
+ <%include file="pages.mako" args="start=start,results_per_page=results_per_page,q=q,results=results"/> 
    <div style='clear:both;'></div>
  </div>
 </div>

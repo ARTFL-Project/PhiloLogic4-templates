@@ -19,9 +19,11 @@ function monkeyPatchAutocomplete() {
     };
 }
 
+var pathname = window.location.pathname.replace('dispatcher.py/', '');
+
 function autocomplete_metadata(metadata, field) {
     $("#" + field).autocomplete({
-        source: "/philo4/${dbname}/scripts/metadata_list.py?field=" + field,
+        source: pathname + "scripts/metadata_list.py?field=" + field,
         minLength: 2,
         dataType: "json"
     });
@@ -30,7 +32,7 @@ function autocomplete_metadata(metadata, field) {
 var fields = ${repr(db.locals['metadata_fields'])}
 
 
-// These functions are for the kwic bibliography whic is shortened by default
+// These functions are for the kwic bibliography which is shortened by default
 function showBiblio() {
     $(this).css('background', 'LightGray')
     $(this).children("#full_biblio").css('position', 'absolute').css('text-decoration', 'underline')
@@ -60,7 +62,7 @@ $(document).ready(function(){
     monkeyPatchAutocomplete();    
     
     $("#q").autocomplete({
-        source: "/philo4/${dbname}/scripts/term_list.py",
+        source: pathname + "scripts/term_list.py",
         minLength: 2,
         "dataType": "json"
     });
@@ -115,18 +117,7 @@ $(document).ready(function(){
         out: hideBiblio   
     };
     $(".kwic_biblio").hoverIntent(config)
-    //$(".kwic_biblio").hover(
-    //    function() {
-    //        $(this).css('background', '#ECECEC')
-    //        $(this).children("#full_biblio").css('position', 'absolute').css('text-decoration', 'underline')
-    //        $(this).children("#full_biblio").css('background', '#ECECEC')
-    //        $(this).children("#full_biblio").css('display', 'inline')
-    //    },
-    //    function () {
-    //        $(this).css('background', 'white')
-    //        $(this).children("#full_biblio").hide(200)
-    //    }
-    //);
+
     
 // This will show more context for concordance and theme-rheme searches
     $(".philologic_occurrence").hover(
@@ -139,15 +130,15 @@ $(document).ready(function(){
     );
     $(".more_context").click(function() {
         var context_link = $(this).text();
-        if (context_link == 'Show more context') {
+        if (context_link == 'More') {
             $(this).siblings('.philologic_context').children('.begin_concordance').show()
             $(this).siblings('.philologic_context').children('.end_concordance').show()
-            $(this).empty().fadeIn(100).append('Show less context')
+            $(this).empty().fadeIn(100).append('Less')
         } 
         else {
             $(this).siblings('.philologic_context').children('.begin_concordance').hide()
             $(this).siblings('.philologic_context').children('.end_concordance').hide()
-            $(this).empty().fadeIn(100).append('Show more context')
+            $(this).empty().fadeIn(100).append('More')
         }
     });
     
