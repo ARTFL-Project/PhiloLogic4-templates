@@ -19,7 +19,7 @@ function monkeyPatchAutocomplete() {
     };
 }
 
-var pathname = window.location.pathname;
+var pathname = window.location.pathname.replace('dispatcher.py/', '');
 
 function autocomplete_metadata(metadata, field) {
     $("#" + field).autocomplete({
