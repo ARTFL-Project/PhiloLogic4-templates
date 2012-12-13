@@ -7,8 +7,11 @@
   <%
   start, end, n = f.link.page_interval(results_per_page, results, q["start"], q["end"])
   kwic_results = fetch_kwic(results, path, q, f.link.byte_query, start-1, end)
+  r_status = "."
+  if not results.done:
+     r_status += " Still working.  Refresh for a more accurate count of the results."  
   %>
-  Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)} for query "${q['q'].decode("utf-8", "ignore")}"
+  Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)} for query "${q['q'].decode("utf-8", "ignore")}"${r_status}
  </div>
  <%include file="show_frequency.mako"/>
  <div class="results_container">
