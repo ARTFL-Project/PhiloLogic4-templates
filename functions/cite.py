@@ -14,15 +14,15 @@ def make_div_cite(i):
     doc_href = make_object_link(i.philo_id[:1],i.bytes)
     section_href = make_object_link(i.philo_id[:2], i.bytes)
     sub_section_href = make_object_link(i.philo_id[:3], i.bytes)
-    para_href = make_object_link(i.philo_id[:5], i.bytes)
+#    para_href = make_object_link(i.philo_id[:5], i.bytes)
     section_names = [i.div1.head,i.div2.head,i.div3.head]
     section_name = section_names[0]
     try:
         sub_section_name = section_names[1]
     except IndexError:
         sub_section_name = section_name
-    speaker_name = i.who
-    cite = u"<span class='philologic_cite'>%s <a href='%s' title='title'>%s</a>" % (i.author,doc_href,i.title)
+#    speaker_name = i.who
+    cite = u"<span class='philologic_cite'>%s <a href='%s' title='title'>%s</a>" % (i.doc.author,doc_href,i.doc.title)
     if section_name:
         cite += u" - <a href='%s'>%s</a>" % (section_href,section_name)
     if sub_section_name:

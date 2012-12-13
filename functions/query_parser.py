@@ -29,7 +29,7 @@ def expand_query(term, path):
     
 def frequencies_file(environ, field_type):
     path = environ['SCRIPT_FILENAME']
-    path = re.sub('(philo4/[^/]+/).*', '\\1', path)
+    path = re.sub('(philo4beta2/[^/]+/).*', '\\1', path)
     path += 'data/frequencies/%s_frequencies' % field_type
     return path
     

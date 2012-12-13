@@ -8,8 +8,8 @@
      colloc_results = fetch_colloc_concordance(results, path, q)
      start, end, n = f.link.page_interval(results_per_page, colloc_results, q["start"], q["end"])
     %>
-    ${q['collocate_num']} occurences of collocate "${q['collocate'].decode('utf-8', 'ignore')}" in ${len(colloc_results)} occurences of "${q['q'].decode('utf-8', 'ignore')}":
-    <div class="description">Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(colloc_results)}</div>
+    ${q['collocate_num']} occurences of collocate "${q['collocate'].decode('utf-8', 'ignore')}" in the vicinity of "${q['q'].decode('utf-8', 'ignore')}":
+    <div class="description">Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${q['collocate_num']}</div>
    </p>
   </div>
 <%include file="show_frequency.mako"/>
@@ -31,15 +31,7 @@
  </ol>
  </div>
  <div class="more">
-  <%
-   prev, next = f.link.page_links(start, end, results_per_page, q, len(colloc_results))
-  %>
-   % if prev:
-    <a href="${prev}" class="previous"> Back </a>
-   % endif
-   % if next:
-    <a href="${next}" class="next"> Next </a>
-   % endif
+ <%include file="pages.mako" args="start=start,results_per_page=results_per_page,q=q,results=results"/> 
    <div style='clear:both;'></div>
  </div>
 </div>

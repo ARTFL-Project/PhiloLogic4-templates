@@ -59,6 +59,10 @@ def fetch_colloc_concordance(results, path, q, filter_words=100):
             count = words.count(collocate)
             hit.collocate_num = count
             new_hitlist.append(hit)
+
+        if len(new_hitlist) > (q["start"] + q["results_per_page"]):
+            break
+            
     
     return collocation_hitlist(new_hitlist, collocate_num)
 
