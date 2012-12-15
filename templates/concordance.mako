@@ -6,8 +6,11 @@
    <p class='description'>
     <%
      start, end, n = f.link.page_interval(results_per_page, results, q["start"], q["end"])
+     r_status = "."
+     if not results.done:
+     	r_status += " Still working.  Refresh for a more accurate count of the results."
     %>
-    Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)}
+    Hits <span class="start">${start}</span> - <span class="end">${end}</span> of ${len(results)}${r_status}
    </p>
   </div>
 <%include file="show_frequency.mako"/>
