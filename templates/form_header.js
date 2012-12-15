@@ -120,14 +120,15 @@ $(document).ready(function(){
 
     
 // This will show more context for concordance and theme-rheme searches
-    $(".philologic_occurrence").hover(
+/*    $(".philologic_occurrence").hover(
         function() {
             $(this).children(".more_context").fadeIn(100);
         },
         function() {
             $(this).children(".more_context").fadeOut(100);
         }
-    );
+	);
+*/
     $(".more_context").click(function() {
         var context_link = $(this).text();
         if (context_link == 'More') {
