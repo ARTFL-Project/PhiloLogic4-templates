@@ -14,14 +14,14 @@ $(document).ready(function(){
 function toggle_frequency() {
     $(".loading").empty().hide();
     var field = $("#frequency_field").val();
-    var spinner = '<img src="/philo4/${dbname}/js/spinner-round.gif" alt="Loading..." />';
+    var spinner = '<img src="${db.locals['db_url']}/js/spinner-round.gif" alt="Loading..." />';
     if ($("#toggle_frequency").hasClass('show_frequency')) {
         $(".results_container").animate({
             "margin-right": "330px"},
             50);
         $("#freq").empty();
         $(".loading").append(spinner).show();
-        $.getJSON("/philo4/${dbname}/scripts/get_frequency.py?frequency_field=" + field + '&${q['q_string']}', function(data) {
+        $.getJSON("${db.locals['db_url']}/scripts/get_frequency.py?frequency_field=" + field + '&${q['q_string']}', function(data) {
             $(".loading").hide().empty();
             $.each(data, function(index, item) {
                 if (item[0].length > 30) {

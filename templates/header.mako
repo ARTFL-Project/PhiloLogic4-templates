@@ -28,7 +28,7 @@
       </div>
             
       <div class="region-content">
-        <h1><a href="/philo4/${dbname}/" title="${dbname}"><span class="site-name">${dbname} alpha5</span></a></h1>           
+        <h1><a href="${db.locals['db_url']}/" title="${dbname}"><span class="site-name">${dbname} alpha5</span></a></h1>           
       </div>
     </div>
   <div class="main_body">
