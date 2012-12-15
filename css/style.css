@@ -350,8 +350,7 @@ a.hide_frequency:hover {
     width: 30%;
 }
 .more_context {
-    display: none;
-    padding-left: 40px;
+    padding-left: 24px;
     color: Gray !important;
     font-weight: 300;
 }
