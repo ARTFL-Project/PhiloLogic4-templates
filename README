@@ -19,8 +19,8 @@ Then create a system directory within it, like /var/www/html/philologic/_system_
 Then copy the entire contents of THIS PhiloLogic4-templates directory into /var/www/html/philologic/_system_dir/_install_dir/
 Now your system should be set up for PhiloLogic.
 
-To install databases, use the webloader.py script, which was contained in the libphilo repo, in the /python/examples/ subdirectory.
+To install databases, use the loader.py script, which is contained in the libphilo repo, in the /python/examples/ subdirectory.
 You'll need to configure the script with the hostname and directory paths you configured above.
 Then run 
-$> python webloader.py database_name <any number of TEI XML files or a file glob to many>
+$> python loader.py database_name <any number of TEI XML files, a file glob to many or a directory path>
 Congrats!  You're done.
