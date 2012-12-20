@@ -63,19 +63,18 @@ def compute_idf(query_words, table, c, total_docs):
         idfs[word] = idf
     return idfs
 
+def regexp(expr, item):
+    reg = re.compile(r"%s" % expr, re.I)
+    return reg.search(item) is not None
+
 def retrieve_hits(q, db):
     object_types = ['doc', 'div1', 'div2', 'div3', 'para', 'sent', 'word']
     obj_types = db.locals['ranked_relevance_objects']
     table = "ranked_relevance"
     
-    ## Get the depths for philo_id slices
-    #depths = []
-    #for obj_type in obj_types:
-    #    depths.append(object_types.index(obj_type) + 1)
-    
-    
     ## Open cursors for sqlite tables
     conn = db.dbh
+    conn.create_function("REGEXP", 2, regexp) ## to use with metadata searches
     c = conn.cursor()
     philo_ids, total_docs = filter_hits(q, obj_types, c)
     
@@ -84,9 +83,7 @@ def retrieve_hits(q, db):
     
     idfs = compute_idf(query_words, table, c, total_docs)
     
-    #print >> sys.stderr, "###DEBUG###", query_words, idfs[query_words]
-    
-    ## Construct query
+    ## Perform search on the text
     c.execute('select * from %s limit 1' % table)
     fields = ['%s.' % table + i[0] for i in c.description]
     c.execute('select * from toms limit 1')
@@ -99,43 +96,46 @@ def retrieve_hits(q, db):
         c.execute(query, words)
     else:
         query = 'select %s from %s inner join toms on toms.philo_id=%s.philo_id and toms.philo_name!="__philo_virtual" where %s.philo_name=?' % (','.join(fields),table, table, table)
-        #print >> sys.stderr, "#QUERY#", query
         c.execute(query, (query_words,))
     
-    new_results = {}
+    results = {}
     for i in c.fetchall():
         philo_id = i['philo_id']
         philo_name = i['philo_name']
         token_counts = i['token_count']
         bytes = i['bytes']
         word_count = i['word_count']
-        boost = metadata_boost(philo_name, q['metadata'], i)
         if not philo_ids or philo_id in philo_ids:
             total_word_count = int(word_count)
             term_frequency = token_counts/total_word_count
             tf_idf = term_frequency * idfs[philo_name]
-            if philo_id not in new_results:
-                new_results[philo_id] = {}
-                new_results[philo_id]['obj_type'] = object_types[philo_id.split().index('0') - 1]
-                new_results[philo_id]['bytes'] = []
-                new_results[philo_id]['tf_idf'] = 0
-            new_results[philo_id]['tf_idf'] += tf_idf * boost
-            new_results[philo_id]['bytes'].extend(bytes.split())
-    hits = sorted(new_results.iteritems(), key=lambda x: x[1]['tf_idf'], reverse=True)
-    #print >> sys.stderr, hits
+            if philo_id not in results:
+                results[philo_id] = {}
+                results[philo_id]['obj_type'] = object_types[philo_id.split().index('0') - 1]
+                results[philo_id]['bytes'] = []
+                results[philo_id]['tf_idf'] = 0
+            results[philo_id]['tf_idf'] += tf_idf #* boost
+            results[philo_id]['bytes'].extend(bytes.split())
+            
+    ## Perform search on metadata
+    for metadata in q['metadata']:
+        query = 'select * from metadata_relevance where %s REGEXP ?' % metadata
+        for word in query_words.split():
+            word = '[\"\'\?!,;:-]?%s[\"\'\?!,;:-]?[^\w]' % word
+            try:
+                c.execute(query, (word,))
+                for i in c.fetchall():
+                    philo_id = i['philo_id']
+                    try:
+                        results[philo_id]['tf_idf'] *= 10
+                    except IndexError:
+                        results[philo_id]['tf_idf'] = idfs[word] * 10
+            except sqlite3.OperationalError:
+                pass
+    
+    hits = sorted(results.iteritems(), key=lambda x: x[1]['tf_idf'], reverse=True)
     return f.IRHitWrapper.ir_results_wrapper(hits, db)
-    
-    
-def metadata_boost(word, metadata, i):
-    boost = 0
-    for field in metadata:
-        try:
-            field = i[field].decode('utf-8', 'ignore').lower().encode('utf-8', 'ignore')
-            if re.search(word, field):
-                boost += 4
-        except (IndexError, TypeError, AttributeError):
-            pass
-    return boost or 1
+
  
 def fetch_relevance(hit, path, q, kwic=True, samples=3):
     length = 400
@@ -147,7 +147,6 @@ def fetch_relevance(hit, path, q, kwic=True, samples=3):
     for byte in byte_sample: 
         byte = [int(byte)]
         bytes, byte_start = adjust_bytes(byte, length)
-        print >> sys.stderr, "PATH", path
         conc_text = f.get_text(hit, byte_start, length, path)
         conc_start, conc_middle, conc_end = chunkifier(conc_text, bytes, highlight=True, kwic=kwic)
         conc_start = clean_text(conc_start, kwic=kwic)
