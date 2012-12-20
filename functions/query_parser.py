@@ -30,6 +30,7 @@ def expand_query(term, path):
 def frequencies_file(environ, field_type):
     path = environ['SCRIPT_FILENAME']
     path = path.replace('scripts/term_list.py', '')
+    path = path.replace('scripts/metadata_list.py', '')
     path = path.replace('dispatcher.py', '')
     path += 'data/frequencies/%s_frequencies' % field_type
     return path
