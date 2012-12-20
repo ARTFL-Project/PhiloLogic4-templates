@@ -11,7 +11,6 @@
    </p>
   </div>
 <%include file="show_frequency.mako"/>
-<%include file="more_context.mako"/>
  <div class="results_container">
  <ol class='philologic_concordance'>
   % for i in results[start - 1:end]:
